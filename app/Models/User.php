@@ -45,6 +45,13 @@ class User extends Authenticatable
         return $this->hasMany(WithdrawalRequest::class);
     }
 
+    public function activeAssignmentsCount(): int
+    {
+        return $this->campaignAssignments()
+            ->whereIn('status', ['assigned', 'posted', 'submitted'])
+            ->count();
+    }
+
     /**
      * Get the attributes that should be cast.
      *

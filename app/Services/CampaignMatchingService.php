@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\AmbassadorProfile;
 use App\Models\Campaign;
 use App\Models\CampaignAssignment;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class CampaignMatchingService
@@ -61,6 +62,7 @@ class CampaignMatchingService
         $alreadyAssignedUserIds = $campaign->assignments()->pluck('ambassador_id');
 
         return AmbassadorProfile::query()
+            ->with('user')
             ->where('category_id', $campaign->category_id)
             ->when(
                 $provinceIds->isNotEmpty(),
@@ -70,6 +72,18 @@ class CampaignMatchingService
             ->whereHas('user', fn ($query) => $query->where('role', 'ambassador')->where('status', 'active'))
             ->orderByDesc('avg_views_7d')
             ->limit((int) config('campaigns.max_assignments_per_run'))
-            ->get();
+            ->get()
+            ->filter(fn (AmbassadorProfile $profile) => $this->hasAssignmentCapacity($profile->user));
+    }
+
+    /**
+     * Each level caps how many campaigns an ambassador can carry at once
+     * (config('campaigns.level_limits')); null means unlimited.
+     */
+    private function hasAssignmentCapacity(User $user): bool
+    {
+        $limit = config("campaigns.level_limits.{$user->level}.max_concurrent_assignments");
+
+        return is_null($limit) || $user->activeAssignmentsCount() < $limit;
     }
 }

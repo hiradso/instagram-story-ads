@@ -16,6 +16,10 @@ use RuntimeException;
 
 class ViewSubmissionService
 {
+    public function __construct(private UserLevelService $levelService)
+    {
+    }
+
     /**
      * Store a screenshot for an assignment, rejecting duplicates and
      * expired submission windows before anything is persisted.
@@ -99,6 +103,8 @@ class ViewSubmissionService
                 'source_id' => $submission->id,
                 'description' => "بابت بازدید تاییدشده کمپین #{$campaign->id}",
             ]);
+
+            $this->levelService->maybePromote($assignment->ambassador);
         });
     }
 

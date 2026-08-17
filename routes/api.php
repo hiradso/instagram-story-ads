@@ -4,6 +4,7 @@ use App\Http\Controllers\AmbassadorProfileController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ReferenceDataController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Admin accounts are never created through public registration; only
@@ -25,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/campaigns', [CampaignController::class, 'adminIndex']);
         Route::patch('/campaigns/{campaign}/status', [CampaignController::class, 'updateStatus']);
+
+        Route::patch('/users/{user}/level', [UserController::class, 'updateLevel']);
     });
 
     Route::middleware('role:advertiser')->prefix('advertiser')->group(function () {
