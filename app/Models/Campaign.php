@@ -55,4 +55,17 @@ class Campaign extends Model
     {
         return $this->hasMany(CampaignAssignment::class);
     }
+
+    /**
+     * Views reserved by assignments that have not yet been approved or
+     * rejected. Kept separate from views_delivered, which only reflects
+     * approved view submissions.
+     */
+    public function reservedViews(): int
+    {
+        return (int) $this->assignments()
+            ->whereIn('status', ['assigned', 'posted', 'submitted'])
+            ->join('ambassador_profiles', 'ambassador_profiles.user_id', '=', 'campaign_assignments.ambassador_id')
+            ->sum('ambassador_profiles.avg_views_7d');
+    }
 }
