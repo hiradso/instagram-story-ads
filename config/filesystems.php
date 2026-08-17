@@ -42,7 +42,13 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
-            'visibility' => 'public',
+            // No explicit 'visibility' here: Flysystem's chmod-on-write to
+            // enforce it fails on this project's Windows NTFS bind mount
+            // (Docker Desktop doesn't support real POSIX permission bits
+            // there), which made every upload silently fail. Files written
+            // through this bind mount already come out world-readable, so
+            // enforcing visibility isn't needed for local dev; a real disk
+            // (e.g. S3) in production won't have this problem.
             'throw' => false,
             'report' => false,
         ],
