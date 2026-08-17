@@ -23,6 +23,16 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               کمپین‌ها
             </Link>
           )}
+          {user?.role === 'ambassador' && (
+            <>
+              <Link to="/ambassador/assignments" className="text-sm text-slate-600 hover:text-slate-900">
+                کمپین‌های من
+              </Link>
+              <Link to="/ambassador/profile" className="text-sm text-slate-600 hover:text-slate-900">
+                پروفایل
+              </Link>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-4">
           {user && (

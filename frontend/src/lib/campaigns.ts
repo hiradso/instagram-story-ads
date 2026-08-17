@@ -62,3 +62,7 @@ export function fetchCategories() {
 export function fetchProvinces() {
   return api.get<Province[]>('/provinces').then((res) => res.data)
 }
+
+export function fetchCities(provinceId: number) {
+  return api.get<{ id: number; name: string }[]>(`/provinces/${provinceId}/cities`).then((res) => res.data)
+}

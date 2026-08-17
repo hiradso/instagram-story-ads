@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AmbassadorProfileController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CampaignAssignmentController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ReferenceDataController;
 use App\Http\Controllers\UserController;
@@ -43,5 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/profile', [AmbassadorProfileController::class, 'show']);
         Route::post('/profile', [AmbassadorProfileController::class, 'store']);
         Route::put('/profile', [AmbassadorProfileController::class, 'update']);
+
+        Route::get('/assignments', [CampaignAssignmentController::class, 'index']);
+        Route::post('/assignments/{assignment}/submission', [CampaignAssignmentController::class, 'submitScreenshot']);
     });
 });

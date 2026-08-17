@@ -18,6 +18,11 @@ class AmbassadorProfileController extends Controller
 
         $profile = $request->user()->ambassadorProfile()->create($request->validated());
 
+        // create() returns the in-memory model as given, not what the DB
+        // actually stored (e.g. the wallet_balance column default) —
+        // reload it, with relations, so the response matches show().
+        $profile->refresh()->load(['category', 'province', 'city']);
+
         return response()->json($profile, 201);
     }
 
@@ -34,6 +39,7 @@ class AmbassadorProfileController extends Controller
     {
         $profile = $request->user()->ambassadorProfile()->firstOrFail();
         $profile->update($request->validated());
+        $profile->load(['category', 'province', 'city']);
 
         return response()->json($profile);
     }

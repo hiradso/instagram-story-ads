@@ -6,6 +6,8 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { CampaignsListPage } from './pages/advertiser/CampaignsListPage'
 import { CampaignFormPage } from './pages/advertiser/CampaignFormPage'
 import { CampaignDetailPage } from './pages/advertiser/CampaignDetailPage'
+import { ProfilePage } from './pages/ambassador/ProfilePage'
+import { AssignmentsPage } from './pages/ambassador/AssignmentsPage'
 
 function App() {
   return (
@@ -22,6 +24,11 @@ function App() {
         <Route path="/advertiser/campaigns/new" element={<CampaignFormPage />} />
         <Route path="/advertiser/campaigns/:id" element={<CampaignDetailPage />} />
         <Route path="/advertiser/campaigns/:id/edit" element={<CampaignFormPage />} />
+      </Route>
+
+      <Route element={<ProtectedRoute allowedRoles={['ambassador']} />}>
+        <Route path="/ambassador/profile" element={<ProfilePage />} />
+        <Route path="/ambassador/assignments" element={<AssignmentsPage />} />
       </Route>
     </Routes>
   )

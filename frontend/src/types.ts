@@ -54,3 +54,44 @@ export interface PaginatedResponse<T> {
   last_page: number
   total: number
 }
+
+export interface AmbassadorProfile {
+  id: number
+  user_id: number
+  category_id: number
+  province_id: number
+  city_id: number
+  instagram_username: string
+  instagram_url: string
+  follower_count: number
+  avg_views_7d: number
+  wallet_balance: string
+  verified_at: string | null
+  category?: Category
+  province?: Province
+  city?: { id: number; name: string }
+}
+
+export type AssignmentStatus = 'assigned' | 'posted' | 'submitted' | 'approved' | 'rejected' | 'expired'
+
+export type SubmissionStatus = 'pending' | 'approved' | 'rejected'
+
+export interface ViewSubmission {
+  id: number
+  claimed_views: number
+  approved_views: number | null
+  status: SubmissionStatus
+  rejection_reason: string | null
+}
+
+export interface CampaignAssignment {
+  id: number
+  campaign_id: number
+  ambassador_id: number
+  status: AssignmentStatus
+  assigned_at: string
+  post_deadline_at: string
+  posted_at: string | null
+  campaign: Campaign
+  view_submission: ViewSubmission | null
+}
