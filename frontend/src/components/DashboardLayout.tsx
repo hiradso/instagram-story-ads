@@ -33,6 +33,19 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               </Link>
             </>
           )}
+          {user?.role === 'admin' && (
+            <>
+              <Link to="/admin/submissions" className="text-sm text-slate-600 hover:text-slate-900">
+                بازبینی اسکرین‌شات‌ها
+              </Link>
+              <Link to="/admin/campaigns" className="text-sm text-slate-600 hover:text-slate-900">
+                کمپین‌ها
+              </Link>
+              <Link to="/admin/profiles" className="text-sm text-slate-600 hover:text-slate-900">
+                سفیرها
+              </Link>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-4">
           {user && (

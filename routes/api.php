@@ -6,6 +6,7 @@ use App\Http\Controllers\CampaignAssignmentController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ReferenceDataController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 // Admin accounts are never created through public registration; only
@@ -29,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/campaigns/{campaign}/status', [CampaignController::class, 'updateStatus']);
 
         Route::patch('/users/{user}/level', [UserController::class, 'updateLevel']);
+
+        Route::get('/submissions', [ViewSubmissionController::class, 'index']);
+        Route::get('/submissions/{submission}/screenshot', [ViewSubmissionController::class, 'screenshot']);
+        Route::post('/submissions/{submission}/approve', [ViewSubmissionController::class, 'approve']);
+        Route::post('/submissions/{submission}/reject', [ViewSubmissionController::class, 'reject']);
     });
 
     Route::middleware('role:advertiser')->prefix('advertiser')->group(function () {
