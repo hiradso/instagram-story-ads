@@ -1,4 +1,17 @@
+import {
+  BadgeCheck,
+  Ban,
+  CheckCircle2,
+  Clock,
+  FileEdit,
+  PauseCircle,
+  Send,
+  XCircle,
+  type LucideIcon,
+} from 'lucide-react'
 import type { AssignmentStatus, CampaignStatus, SubmissionStatus } from '../types'
+
+type Tone = 'slate' | 'amber' | 'emerald' | 'orange' | 'blue' | 'red'
 
 export const campaignStatusLabel: Record<CampaignStatus, string> = {
   draft: 'پیش‌نویس',
@@ -9,13 +22,22 @@ export const campaignStatusLabel: Record<CampaignStatus, string> = {
   cancelled: 'لغوشده',
 }
 
-export const campaignStatusColor: Record<CampaignStatus, string> = {
-  draft: 'bg-slate-100 text-slate-600',
-  pending_review: 'bg-amber-100 text-amber-700',
-  active: 'bg-emerald-100 text-emerald-700',
-  paused: 'bg-orange-100 text-orange-700',
-  completed: 'bg-blue-100 text-blue-700',
-  cancelled: 'bg-red-100 text-red-700',
+export const campaignStatusTone: Record<CampaignStatus, Tone> = {
+  draft: 'slate',
+  pending_review: 'amber',
+  active: 'emerald',
+  paused: 'orange',
+  completed: 'blue',
+  cancelled: 'red',
+}
+
+export const campaignStatusIcon: Record<CampaignStatus, LucideIcon> = {
+  draft: FileEdit,
+  pending_review: Clock,
+  active: CheckCircle2,
+  paused: PauseCircle,
+  completed: BadgeCheck,
+  cancelled: Ban,
 }
 
 export function formatNumber(value: string | number) {
@@ -35,13 +57,22 @@ export const assignmentStatusLabel: Record<AssignmentStatus, string> = {
   expired: 'منقضی‌شده',
 }
 
-export const assignmentStatusColor: Record<AssignmentStatus, string> = {
-  assigned: 'bg-slate-100 text-slate-600',
-  posted: 'bg-blue-100 text-blue-700',
-  submitted: 'bg-amber-100 text-amber-700',
-  approved: 'bg-emerald-100 text-emerald-700',
-  rejected: 'bg-red-100 text-red-700',
-  expired: 'bg-red-100 text-red-700',
+export const assignmentStatusTone: Record<AssignmentStatus, Tone> = {
+  assigned: 'slate',
+  posted: 'blue',
+  submitted: 'amber',
+  approved: 'emerald',
+  rejected: 'red',
+  expired: 'red',
+}
+
+export const assignmentStatusIcon: Record<AssignmentStatus, LucideIcon> = {
+  assigned: Send,
+  posted: Send,
+  submitted: Clock,
+  approved: CheckCircle2,
+  rejected: XCircle,
+  expired: Ban,
 }
 
 export const submissionStatusLabel: Record<SubmissionStatus, string> = {

@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react'
+import { AlertCircle, BadgeCheck, Clock, Link2, ShieldCheck, Users, Wallet } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAdminProfiles, updateUserLevel, verifyProfile } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
 import type { AmbassadorProfile, User } from '../../types'
+import { Card } from '../../components/ui/Card'
+import { Badge } from '../../components/ui/Badge'
+import { Button } from '../../components/ui/Button'
+import { EmptyState } from '../../components/ui/EmptyState'
+import { Spinner } from '../../components/ui/Spinner'
 
 interface Row extends AmbassadorProfile {
   user: User
@@ -47,42 +53,57 @@ export function ProfilesPage() {
 
   return (
     <DashboardLayout>
-      <h2 className="mb-6 text-lg font-bold text-slate-900">پروفایل سفیرها</h2>
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-slate-900">پروفایل سفیرها</h2>
+        <p className="mt-0.5 text-sm text-slate-400">تایید پروفایل و مدیریت سطح سفیرها</p>
+      </div>
 
-      {error && <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {error && (
+        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+          <AlertCircle className="size-4 shrink-0" />
+          {error}
+        </p>
+      )}
+
+      {profiles === null && <Spinner label="در حال بارگذاری..." />}
+
+      {profiles?.length === 0 && <EmptyState icon={ShieldCheck} title="هنوز سفیری ثبت‌نام نکرده" />}
 
       <div className="grid gap-4">
         {profiles?.map((profile) => (
-          <div
-            key={profile.id}
-            className="flex items-center justify-between rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"
-          >
+          <Card key={profile.id} className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="mb-1 flex items-center gap-2">
+              <div className="mb-1.5 flex items-center gap-2">
                 <h3 className="font-medium text-slate-900">{profile.user.name}</h3>
                 <a
                   href={profile.instagram_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-slate-500 hover:underline"
+                  className="flex items-center gap-1 text-sm text-slate-500 hover:text-brand-600"
                 >
-                  @{profile.instagram_username}
+                  <Link2 className="size-3.5" />@{profile.instagram_username}
                 </a>
                 {profile.verified_at ? (
-                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                  <Badge tone="emerald" icon={<BadgeCheck className="size-3.5" />}>
                     تاییدشده
-                  </span>
+                  </Badge>
                 ) : (
-                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                  <Badge tone="amber" icon={<Clock className="size-3.5" />}>
                     تاییدنشده
-                  </span>
+                  </Badge>
                 )}
               </div>
-              <p className="text-sm text-slate-500">
-                فالوور: {profile.follower_count.toLocaleString('fa-IR')} · میانگین بازدید:{' '}
-                {profile.avg_views_7d.toLocaleString('fa-IR')} · موجودی کیف‌پول:{' '}
-                {Number(profile.wallet_balance).toLocaleString('fa-IR')} تومان
-              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
+                <span className="flex items-center gap-1.5">
+                  <Users className="size-3.5 text-slate-400" />
+                  {profile.follower_count.toLocaleString('fa-IR')} فالوور
+                </span>
+                <span>میانگین بازدید: {profile.avg_views_7d.toLocaleString('fa-IR')}</span>
+                <span className="flex items-center gap-1.5">
+                  <Wallet className="size-3.5 text-slate-400" />
+                  {Number(profile.wallet_balance).toLocaleString('fa-IR')} تومان
+                </span>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
@@ -91,7 +112,7 @@ export function ProfilesPage() {
                 value={profile.user.level}
                 onChange={(e) => handleLevelChange(profile, Number(e.target.value))}
                 disabled={busyId === profile.id}
-                className="rounded-lg border border-slate-300 px-2 py-1 text-sm outline-none focus:border-slate-500"
+                className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
               >
                 <option value={1}>۱</option>
                 <option value={2}>۲</option>
@@ -99,16 +120,17 @@ export function ProfilesPage() {
               </select>
 
               {!profile.verified_at && (
-                <button
+                <Button
+                  size="sm"
                   onClick={() => handleVerify(profile)}
-                  disabled={busyId === profile.id}
-                  className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+                  loading={busyId === profile.id}
+                  icon={<BadgeCheck className="size-3.5" />}
                 >
                   تایید پروفایل
-                </button>
+                </Button>
               )}
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </DashboardLayout>

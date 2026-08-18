@@ -1,11 +1,32 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { AxiosError } from 'axios'
+import {
+  AlertCircle,
+  AtSign,
+  BadgeCheck,
+  Clock,
+  Eye,
+  Link2,
+  MapPin,
+  Pencil,
+  Save,
+  Tag,
+  Users,
+  Wallet,
+  X,
+} from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { createProfile, fetchProfile, updateProfile, type ProfileFormData } from '../../lib/ambassador'
 import { fetchCategories, fetchCities, fetchProvinces } from '../../lib/campaigns'
 import { extractErrorMessage } from '../../lib/errors'
 import { formatToman } from '../../lib/labels'
 import type { AmbassadorProfile, Category, Province } from '../../types'
+import { Card } from '../../components/ui/Card'
+import { Button } from '../../components/ui/Button'
+import { Label, Select, TextInput } from '../../components/ui/Field'
+import { StatTile } from '../../components/ui/StatTile'
+import { Badge } from '../../components/ui/Badge'
+import { Spinner } from '../../components/ui/Spinner'
 
 const emptyForm: ProfileFormData = {
   category_id: 0,
@@ -85,7 +106,7 @@ export function ProfilePage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <p className="text-sm text-slate-500">در حال بارگذاری...</p>
+        <Spinner label="در حال بارگذاری..." />
       </DashboardLayout>
     )
   }
@@ -94,55 +115,56 @@ export function ProfilePage() {
     return (
       <DashboardLayout>
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">پروفایل سفیر</h2>
-          <button
-            onClick={startEdit}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100"
-          >
+          <h2 className="text-xl font-bold text-slate-900">پروفایل سفیر</h2>
+          <Button variant="secondary" size="sm" onClick={startEdit} icon={<Pencil className="size-3.5" />}>
             ویرایش
-          </button>
+          </Button>
         </div>
 
-        <div className="grid gap-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:grid-cols-2">
-          <div>
-            <p className="text-xs text-slate-400">پیج اینستاگرام</p>
+        <div className="animate-fade-in-up space-y-4">
+          <Card className="flex items-center justify-between">
             <a
               href={profile.instagram_url}
               target="_blank"
               rel="noreferrer"
-              className="font-medium text-slate-900 hover:underline"
+              className="flex items-center gap-3 font-medium text-slate-900 hover:text-brand-600"
             >
+              <span className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 via-fuchsia-500 to-orange-400 text-white">
+                <Link2 className="size-5" strokeWidth={1.75} />
+              </span>
               @{profile.instagram_username}
             </a>
+            {profile.verified_at ? (
+              <Badge tone="emerald" icon={<BadgeCheck className="size-3.5" />}>
+                تاییدشده
+              </Badge>
+            ) : (
+              <Badge tone="amber" icon={<Clock className="size-3.5" />}>
+                در انتظار تایید ادمین
+              </Badge>
+            )}
+          </Card>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <StatTile icon={Tag} label="دسته‌بندی" value={profile.category?.name ?? '—'} />
+            <StatTile
+              icon={MapPin}
+              label="استان / شهر"
+              value={`${profile.province?.name ?? '—'} / ${profile.city?.name ?? '—'}`}
+            />
+            <StatTile icon={Users} label="تعداد فالوور" value={profile.follower_count.toLocaleString('fa-IR')} />
+            <StatTile icon={Eye} label="میانگین بازدید ۷ روزه" value={profile.avg_views_7d.toLocaleString('fa-IR')} />
           </div>
-          <div>
-            <p className="text-xs text-slate-400">وضعیت تایید</p>
-            <p className="font-medium text-slate-900">
-              {profile.verified_at ? 'تاییدشده' : 'در انتظار تایید ادمین'}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-400">دسته‌بندی</p>
-            <p className="font-medium text-slate-900">{profile.category?.name ?? '—'}</p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-400">استان / شهر</p>
-            <p className="font-medium text-slate-900">
-              {profile.province?.name} / {profile.city?.name}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-400">تعداد فالوور</p>
-            <p className="font-medium text-slate-900">{profile.follower_count.toLocaleString('fa-IR')}</p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-400">میانگین بازدید ۷ روزه</p>
-            <p className="font-medium text-slate-900">{profile.avg_views_7d.toLocaleString('fa-IR')}</p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-400">موجودی کیف‌پول</p>
-            <p className="font-medium text-slate-900">{formatToman(profile.wallet_balance)}</p>
-          </div>
+
+          <Card className="flex items-center gap-3 bg-gradient-to-l from-brand-50 to-accent-400/10">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-white text-brand-500 ring-1 ring-slate-200/70">
+              <Wallet className="size-5" strokeWidth={1.75} />
+            </span>
+            <div>
+              <p className="text-xs text-slate-400">موجودی کیف‌پول</p>
+              <p className="text-lg font-bold text-slate-900">{formatToman(profile.wallet_balance)}</p>
+            </div>
+          </Card>
         </div>
       </DashboardLayout>
     )
@@ -150,45 +172,46 @@ export function ProfilePage() {
 
   return (
     <DashboardLayout>
-      <h2 className="mb-6 text-lg font-bold text-slate-900">
+      <h2 className="mb-6 text-xl font-bold text-slate-900">
         {profile ? 'ویرایش پروفایل سفیر' : 'تکمیل پروفایل سفیر'}
       </h2>
 
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-xl space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
-      >
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      <Card as="form" onSubmit={handleSubmit} className="max-w-xl space-y-4">
+        {error && (
+          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+            <AlertCircle className="size-4 shrink-0" />
+            {error}
+          </p>
+        )}
 
         <div>
-          <label className="mb-1 block text-sm text-slate-600">نام کاربری اینستاگرام</label>
-          <input
+          <Label>نام کاربری اینستاگرام</Label>
+          <TextInput
+            icon={AtSign}
             required
             value={form.instagram_username}
             onChange={(e) => setForm({ ...form, instagram_username: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm text-slate-600">لینک پیج</label>
-          <input
+          <Label>لینک پیج</Label>
+          <TextInput
+            icon={Link2}
             type="url"
             required
             value={form.instagram_url}
             onChange={(e) => setForm({ ...form, instagram_url: e.target.value })}
             placeholder="https://instagram.com/..."
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm text-slate-600">دسته‌بندی پیج</label>
-          <select
+          <Label>دسته‌بندی پیج</Label>
+          <Select
             required
             value={form.category_id || ''}
             onChange={(e) => setForm({ ...form, category_id: Number(e.target.value) })}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
           >
             <option value="" disabled>
               انتخاب کن
@@ -198,17 +221,16 @@ export function ProfilePage() {
                 {c.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-1 block text-sm text-slate-600">استان</label>
-            <select
+            <Label>استان</Label>
+            <Select
               required
               value={form.province_id || ''}
               onChange={(e) => setForm({ ...form, province_id: Number(e.target.value), city_id: 0 })}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
             >
               <option value="" disabled>
                 انتخاب کن
@@ -218,16 +240,15 @@ export function ProfilePage() {
                   {p.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div>
-            <label className="mb-1 block text-sm text-slate-600">شهر</label>
-            <select
+            <Label>شهر</Label>
+            <Select
               required
               disabled={!form.province_id}
               value={form.city_id || ''}
               onChange={(e) => setForm({ ...form, city_id: Number(e.target.value) })}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500 disabled:bg-slate-50"
             >
               <option value="" disabled>
                 انتخاب کن
@@ -237,54 +258,46 @@ export function ProfilePage() {
                   {c.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-1 block text-sm text-slate-600">تعداد فالوور</label>
-            <input
+            <Label>تعداد فالوور</Label>
+            <TextInput
+              icon={Users}
               type="number"
               required
               min={0}
               value={form.follower_count || ''}
               onChange={(e) => setForm({ ...form, follower_count: Number(e.target.value) })}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm text-slate-600">میانگین بازدید استوری (۷ روز اخیر)</label>
-            <input
+            <Label>میانگین بازدید استوری (۷ روز اخیر)</Label>
+            <TextInput
+              icon={Eye}
               type="number"
               required
               min={0}
               value={form.avg_views_7d || ''}
               onChange={(e) => setForm({ ...form, avg_views_7d: Number(e.target.value) })}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
             />
           </div>
         </div>
 
         <div className="flex gap-2">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="flex-1 rounded-lg bg-slate-900 py-2 text-sm font-medium text-white disabled:opacity-50"
-          >
+          <Button type="submit" loading={submitting} icon={<Save className="size-4" />} className="flex-1">
             {submitting ? 'در حال ذخیره...' : 'ذخیره'}
-          </button>
+          </Button>
           {profile && (
-            <button
-              type="button"
-              onClick={() => setEditing(false)}
-              className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600"
-            >
+            <Button type="button" variant="secondary" onClick={() => setEditing(false)} icon={<X className="size-4" />}>
               انصراف
-            </button>
+            </Button>
           )}
         </div>
-      </form>
+      </Card>
     </DashboardLayout>
   )
 }

@@ -1,8 +1,12 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { AlertCircle, Megaphone, Phone, User, UserPlus, Camera, Mail, Lock } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { extractErrorMessage } from '../lib/errors'
 import type { UserRole } from '../types'
+import { AuthShell } from '../components/AuthShell'
+import { Button } from '../components/ui/Button'
+import { Label, TextInput } from '../components/ui/Field'
 
 export function Register() {
   const { register } = useAuth()
@@ -31,103 +35,106 @@ export function Register() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200"
-      >
-        <h1 className="mb-6 text-xl font-bold text-slate-900">ثبت‌نام در استوری‌یار</h1>
-
+    <AuthShell title="ثبت‌نام در استوری‌یار" subtitle="مدیریت کمپین تبلیغات استوری اینستاگرام">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+            <AlertCircle className="size-4 shrink-0" />
+            {error}
+          </p>
         )}
 
-        <label className="mb-1 block text-sm text-slate-600">نام</label>
-        <input
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
-
-        <label className="mb-1 block text-sm text-slate-600">ایمیل</label>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
-
-        <label className="mb-1 block text-sm text-slate-600">شماره موبایل (اختیاری)</label>
-        <input
-          type="tel"
-          placeholder="09xxxxxxxxx"
-          pattern="^09\d{9}$"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
-
-        <label className="mb-1 block text-sm text-slate-600">رمز عبور</label>
-        <input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
-
-        <label className="mb-1 block text-sm text-slate-600">تکرار رمز عبور</label>
-        <input
-          type="password"
-          required
-          value={passwordConfirmation}
-          onChange={(e) => setPasswordConfirmation(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
-
-        <label className="mb-1 block text-sm text-slate-600">نوع حساب</label>
-        <div className="mb-6 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => setRole('advertiser')}
-            className={`rounded-lg border px-3 py-2 text-sm ${
-              role === 'advertiser'
-                ? 'border-slate-900 bg-slate-900 text-white'
-                : 'border-slate-300 text-slate-600'
-            }`}
-          >
-            آگهی‌دهنده
-          </button>
-          <button
-            type="button"
-            onClick={() => setRole('ambassador')}
-            className={`rounded-lg border px-3 py-2 text-sm ${
-              role === 'ambassador'
-                ? 'border-slate-900 bg-slate-900 text-white'
-                : 'border-slate-300 text-slate-600'
-            }`}
-          >
-            سفیر (صاحب پیج)
-          </button>
+        <div>
+          <Label>نام</Label>
+          <TextInput icon={User} required value={name} onChange={(e) => setName(e.target.value)} />
         </div>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-slate-900 py-2 text-sm font-medium text-white disabled:opacity-50"
-        >
-          {submitting ? 'در حال ثبت‌نام...' : 'ثبت‌نام'}
-        </button>
+        <div>
+          <Label>ایمیل</Label>
+          <TextInput
+            icon={Mail}
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-        <p className="mt-4 text-center text-sm text-slate-500">
+        <div>
+          <Label>شماره موبایل (اختیاری)</Label>
+          <TextInput
+            icon={Phone}
+            type="tel"
+            placeholder="09xxxxxxxxx"
+            pattern="^09\d{9}$"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <Label>رمز عبور</Label>
+          <TextInput
+            icon={Lock}
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <Label>تکرار رمز عبور</Label>
+          <TextInput
+            icon={Lock}
+            type="password"
+            required
+            value={passwordConfirmation}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <Label>نوع حساب</Label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setRole('advertiser')}
+              className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition-all ${
+                role === 'advertiser'
+                  ? 'border-brand-400 bg-brand-50 text-brand-700 ring-2 ring-brand-100'
+                  : 'border-slate-200 text-slate-500 hover:border-slate-300'
+              }`}
+            >
+              <Megaphone className="size-4" />
+              آگهی‌دهنده
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole('ambassador')}
+              className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition-all ${
+                role === 'ambassador'
+                  ? 'border-brand-400 bg-brand-50 text-brand-700 ring-2 ring-brand-100'
+                  : 'border-slate-200 text-slate-500 hover:border-slate-300'
+              }`}
+            >
+              <Camera className="size-4" />
+              سفیر (صاحب پیج)
+            </button>
+          </div>
+        </div>
+
+        <Button type="submit" loading={submitting} icon={<UserPlus className="size-4" />} className="w-full">
+          {submitting ? 'در حال ثبت‌نام...' : 'ثبت‌نام'}
+        </Button>
+
+        <p className="text-center text-sm text-slate-500">
           قبلاً ثبت‌نام کردی؟{' '}
-          <Link to="/login" className="font-medium text-slate-900">
+          <Link to="/login" className="font-medium text-brand-600 hover:text-brand-700">
             وارد شو
           </Link>
         </p>
       </form>
-    </div>
+    </AuthShell>
   )
 }

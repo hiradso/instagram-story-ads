@@ -1,4 +1,15 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import {
+  AlertCircle,
+  CheckCircle2,
+  Eye,
+  ImageOff,
+  Mail,
+  ShieldCheck,
+  User as UserIcon,
+  X,
+  XCircle,
+} from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import {
   approveSubmission,
@@ -8,6 +19,10 @@ import {
   type PendingSubmission,
 } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
+import { Card } from '../../components/ui/Card'
+import { Button } from '../../components/ui/Button'
+import { EmptyState } from '../../components/ui/EmptyState'
+import { Spinner } from '../../components/ui/Spinner'
 
 function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmission; onReviewed: () => void }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -57,23 +72,42 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
   const campaign = submission.campaign_assignment.campaign
 
   return (
-    <div className="grid gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:grid-cols-[200px_1fr]">
+    <Card className="animate-fade-in-up grid gap-4 sm:grid-cols-[180px_1fr]">
       {imageUrl ? (
-        <img src={imageUrl} alt="اسکرین‌شات بازدید" className="w-full rounded-lg object-cover ring-1 ring-slate-200" />
+        <img
+          src={imageUrl}
+          alt="اسکرین‌شات بازدید"
+          className="aspect-[3/4] w-full rounded-xl object-cover ring-1 ring-slate-200"
+        />
       ) : (
-        <div className="flex h-40 items-center justify-center rounded-lg bg-slate-50 text-xs text-slate-400">
-          در حال بارگذاری تصویر...
+        <div className="flex aspect-[3/4] items-center justify-center rounded-xl bg-slate-50 text-slate-300">
+          <ImageOff className="size-6 animate-pulse" strokeWidth={1.5} />
         </div>
       )}
 
       <div>
         <h3 className="font-medium text-slate-900">{campaign.title}</h3>
-        <p className="mb-2 text-sm text-slate-500">
-          سفیر: {ambassador.name} ({ambassador.email}) · بازدید اعلام‌شده:{' '}
-          {submission.claimed_views.toLocaleString('fa-IR')}
-        </p>
+        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
+          <span className="flex items-center gap-1.5">
+            <UserIcon className="size-3.5 text-slate-400" />
+            {ambassador.name}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Mail className="size-3.5 text-slate-400" />
+            {ambassador.email}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Eye className="size-3.5 text-slate-400" />
+            {submission.claimed_views.toLocaleString('fa-IR')} بازدید اعلام‌شده
+          </span>
+        </div>
 
-        {error && <p className="mb-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+        {error && (
+          <p className="mb-2 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+            <AlertCircle className="size-4 shrink-0" />
+            {error}
+          </p>
+        )}
 
         {!showRejectForm ? (
           <div className="flex flex-wrap items-center gap-2">
@@ -83,50 +117,54 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
               min={1}
               value={approvedViews}
               onChange={(e) => setApprovedViews(e.target.value)}
-              className="w-24 rounded-lg border border-slate-300 px-2 py-1 text-sm outline-none focus:border-slate-500"
+              className="w-24 rounded-xl border border-slate-200 px-2.5 py-1.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
             />
-            <button
+            <Button
+              variant="success"
+              size="sm"
               onClick={handleApprove}
-              disabled={submitting}
-              className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+              loading={submitting}
+              icon={<CheckCircle2 className="size-3.5" />}
             >
               تایید
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() => setShowRejectForm(true)}
               disabled={submitting}
-              className="rounded-lg border border-red-300 px-3 py-1.5 text-sm text-red-600 disabled:opacity-50"
+              icon={<XCircle className="size-3.5 text-red-500" />}
+              className="text-red-600"
             >
               رد
-            </button>
+            </Button>
           </div>
         ) : (
           <form onSubmit={handleReject} className="flex flex-wrap items-center gap-2">
             <input
               required
+              autoFocus
               placeholder="دلیل رد"
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              className="flex-1 rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus:border-slate-500"
+              className="flex-1 rounded-xl border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-red-400 focus:ring-4 focus:ring-red-100"
             />
-            <button
-              type="submit"
-              disabled={submitting}
-              className="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-            >
+            <Button type="submit" variant="danger" size="sm" loading={submitting}>
               ثبت رد
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setShowRejectForm(false)}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-600"
+              icon={<X className="size-3.5" />}
             >
               انصراف
-            </button>
+            </Button>
           </form>
         )}
       </div>
-    </div>
+    </Card>
   )
 }
 
@@ -141,12 +179,15 @@ export function SubmissionsPage() {
 
   return (
     <DashboardLayout>
-      <h2 className="mb-6 text-lg font-bold text-slate-900">اسکرین‌شات‌های در انتظار بررسی</h2>
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-slate-900">اسکرین‌شات‌های در انتظار بررسی</h2>
+        <p className="mt-0.5 text-sm text-slate-400">بازدید ادعاشده رو با اسکرین‌شات تطبیق بده و تایید یا رد کن</p>
+      </div>
+
+      {submissions === null && <Spinner label="در حال بارگذاری..." />}
 
       {submissions?.length === 0 && (
-        <div className="rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm text-slate-500">چیزی برای بررسی نیست.</p>
-        </div>
+        <EmptyState icon={ShieldCheck} title="چیزی برای بررسی نیست" description="همه‌ی اسکرین‌شات‌ها بررسی شدن." />
       )}
 
       <div className="grid gap-4">

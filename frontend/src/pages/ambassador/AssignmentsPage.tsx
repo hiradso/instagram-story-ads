@@ -1,9 +1,15 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { AlertCircle, Camera, CheckCircle2, Clock, ImagePlus, Upload, XCircle } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAssignments, submitScreenshot } from '../../lib/ambassador'
-import { assignmentStatusColor, assignmentStatusLabel, submissionStatusLabel } from '../../lib/labels'
+import { assignmentStatusIcon, assignmentStatusLabel, assignmentStatusTone, submissionStatusLabel } from '../../lib/labels'
 import { extractErrorMessage } from '../../lib/errors'
 import type { CampaignAssignment } from '../../types'
+import { Card } from '../../components/ui/Card'
+import { Badge } from '../../components/ui/Badge'
+import { Button } from '../../components/ui/Button'
+import { EmptyState } from '../../components/ui/EmptyState'
+import { Spinner } from '../../components/ui/Spinner'
 
 function AssignmentCard({
   assignment,
@@ -18,6 +24,8 @@ function AssignmentCard({
   const [submitting, setSubmitting] = useState(false)
 
   const canSubmit = ['assigned', 'posted'].includes(assignment.status) && !assignment.view_submission
+  const StatusIcon = assignmentStatusIcon[assignment.status]
+  const submission = assignment.view_submission
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -38,68 +46,74 @@ function AssignmentCard({
   }
 
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-      <div className="mb-3 flex items-center justify-between">
-        <div>
-          <h3 className="font-medium text-slate-900">{assignment.campaign.title}</h3>
-          <p className="text-xs text-slate-400">
-            دسته‌بندی: {assignment.campaign.category?.name ?? '—'} · مهلت ثبت اسکرین‌شات تا{' '}
-            {new Date(assignment.post_deadline_at).toLocaleString('fa-IR')}
-          </p>
+    <Card className="animate-fade-in-up">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-accent-400/10 text-brand-500 ring-1 ring-slate-200/70">
+            <Camera className="size-5" strokeWidth={1.75} />
+          </span>
+          <div>
+            <h3 className="font-medium text-slate-900">{assignment.campaign.title}</h3>
+            <p className="flex items-center gap-1 text-xs text-slate-400">
+              <Clock className="size-3" />
+              مهلت تا {new Date(assignment.post_deadline_at).toLocaleString('fa-IR')}
+            </p>
+          </div>
         </div>
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${assignmentStatusColor[assignment.status]}`}
-        >
+        <Badge tone={assignmentStatusTone[assignment.status]} icon={<StatusIcon className="size-3.5" />}>
           {assignmentStatusLabel[assignment.status]}
-        </span>
+        </Badge>
       </div>
 
-      {assignment.view_submission && (
-        <div className="rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">
-          <p>وضعیت بررسی: {submissionStatusLabel[assignment.view_submission.status]}</p>
-          <p>بازدید اعلام‌شده: {assignment.view_submission.claimed_views.toLocaleString('fa-IR')}</p>
-          {assignment.view_submission.approved_views !== null && (
-            <p>بازدید تاییدشده: {assignment.view_submission.approved_views.toLocaleString('fa-IR')}</p>
+      {submission && (
+        <div className="animate-fade-in space-y-1 rounded-xl bg-slate-50 px-3.5 py-3 text-sm text-slate-600 ring-1 ring-slate-200/70">
+          <p className="flex items-center gap-1.5">
+            {submission.status === 'approved' && <CheckCircle2 className="size-3.5 text-emerald-500" />}
+            {submission.status === 'rejected' && <XCircle className="size-3.5 text-red-500" />}
+            {submission.status === 'pending' && <Clock className="size-3.5 text-amber-500" />}
+            وضعیت بررسی: {submissionStatusLabel[submission.status]}
+          </p>
+          <p>بازدید اعلام‌شده: {submission.claimed_views.toLocaleString('fa-IR')}</p>
+          {submission.approved_views !== null && (
+            <p>بازدید تاییدشده: {submission.approved_views.toLocaleString('fa-IR')}</p>
           )}
-          {assignment.view_submission.rejection_reason && (
-            <p className="text-red-600">دلیل رد: {assignment.view_submission.rejection_reason}</p>
-          )}
+          {submission.rejection_reason && <p className="text-red-600">دلیل رد: {submission.rejection_reason}</p>}
         </div>
       )}
 
       {canSubmit && (
-        <form onSubmit={handleSubmit} className="mt-3 flex flex-wrap items-end gap-2">
-          {error && <p className="w-full text-sm text-red-600">{error}</p>}
-          <div>
-            <label className="mb-1 block text-xs text-slate-500">اسکرین‌شات آمار بازدید</label>
+        <form onSubmit={handleSubmit} className="mt-3 flex flex-wrap items-end gap-2.5">
+          {error && (
+            <p className="flex w-full items-center gap-1.5 text-sm text-red-600">
+              <AlertCircle className="size-3.5 shrink-0" />
+              {error}
+            </p>
+          )}
+          <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-500 transition-colors hover:border-brand-300 hover:bg-brand-50/40">
+            <ImagePlus className="size-4" />
+            {file ? file.name : 'انتخاب اسکرین‌شات'}
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="text-sm"
+              className="hidden"
             />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs text-slate-500">تعداد بازدید</label>
-            <input
-              type="number"
-              min={1}
-              required
-              value={claimedViews}
-              onChange={(e) => setClaimedViews(e.target.value)}
-              className="w-28 rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus:border-slate-500"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded-lg bg-slate-900 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
-          >
-            {submitting ? 'در حال ارسال...' : 'ثبت'}
-          </button>
+          </label>
+          <input
+            type="number"
+            min={1}
+            required
+            placeholder="تعداد بازدید"
+            value={claimedViews}
+            onChange={(e) => setClaimedViews(e.target.value)}
+            className="w-32 rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
+          />
+          <Button type="submit" size="sm" loading={submitting} icon={<Upload className="size-3.5" />}>
+            ثبت
+          </Button>
         </form>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -117,17 +131,26 @@ export function AssignmentsPage() {
 
   return (
     <DashboardLayout>
-      <h2 className="mb-6 text-lg font-bold text-slate-900">کمپین‌های تخصیص‌داده‌شده</h2>
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-slate-900">کمپین‌های تخصیص‌داده‌شده</h2>
+        <p className="mt-0.5 text-sm text-slate-400">استوری‌هات رو منتشر کن و اسکرین‌شات بازدید رو ثبت کن</p>
+      </div>
 
-      {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {error && (
+        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+          <AlertCircle className="size-4 shrink-0" />
+          {error}
+        </p>
+      )}
+
+      {assignments === null && !error && <Spinner label="در حال بارگذاری..." />}
 
       {assignments?.length === 0 && (
-        <div className="rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm text-slate-500">
-            هنوز کمپینی بهت تخصیص داده نشده. وقتی موتور تخصیص یه کمپین مناسب پیدا کنه، اینجا نشون داده
-            می‌شه.
-          </p>
-        </div>
+        <EmptyState
+          icon={Camera}
+          title="هنوز کمپینی بهت تخصیص داده نشده"
+          description="وقتی موتور تخصیص یه کمپین مناسب پیدا کنه، اینجا نشون داده می‌شه."
+        />
       )}
 
       <div className="grid gap-4">

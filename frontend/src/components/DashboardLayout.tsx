@@ -1,5 +1,14 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import {
+  Camera,
+  ClipboardCheck,
+  LogOut,
+  Megaphone,
+  Sparkles,
+  User,
+  Users,
+} from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { formatNumber } from '../lib/labels'
 
@@ -9,61 +18,93 @@ const roleLabel: Record<string, string> = {
   ambassador: 'سفیر',
 }
 
+interface NavItem {
+  to: string
+  label: string
+  icon: typeof Camera
+}
+
+const navByRole: Record<string, NavItem[]> = {
+  advertiser: [{ to: '/advertiser/campaigns', label: 'کمپین‌ها', icon: Megaphone }],
+  ambassador: [
+    { to: '/ambassador/assignments', label: 'کمپین‌های من', icon: Camera },
+    { to: '/ambassador/profile', label: 'پروفایل', icon: User },
+  ],
+  admin: [
+    { to: '/admin/submissions', label: 'بازبینی اسکرین‌شات‌ها', icon: ClipboardCheck },
+    { to: '/admin/campaigns', label: 'کمپین‌ها', icon: Megaphone },
+    { to: '/admin/profiles', label: 'سفیرها', icon: Users },
+  ],
+}
+
+function initials(name: string) {
+  return name.trim().slice(0, 1)
+}
+
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth()
+  const location = useLocation()
+  const items = user ? navByRole[user.role] ?? [] : []
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-        <div className="flex items-center gap-6">
-          <Link to="/">
-            <h1 className="text-lg font-bold text-slate-900">استوری‌یار</h1>
-          </Link>
-          {user?.role === 'advertiser' && (
-            <Link to="/advertiser/campaigns" className="text-sm text-slate-600 hover:text-slate-900">
-              کمپین‌ها
+      <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
+          <div className="flex items-center gap-1">
+            <Link to="/" className="ml-5 flex items-center gap-2">
+              <span className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 text-white shadow-sm shadow-brand-500/30">
+                <Sparkles className="size-4" strokeWidth={2} />
+              </span>
+              <h1 className="text-base font-bold text-slate-900">استوری‌یار</h1>
             </Link>
-          )}
-          {user?.role === 'ambassador' && (
-            <>
-              <Link to="/ambassador/assignments" className="text-sm text-slate-600 hover:text-slate-900">
-                کمپین‌های من
-              </Link>
-              <Link to="/ambassador/profile" className="text-sm text-slate-600 hover:text-slate-900">
-                پروفایل
-              </Link>
-            </>
-          )}
-          {user?.role === 'admin' && (
-            <>
-              <Link to="/admin/submissions" className="text-sm text-slate-600 hover:text-slate-900">
-                بازبینی اسکرین‌شات‌ها
-              </Link>
-              <Link to="/admin/campaigns" className="text-sm text-slate-600 hover:text-slate-900">
-                کمپین‌ها
-              </Link>
-              <Link to="/admin/profiles" className="text-sm text-slate-600 hover:text-slate-900">
-                سفیرها
-              </Link>
-            </>
-          )}
-        </div>
-        <div className="flex items-center gap-4">
-          {user && (
-            <p className="text-xs text-slate-500">
-              {user.name} · {roleLabel[user.role]}
-              {user.role === 'ambassador' && ` · سطح ${formatNumber(user.level)}`}
-            </p>
-          )}
-          <button
-            onClick={() => logout()}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100"
-          >
-            خروج
-          </button>
+
+            <nav className="flex items-center gap-1">
+              {items.map((item) => {
+                const active = location.pathname.startsWith(item.to)
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                      active
+                        ? 'bg-brand-50 text-brand-600'
+                        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                    }`}
+                  >
+                    <item.icon className="size-4" strokeWidth={active ? 2.25 : 1.75} />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {user && (
+              <div className="flex items-center gap-2.5">
+                <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-tl from-brand-500 to-accent-400 text-xs font-bold text-white">
+                  {initials(user.name)}
+                </span>
+                <div className="hidden text-xs leading-tight sm:block">
+                  <p className="font-medium text-slate-700">{user.name}</p>
+                  <p className="text-slate-400">
+                    {roleLabel[user.role]}
+                    {user.role === 'ambassador' && ` · سطح ${formatNumber(user.level)}`}
+                  </p>
+                </div>
+              </div>
+            )}
+            <button
+              onClick={() => logout()}
+              className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+              title="خروج"
+            >
+              <LogOut className="size-4" strokeWidth={1.75} />
+            </button>
+          </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl px-6 py-8">{children}</main>
+      <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
     </div>
   )
 }

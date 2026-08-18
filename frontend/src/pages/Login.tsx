@@ -1,7 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { AlertCircle, LogIn, Mail, Lock } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { extractErrorMessage } from '../lib/errors'
+import { AuthShell } from '../components/AuthShell'
+import { Button } from '../components/ui/Button'
+import { Label, TextInput } from '../components/ui/Field'
 
 export function Login() {
   const { login } = useAuth()
@@ -26,50 +30,48 @@ export function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200"
-      >
-        <h1 className="mb-6 text-xl font-bold text-slate-900">ورود به استوری‌یار</h1>
-
+    <AuthShell title="ورود به استوری‌یار" subtitle="مدیریت کمپین تبلیغات استوری اینستاگرام">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+            <AlertCircle className="size-4 shrink-0" />
+            {error}
+          </p>
         )}
 
-        <label className="mb-1 block text-sm text-slate-600">ایمیل</label>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
+        <div>
+          <Label>ایمیل</Label>
+          <TextInput
+            icon={Mail}
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-        <label className="mb-1 block text-sm text-slate-600">رمز عبور</label>
-        <input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mb-6 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
-        />
+        <div>
+          <Label>رمز عبور</Label>
+          <TextInput
+            icon={Lock}
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-slate-900 py-2 text-sm font-medium text-white disabled:opacity-50"
-        >
+        <Button type="submit" loading={submitting} icon={<LogIn className="size-4" />} className="w-full">
           {submitting ? 'در حال ورود...' : 'ورود'}
-        </button>
+        </Button>
 
-        <p className="mt-4 text-center text-sm text-slate-500">
+        <p className="text-center text-sm text-slate-500">
           حساب نداری؟{' '}
-          <Link to="/register" className="font-medium text-slate-900">
+          <Link to="/register" className="font-medium text-brand-600 hover:text-brand-700">
             ثبت‌نام کن
           </Link>
         </p>
       </form>
-    </div>
+    </AuthShell>
   )
 }
