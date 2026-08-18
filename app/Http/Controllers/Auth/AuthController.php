@@ -18,6 +18,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
+            'phone' => $request->validated('phone'),
             'password' => Hash::make($request->validated('password')),
             'role' => $request->validated('role'),
         ]);
@@ -59,6 +60,17 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
+        return response()->json($request->user());
+    }
+
+    public function updateMe(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'phone' => ['nullable', 'regex:/^09\d{9}$/'],
+        ]);
+
+        $request->user()->update($data);
+
         return response()->json($request->user());
     }
 }

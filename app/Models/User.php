@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'role', 'level', 'status'])]
+#[Fillable(['name', 'email', 'phone', 'password', 'role', 'level', 'status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->campaignAssignments()
             ->whereIn('status', ['assigned', 'posted', 'submitted'])
             ->count();
+    }
+
+    public function routeNotificationForSms(): ?string
+    {
+        return $this->phone;
     }
 
     /**

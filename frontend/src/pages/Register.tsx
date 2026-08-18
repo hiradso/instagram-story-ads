@@ -9,6 +9,7 @@ export function Register() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [role, setRole] = useState<UserRole>('advertiser')
@@ -20,7 +21,7 @@ export function Register() {
     setError(null)
     setSubmitting(true)
     try {
-      await register(name, email, password, passwordConfirmation, role)
+      await register(name, email, phone, password, passwordConfirmation, role)
       navigate('/')
     } catch (err) {
       setError(extractErrorMessage(err))
@@ -55,6 +56,16 @@ export function Register() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
+        />
+
+        <label className="mb-1 block text-sm text-slate-600">شماره موبایل (اختیاری)</label>
+        <input
+          type="tel"
+          placeholder="09xxxxxxxxx"
+          pattern="^09\d{9}$"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           className="mb-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-slate-500"
         />
 

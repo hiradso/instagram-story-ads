@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Campaign\StoreCampaignRequest;
 use App\Http\Requests\Campaign\UpdateCampaignRequest;
 use App\Models\Campaign;
+use App\Notifications\CampaignActivatedNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -97,7 +98,12 @@ class CampaignController extends Controller
             'status' => ['required', 'in:pending_review,active,paused,completed,cancelled'],
         ]);
 
-        $campaign->update(['status' => $request->string('status')->toString()]);
+        $newStatus = $request->string('status')->toString();
+        $campaign->update(['status' => $newStatus]);
+
+        if ($newStatus === 'active') {
+            $campaign->advertiser->notify(new CampaignActivatedNotification($campaign));
+        }
 
         return response()->json($campaign);
     }

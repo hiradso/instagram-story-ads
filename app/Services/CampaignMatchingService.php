@@ -6,6 +6,7 @@ use App\Models\AmbassadorProfile;
 use App\Models\Campaign;
 use App\Models\CampaignAssignment;
 use App\Models\User;
+use App\Notifications\CampaignAssignedNotification;
 use Illuminate\Support\Facades\DB;
 
 class CampaignMatchingService
@@ -16,7 +17,9 @@ class CampaignMatchingService
      */
     public function allocate(Campaign $campaign): int
     {
-        return DB::transaction(function () use ($campaign) {
+        $newlyAssignedAmbassadors = [];
+
+        $assignedCount = DB::transaction(function () use ($campaign, &$newlyAssignedAmbassadors) {
             /** @var Campaign $campaign */
             $campaign = Campaign::whereKey($campaign->id)->lockForUpdate()->firstOrFail();
 
@@ -45,12 +48,21 @@ class CampaignMatchingService
                     'post_deadline_at' => now()->addHours((int) config('campaigns.post_deadline_hours')),
                 ]);
 
+                $newlyAssignedAmbassadors[] = $profile->user;
                 $remainingCapacity -= $profile->avg_views_7d;
                 $assignedCount++;
             }
 
             return $assignedCount;
         });
+
+        // Notify only after the transaction commits, so a queued
+        // notification never runs against not-yet-committed rows.
+        foreach ($newlyAssignedAmbassadors as $ambassador) {
+            $ambassador->notify(new CampaignAssignedNotification($campaign));
+        }
+
+        return $assignedCount;
     }
 
     /**

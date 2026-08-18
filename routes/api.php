@@ -21,6 +21,7 @@ Route::get('/provinces/{province}/cities', [ReferenceDataController::class, 'cit
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::patch('/me', [AuthController::class, 'updateMe']);
 
     Route::middleware('role:admin')->prefix('admin')->group(function () {
         Route::get('/ambassador-profiles', [AmbassadorProfileController::class, 'adminIndex']);

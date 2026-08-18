@@ -10,6 +10,8 @@ use App\Models\CampaignAssignment;
 use App\Models\User;
 use App\Models\ViewSubmission;
 use App\Models\WalletTransaction;
+use App\Notifications\SubmissionApprovedNotification;
+use App\Notifications\SubmissionRejectedNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -69,8 +71,9 @@ class ViewSubmissionService
         }
 
         $approvedViews ??= $submission->claimed_views;
+        $amount = null;
 
-        DB::transaction(function () use ($submission, $admin, $approvedViews) {
+        DB::transaction(function () use ($submission, $admin, $approvedViews, &$amount) {
             $assignment = $submission->campaignAssignment()->lockForUpdate()->first();
             $campaign = Campaign::whereKey($assignment->campaign_id)->lockForUpdate()->firstOrFail();
             $profile = AmbassadorProfile::where('user_id', $assignment->ambassador_id)->lockForUpdate()->firstOrFail();
@@ -106,6 +109,8 @@ class ViewSubmissionService
 
             $this->levelService->maybePromote($assignment->ambassador);
         });
+
+        $submission->campaignAssignment->ambassador->notify(new SubmissionApprovedNotification($submission, $amount));
     }
 
     public function reject(ViewSubmission $submission, User $admin, string $reason): void
@@ -124,5 +129,7 @@ class ViewSubmissionService
 
             $submission->campaignAssignment()->update(['status' => 'rejected']);
         });
+
+        $submission->campaignAssignment->ambassador->notify(new SubmissionRejectedNotification($submission));
     }
 }

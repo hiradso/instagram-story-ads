@@ -20,6 +20,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['nullable', 'regex:/^09\d{9}$/'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'role' => ['required', 'in:advertiser,ambassador'],
         ];
