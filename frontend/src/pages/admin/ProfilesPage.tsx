@@ -9,6 +9,7 @@ import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
+import { InfoTooltip } from '../../components/ui/Tooltip'
 
 interface Row extends AmbassadorProfile {
   user: User
@@ -107,7 +108,13 @@ export function ProfilesPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500">سطح</label>
+              <label className="flex items-center gap-1 text-xs text-slate-500">
+                سطح
+                <InfoTooltip>
+                  سطح ۱: حداکثر ۱ کمپین هم‌زمان. سطح ۲: تا ۳ کمپین. سطح ۳: نامحدود. سفیرها با تایید شدن بازدیدهاشون
+                  خودکار ارتقا می‌گیرن؛ این‌جا می‌تونی دستی هم تغییرش بدی.
+                </InfoTooltip>
+              </label>
               <select
                 value={profile.user.level}
                 onChange={(e) => handleLevelChange(profile, Number(e.target.value))}

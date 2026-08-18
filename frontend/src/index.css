@@ -55,3 +55,30 @@ body {
   background: var(--color-brand-100);
   color: var(--color-brand-600);
 }
+
+/* Single-element conic-gradient ring loader (css-loaders.com style),
+   tinted with the brand gradient instead of a flat color. Uses a mask
+   (not a background overlay) to punch the hole, so it works on any
+   background behind it — including inside colored buttons. */
+.loader-ring {
+  display: inline-block;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--color-brand-500) 100deg,
+    var(--color-accent-500) 200deg,
+    transparent 300deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  animation: loader-ring-spin 0.85s linear infinite;
+}
+.loader-ring--on-brand {
+  background: conic-gradient(from 0deg, transparent 0deg, #fff 100deg, transparent 300deg);
+}
+@keyframes loader-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

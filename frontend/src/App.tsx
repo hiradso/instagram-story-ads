@@ -11,6 +11,7 @@ import { AssignmentsPage } from './pages/ambassador/AssignmentsPage'
 import { SubmissionsPage } from './pages/admin/SubmissionsPage'
 import { AdminCampaignsPage } from './pages/admin/CampaignsPage'
 import { ProfilesPage } from './pages/admin/ProfilesPage'
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+        <Route path="/admin" element={<AdminDashboardPage />} />
         <Route path="/admin/submissions" element={<SubmissionsPage />} />
         <Route path="/admin/campaigns" element={<AdminCampaignsPage />} />
         <Route path="/admin/profiles" element={<ProfilesPage />} />

@@ -192,7 +192,9 @@ export function CampaignFormPage() {
         <Card className="space-y-4 sm:col-span-5">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>قیمت هر ۱۰۰۰ بازدید (تومان)</Label>
+              <Label tooltip="این مبلغی‌یه که سفیر به‌ازای هر ۱۰۰۰ بازدید تاییدشده دریافت می‌کنه. هرچی بالاتر باشه، کمپینت جذاب‌تر و اولویت‌دارتر می‌شه.">
+                قیمت هر ۱۰۰۰ بازدید (تومان)
+              </Label>
               <TextInput
                 type="number"
                 required
@@ -202,7 +204,9 @@ export function CampaignFormPage() {
               />
             </div>
             <div>
-              <Label>بودجه کل (تومان)</Label>
+              <Label tooltip="کل بودجه‌ای که برای این کمپین کنار می‌ذاری. سقف بازدیدی که می‌تونی بخری از تقسیم همین عدد بر قیمت هر ۱۰۰۰ بازدید محاسبه می‌شه.">
+                بودجه کل (تومان)
+              </Label>
               <TextInput
                 type="number"
                 required
@@ -233,7 +237,7 @@ export function CampaignFormPage() {
           </div>
 
           <div>
-            <Label>
+            <Label tooltip="فقط سفیرهای همین استان‌ها برای این کمپین در نظر گرفته می‌شن. اگه هیچ‌کدوم رو انتخاب نکنی، سفیرهای همه‌ی استان‌ها واجد شرایطن.">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="size-3.5" />
                 استان‌های هدف

@@ -1,10 +1,8 @@
-import { Loader2 } from 'lucide-react'
-
 export function Spinner({ label }: { label?: string }) {
   return (
-    <div className="flex animate-fade-in items-center justify-center gap-2 py-16 text-slate-400">
-      <Loader2 className="size-5 animate-spin" />
-      {label && <span className="text-sm">{label}</span>}
+    <div className="animate-fade-in flex flex-col items-center justify-center gap-3 py-16">
+      <span className="loader-ring size-8" />
+      {label && <span className="text-sm text-slate-400">{label}</span>}
     </div>
   )
 }

@@ -23,6 +23,7 @@ import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
+import { InfoTooltip } from '../../components/ui/Tooltip'
 
 function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmission; onReviewed: () => void }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -111,7 +112,13 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
 
         {!showRejectForm ? (
           <div className="flex flex-wrap items-center gap-2">
-            <label className="text-xs text-slate-500">بازدید تاییدشده:</label>
+            <label className="flex items-center gap-1 text-xs text-slate-500">
+              بازدید تاییدشده:
+              <InfoTooltip>
+                پیش‌فرض همون عددیه که سفیر اعلام کرده. اگه با عکس هم‌خونی نداره، قبل از تایید اصلاحش کن — دقیقاً
+                همین عدد مبنای محاسبه‌ی مبلغ واریزیه.
+              </InfoTooltip>
+            </label>
             <input
               type="number"
               min={1}

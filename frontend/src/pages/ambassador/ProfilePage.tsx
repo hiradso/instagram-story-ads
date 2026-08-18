@@ -207,7 +207,9 @@ export function ProfilePage() {
         </div>
 
         <div>
-          <Label>دسته‌بندی پیج</Label>
+          <Label tooltip="کمپین‌ها فقط به سفیرهایی با دسته‌بندی مشابه خودشون تخصیص داده می‌شن، پس این رو با موضوع اصلی محتوای پیجت هماهنگ کن.">
+            دسته‌بندی پیج
+          </Label>
           <Select
             required
             value={form.category_id || ''}
@@ -275,7 +277,9 @@ export function ProfilePage() {
             />
           </div>
           <div>
-            <Label>میانگین بازدید استوری (۷ روز اخیر)</Label>
+            <Label tooltip="این عدد تعیین می‌کنه چه کمپین‌هایی به تو تخصیص داده می‌شن و پرداختیت چقدره — سعی کن نزدیک به میانگین واقعی آمار استوری‌هات باشه.">
+              میانگین بازدید استوری (۷ روز اخیر)
+            </Label>
             <TextInput
               icon={Eye}
               type="number"

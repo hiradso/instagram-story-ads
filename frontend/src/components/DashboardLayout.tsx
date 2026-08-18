@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import {
   Camera,
   ClipboardCheck,
+  LayoutDashboard,
   LogOut,
   Megaphone,
   Sparkles,
@@ -11,6 +12,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { formatNumber } from '../lib/labels'
+import { InfoTooltip } from './ui/Tooltip'
 
 const roleLabel: Record<string, string> = {
   admin: 'ادمین',
@@ -31,6 +33,7 @@ const navByRole: Record<string, NavItem[]> = {
     { to: '/ambassador/profile', label: 'پروفایل', icon: User },
   ],
   admin: [
+    { to: '/admin', label: 'داشبورد', icon: LayoutDashboard },
     { to: '/admin/submissions', label: 'بازبینی اسکرین‌شات‌ها', icon: ClipboardCheck },
     { to: '/admin/campaigns', label: 'کمپین‌ها', icon: Megaphone },
     { to: '/admin/profiles', label: 'سفیرها', icon: Users },
@@ -60,7 +63,10 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
             <nav className="flex items-center gap-1">
               {items.map((item) => {
-                const active = location.pathname.startsWith(item.to)
+                const active =
+                  item.to === '/admin'
+                    ? location.pathname === '/admin'
+                    : location.pathname.startsWith(item.to)
                 return (
                   <Link
                     key={item.to}
@@ -87,9 +93,17 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 </span>
                 <div className="hidden text-xs leading-tight sm:block">
                   <p className="font-medium text-slate-700">{user.name}</p>
-                  <p className="text-slate-400">
+                  <p className="flex items-center gap-1 text-slate-400">
                     {roleLabel[user.role]}
-                    {user.role === 'ambassador' && ` · سطح ${formatNumber(user.level)}`}
+                    {user.role === 'ambassador' && (
+                      <>
+                        {` · سطح ${formatNumber(user.level)}`}
+                        <InfoTooltip>
+                          سطح بالاتر یعنی می‌تونی هم‌زمان کمپین‌های بیشتری بگیری. با تایید شدن بازدیدهات خودکار ارتقا
+                          می‌گیری.
+                        </InfoTooltip>
+                      </>
+                    )}
                   </p>
                 </div>
               </div>

@@ -1,5 +1,4 @@
 import { type ButtonHTMLAttributes, type ReactNode } from 'react'
-import { Loader2 } from 'lucide-react'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success'
 type Size = 'sm' | 'md'
@@ -26,6 +25,10 @@ const sizes: Record<Size, string> = {
   md: 'px-4 py-2 text-sm gap-2',
 }
 
+// Solid/gradient-background variants need the white ring so it's visible
+// against them; light-background variants use the brand-colored ring.
+const solidVariants: Variant[] = ['primary', 'danger', 'success']
+
 export function Button({
   variant = 'primary',
   size = 'md',
@@ -42,7 +45,13 @@ export function Button({
       className={`inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100 ${variants[variant]} ${sizes[size]} ${className}`}
       {...rest}
     >
-      {loading ? <Loader2 className="size-4 animate-spin" /> : icon}
+      {loading ? (
+        <span
+          className={`loader-ring size-3.5 ${solidVariants.includes(variant) ? 'loader-ring--on-brand' : ''}`}
+        />
+      ) : (
+        icon
+      )}
       {children}
     </button>
   )

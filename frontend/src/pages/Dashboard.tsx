@@ -13,7 +13,7 @@ export function Dashboard() {
   }
 
   if (user?.role === 'admin') {
-    return <Navigate to="/admin/submissions" replace />
+    return <Navigate to="/admin" replace />
   }
 
   return <Navigate to="/login" replace />
