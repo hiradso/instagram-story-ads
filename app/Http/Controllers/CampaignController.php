@@ -33,6 +33,7 @@ class CampaignController extends Controller
             'creative_path' => $creativePath,
             'budget_remaining' => $data['budget_total'],
             'capacity_views' => $capacityViews,
+            'views_delivered' => 0,
             'status' => 'draft',
         ]);
 

@@ -23,6 +23,11 @@ class AuthController extends Controller
             'role' => $request->validated('role'),
         ]);
 
+        // create() returns the in-memory model as given, not what the DB
+        // actually stored (e.g. the level/status column defaults) — same
+        // class of bug already fixed once in AmbassadorProfileController.
+        $user->refresh();
+
         return response()->json([
             'user' => $user,
             'token' => $user->createToken('api')->plainTextToken,

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { formatNumber } from '../lib/labels'
 
 const roleLabel: Record<string, string> = {
   admin: 'ادمین',
@@ -51,7 +52,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           {user && (
             <p className="text-xs text-slate-500">
               {user.name} · {roleLabel[user.role]}
-              {user.role === 'ambassador' && ` · سطح ${user.level}`}
+              {user.role === 'ambassador' && ` · سطح ${formatNumber(user.level)}`}
             </p>
           )}
           <button

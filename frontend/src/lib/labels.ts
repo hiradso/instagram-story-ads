@@ -18,8 +18,12 @@ export const campaignStatusColor: Record<CampaignStatus, string> = {
   cancelled: 'bg-red-100 text-red-700',
 }
 
+export function formatNumber(value: string | number) {
+  return Number(value).toLocaleString('fa-IR')
+}
+
 export function formatToman(value: string | number) {
-  return `${Number(value).toLocaleString('fa-IR')} تومان`
+  return `${formatNumber(value)} تومان`
 }
 
 export const assignmentStatusLabel: Record<AssignmentStatus, string> = {
