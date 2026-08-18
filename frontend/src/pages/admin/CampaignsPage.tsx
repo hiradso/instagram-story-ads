@@ -6,6 +6,10 @@ import { extractErrorMessage } from '../../lib/errors'
 import type { Campaign, CampaignStatus } from '../../types'
 
 const nextActions: Partial<Record<CampaignStatus, { label: string; to: CampaignStatus }[]>> = {
+  draft: [
+    { label: 'فعال‌سازی', to: 'active' },
+    { label: 'رد کردن', to: 'cancelled' },
+  ],
   pending_review: [
     { label: 'فعال‌سازی', to: 'active' },
     { label: 'رد کردن', to: 'cancelled' },
