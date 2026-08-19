@@ -48,7 +48,7 @@ export function InfoTooltip({ children }: { children: ReactNode }) {
           className="animate-scale-in pointer-events-none absolute bottom-full right-1/2 z-20 mb-2 w-52 translate-x-1/2 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white shadow-lg dark:bg-slate-700 dark:ring-1 dark:ring-slate-600"
         >
           {children}
-          <span className="absolute top-full right-1/2 size-2 -translate-y-1/2 translate-x-1/2 rotate-45 bg-slate-800 dark:bg-slate-700" />
+          <span className="absolute top-full right-1/2 size-2 -translate-y-1/2 translate-x-1/2 rotate-45 rounded-[2px] bg-slate-800 dark:bg-slate-700" />
         </span>
       )}
     </span>
