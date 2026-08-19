@@ -25,8 +25,8 @@ const sizes: Record<Size, string> = {
   md: 'px-4 py-2 text-sm gap-2',
 }
 
-// Solid/gradient-background variants need the white ring so it's visible
-// against them; light-background variants use the brand-colored ring.
+// Solid/gradient-background variants need white dots so they're visible
+// against them; light-background variants use the brand-colored dots.
 const solidVariants: Variant[] = ['primary', 'danger', 'success']
 
 export function Button({
@@ -46,9 +46,11 @@ export function Button({
       {...rest}
     >
       {loading ? (
-        <span
-          className={`loader-ring size-3.5 ${solidVariants.includes(variant) ? 'loader-ring--on-brand' : ''}`}
-        />
+        <span className={`loader-dots ${solidVariants.includes(variant) ? 'loader-dots--on-brand' : ''}`}>
+          <span />
+          <span />
+          <span />
+        </span>
       ) : (
         icon
       )}
