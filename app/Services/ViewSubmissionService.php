@@ -14,13 +14,16 @@ use App\Notifications\SubmissionApprovedNotification;
 use App\Notifications\SubmissionRejectedNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class ViewSubmissionService
 {
-    public function __construct(private UserLevelService $levelService)
-    {
-    }
+    public function __construct(
+        private UserLevelService $levelService,
+        private ScreenshotProcessor $screenshotProcessor,
+    ) {}
 
     /**
      * Store a screenshot for an assignment, rejecting duplicates and
@@ -37,15 +40,23 @@ class ViewSubmissionService
             throw new SubmissionWindowExpiredException;
         }
 
+        // Hash the original upload (not the resized copy) so two identical
+        // source screenshots are still caught as duplicates even though
+        // processing re-encodes them.
         $hash = hash_file('sha256', $screenshot->getRealPath());
 
         if (ViewSubmission::where('image_hash', $hash)->exists()) {
             throw new DuplicateScreenshotException;
         }
 
-        return DB::transaction(function () use ($assignment, $screenshot, $claimedViews, $hash) {
-            $path = $screenshot->store('view-submissions', 'local');
+        // Normalize dimensions/format before storing — see
+        // ScreenshotProcessor for why (a fixed-size review card shouldn't
+        // have to deal with whatever resolution a phone produced).
+        $processed = $this->screenshotProcessor->process($screenshot);
+        $path = 'view-submissions/'.Str::random(40).'.jpg';
+        Storage::disk('local')->put($path, $processed);
 
+        return DB::transaction(function () use ($assignment, $path, $claimedViews, $hash) {
             $submission = ViewSubmission::create([
                 'campaign_assignment_id' => $assignment->id,
                 'screenshot_path' => $path,
