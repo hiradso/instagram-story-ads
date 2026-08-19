@@ -29,10 +29,10 @@ export function TextInput({
   )
 }
 
-export function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className={baseInput} {...props} />
+export function Textarea({ className = '', ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return <textarea className={`${baseInput} ${className}`} {...rest} />
 }
 
-export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select className={`${baseInput} appearance-none bg-no-repeat`} {...props} />
+export function Select({ className = '', ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
+  return <select className={`${baseInput} appearance-none bg-no-repeat ${className}`} {...rest} />
 }
