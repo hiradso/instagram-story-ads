@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { AlertCircle, Megaphone, Phone, User, UserPlus, Camera, Mail, Lock } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { extractErrorMessage } from '../lib/errors'
@@ -11,12 +11,13 @@ import { Label, TextInput } from '../components/ui/Field'
 export function Register() {
   const { register } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-  const [role, setRole] = useState<UserRole>('advertiser')
+  const [role, setRole] = useState<UserRole>(searchParams.get('role') === 'ambassador' ? 'ambassador' : 'advertiser')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 

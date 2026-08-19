@@ -1,8 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
+import { Landing } from './pages/Landing'
+import { About } from './pages/About'
+import { Guide } from './pages/Guide'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { ForgotPassword } from './pages/ForgotPassword'
-import { Dashboard } from './pages/Dashboard'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { CampaignsListPage } from './pages/advertiser/CampaignsListPage'
 import { CampaignFormPage } from './pages/advertiser/CampaignFormPage'
@@ -21,12 +23,14 @@ import { Settings } from './pages/Settings'
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/guide" element={<Guide />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Dashboard />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
 
