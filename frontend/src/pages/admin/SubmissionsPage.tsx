@@ -13,17 +13,29 @@ import {
 import { DashboardLayout } from '../../components/DashboardLayout'
 import {
   approveSubmission,
-  fetchPendingSubmissions,
+  fetchSubmissions,
   fetchSubmissionScreenshot,
   rejectSubmission,
   type PendingSubmission,
+  type SubmissionFilters,
 } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
+import { submissionStatusIcon, submissionStatusLabel, submissionStatusTone } from '../../lib/labels'
 import { Card } from '../../components/ui/Card'
+import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 import { InfoTooltip } from '../../components/ui/Tooltip'
+import { Pagination } from '../../components/ui/Pagination'
+import { Select } from '../../components/ui/Field'
+
+const statusFilterOptions: { value: NonNullable<SubmissionFilters['status']>; label: string }[] = [
+  { value: 'pending', label: 'در انتظار بررسی' },
+  { value: 'approved', label: 'تاییدشده' },
+  { value: 'rejected', label: 'ردشده' },
+  { value: 'all', label: 'همه' },
+]
 
 function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmission; onReviewed: () => void }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -71,6 +83,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
 
   const ambassador = submission.campaign_assignment.ambassador
   const campaign = submission.campaign_assignment.campaign
+  const StatusIcon = submissionStatusIcon[submission.status]
 
   return (
     <Card className="animate-fade-in-up grid gap-4 sm:grid-cols-[180px_1fr]">
@@ -87,7 +100,14 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
       )}
 
       <div>
-        <h3 className="font-medium text-heading">{campaign.title}</h3>
+        <div className="mb-1.5 flex items-center gap-2">
+          <h3 className="font-medium text-heading">{campaign.title}</h3>
+          {submission.status !== 'pending' && (
+            <Badge tone={submissionStatusTone[submission.status]} icon={<StatusIcon className="size-3.5" />}>
+              {submissionStatusLabel[submission.status]}
+            </Badge>
+          )}
+        </div>
         <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-subtle">
           <span className="flex items-center gap-1.5">
             <UserIcon className="size-3.5 text-faint" />
@@ -99,9 +119,15 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
           </span>
           <span className="flex items-center gap-1.5">
             <Eye className="size-3.5 text-faint" />
-            {submission.claimed_views.toLocaleString('fa-IR')} بازدید اعلام‌شده
+            {submission.status === 'approved' && submission.approved_views !== null
+              ? `${submission.approved_views.toLocaleString('fa-IR')} بازدید تاییدشده`
+              : `${submission.claimed_views.toLocaleString('fa-IR')} بازدید اعلام‌شده`}
           </span>
         </div>
+
+        {submission.status === 'rejected' && submission.rejection_reason && (
+          <p className="mb-2 text-sm text-red-600 dark:text-red-400">دلیل رد: {submission.rejection_reason}</p>
+        )}
 
         {error && (
           <p className="mb-2 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">
@@ -110,7 +136,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
           </p>
         )}
 
-        {!showRejectForm ? (
+        {submission.status !== 'pending' ? null : !showRejectForm ? (
           <div className="flex flex-wrap items-center gap-2">
             <label className="flex items-center gap-1 text-xs text-subtle">
               بازدید تاییدشده:
@@ -177,24 +203,55 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
 
 export function SubmissionsPage() {
   const [submissions, setSubmissions] = useState<PendingSubmission[] | null>(null)
+  const [lastPage, setLastPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [status, setStatus] = useState<NonNullable<SubmissionFilters['status']>>('pending')
 
   function load() {
-    fetchPendingSubmissions().then((res) => setSubmissions(res.data))
+    fetchSubmissions({ status, page }).then((res) => {
+      setSubmissions(res.data)
+      setLastPage(res.last_page)
+      setTotal(res.total)
+    })
   }
 
-  useEffect(load, [])
+  useEffect(load, [status, page])
+
+  function handleStatusFilterChange(value: NonNullable<SubmissionFilters['status']>) {
+    setStatus(value)
+    setPage(1)
+  }
 
   return (
     <DashboardLayout>
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-heading">اسکرین‌شات‌های در انتظار بررسی</h2>
+        <h2 className="text-xl font-bold text-heading">بررسی اسکرین‌شات‌ها</h2>
         <p className="mt-0.5 text-sm text-faint">بازدید ادعاشده رو با اسکرین‌شات تطبیق بده و تایید یا رد کن</p>
+      </div>
+
+      <div className="mb-4">
+        <Select
+          value={status}
+          onChange={(e) => handleStatusFilterChange(e.target.value as NonNullable<SubmissionFilters['status']>)}
+          className="w-auto"
+        >
+          {statusFilterOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </Select>
       </div>
 
       {submissions === null && <Spinner label="در حال بارگذاری..." />}
 
       {submissions?.length === 0 && (
-        <EmptyState icon={ShieldCheck} title="چیزی برای بررسی نیست" description="همه‌ی اسکرین‌شات‌ها بررسی شدن." />
+        <EmptyState
+          icon={ShieldCheck}
+          title={status === 'pending' ? 'چیزی برای بررسی نیست' : 'موردی پیدا نشد'}
+          description={status === 'pending' ? 'همه‌ی اسکرین‌شات‌ها بررسی شدن.' : undefined}
+        />
       )}
 
       <div className="grid gap-4">
@@ -202,6 +259,10 @@ export function SubmissionsPage() {
           <SubmissionCard key={s.id} submission={s} onReviewed={load} />
         ))}
       </div>
+
+      {submissions && submissions.length > 0 && (
+        <Pagination currentPage={page} lastPage={lastPage} total={total} onPageChange={setPage} />
+      )}
     </DashboardLayout>
   )
 }

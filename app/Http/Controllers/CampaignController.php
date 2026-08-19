@@ -99,11 +99,23 @@ class CampaignController extends Controller
         return response()->json(status: 204);
     }
 
-    public function adminIndex(): JsonResponse
+    public function adminIndex(Request $request): JsonResponse
     {
-        return response()->json(
-            Campaign::with(['advertiser', 'category', 'provinces'])->latest()->paginate(20)
-        );
+        $campaigns = Campaign::query()
+            ->with(['advertiser', 'category', 'provinces'])
+            ->when(
+                $request->filled('status') && $request->string('status')->toString() !== 'all',
+                fn ($query) => $query->where('status', $request->string('status'))
+            )
+            ->when(
+                $request->filled('search'),
+                fn ($query) => $query->where('title', 'like', '%'.$request->string('search').'%')
+            )
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return response()->json($campaigns);
     }
 
     public function updateStatus(Request $request, Campaign $campaign): JsonResponse

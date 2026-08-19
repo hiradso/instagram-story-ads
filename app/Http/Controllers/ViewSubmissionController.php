@@ -12,13 +12,16 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewSubmissionController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $status = $request->string('status')->toString() ?: 'pending';
+
         $submissions = ViewSubmission::query()
-            ->where('status', 'pending')
+            ->when($status !== 'all', fn ($query) => $query->where('status', $status))
             ->with(['campaignAssignment.campaign', 'campaignAssignment.ambassador'])
             ->oldest()
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return response()->json($submissions);
     }

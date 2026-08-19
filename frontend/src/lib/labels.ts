@@ -87,6 +87,18 @@ export const submissionStatusLabel: Record<SubmissionStatus, string> = {
   rejected: 'ردشده',
 }
 
+export const submissionStatusTone: Record<SubmissionStatus, Tone> = {
+  pending: 'amber',
+  approved: 'emerald',
+  rejected: 'red',
+}
+
+export const submissionStatusIcon: Record<SubmissionStatus, LucideIcon> = {
+  pending: Clock,
+  approved: CheckCircle2,
+  rejected: XCircle,
+}
+
 export const withdrawalStatusLabel: Record<WithdrawalStatus, string> = {
   pending: 'در انتظار بررسی',
   approved: 'تاییدشده',

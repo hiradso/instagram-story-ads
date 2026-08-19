@@ -44,11 +44,27 @@ class AmbassadorProfileController extends Controller
         return response()->json($profile);
     }
 
-    public function adminIndex(): JsonResponse
+    public function adminIndex(Request $request): JsonResponse
     {
-        return response()->json(
-            AmbassadorProfile::with(['user', 'category', 'province', 'city'])->paginate(20)
-        );
+        $profiles = AmbassadorProfile::query()
+            ->with(['user', 'category', 'province', 'city'])
+            ->when($request->filled('verified'), function ($query) use ($request) {
+                $request->string('verified')->toString() === 'yes'
+                    ? $query->whereNotNull('verified_at')
+                    : $query->whereNull('verified_at');
+            })
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $term = '%'.$request->string('search').'%';
+                $query->where(function ($inner) use ($term) {
+                    $inner->where('instagram_username', 'like', $term)
+                        ->orWhereHas('user', fn ($userQuery) => $userQuery->where('name', 'like', $term));
+                });
+            })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return response()->json($profiles);
     }
 
     public function verify(AmbassadorProfile $ambassadorProfile): JsonResponse

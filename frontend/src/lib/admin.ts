@@ -5,9 +5,14 @@ export interface PendingSubmission extends ViewSubmission {
   campaign_assignment: CampaignAssignment & { ambassador: User }
 }
 
-export function fetchPendingSubmissions() {
+export interface SubmissionFilters {
+  status?: 'pending' | 'approved' | 'rejected' | 'all'
+  page?: number
+}
+
+export function fetchSubmissions(filters: SubmissionFilters = {}) {
   return api
-    .get<PaginatedResponse<PendingSubmission>>('/admin/submissions')
+    .get<PaginatedResponse<PendingSubmission>>('/admin/submissions', { params: filters })
     .then((res) => res.data)
 }
 
@@ -27,8 +32,16 @@ export function rejectSubmission(submissionId: number, reason: string) {
   return api.post(`/admin/submissions/${submissionId}/reject`, { reason })
 }
 
-export function fetchAdminCampaigns() {
-  return api.get<PaginatedResponse<Campaign>>('/admin/campaigns').then((res) => res.data)
+export interface CampaignFilters {
+  status?: CampaignStatus | 'all'
+  search?: string
+  page?: number
+}
+
+export function fetchAdminCampaigns(filters: CampaignFilters = {}) {
+  return api
+    .get<PaginatedResponse<Campaign>>('/admin/campaigns', { params: filters })
+    .then((res) => res.data)
 }
 
 export function updateCampaignStatus(campaignId: number, status: CampaignStatus) {
@@ -39,9 +52,15 @@ interface AdminAmbassadorProfile extends AmbassadorProfile {
   user: User
 }
 
-export function fetchAdminProfiles() {
+export interface ProfileFilters {
+  verified?: 'yes' | 'no'
+  search?: string
+  page?: number
+}
+
+export function fetchAdminProfiles(filters: ProfileFilters = {}) {
   return api
-    .get<PaginatedResponse<AdminAmbassadorProfile>>('/admin/ambassador-profiles')
+    .get<PaginatedResponse<AdminAmbassadorProfile>>('/admin/ambassador-profiles', { params: filters })
     .then((res) => res.data)
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { AlertCircle, BadgeCheck, Clock, Link2, ShieldCheck, Users, Wallet } from 'lucide-react'
+import { AlertCircle, BadgeCheck, Clock, Link2, Search, ShieldCheck, Users, Wallet } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
-import { fetchAdminProfiles, updateUserLevel, verifyProfile } from '../../lib/admin'
+import { fetchAdminProfiles, updateUserLevel, verifyProfile, type ProfileFilters } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
 import type { AmbassadorProfile, User } from '../../types'
 import { Card } from '../../components/ui/Card'
@@ -10,21 +10,57 @@ import { Button } from '../../components/ui/Button'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 import { InfoTooltip } from '../../components/ui/Tooltip'
+import { Pagination } from '../../components/ui/Pagination'
+import { Select, TextInput } from '../../components/ui/Field'
 
 interface Row extends AmbassadorProfile {
   user: User
 }
 
+const verifiedFilterOptions: { value: ProfileFilters['verified'] | 'all'; label: string }[] = [
+  { value: 'all', label: 'همه' },
+  { value: 'yes', label: 'تاییدشده' },
+  { value: 'no', label: 'تاییدنشده' },
+]
+
 export function ProfilesPage() {
   const [profiles, setProfiles] = useState<Row[] | null>(null)
+  const [lastPage, setLastPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [verified, setVerified] = useState<ProfileFilters['verified'] | 'all'>('all')
+  const [searchInput, setSearchInput] = useState('')
+  const [search, setSearch] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<number | null>(null)
 
   function load() {
-    fetchAdminProfiles().then((res) => setProfiles(res.data as Row[]))
+    fetchAdminProfiles({
+      verified: verified === 'all' ? undefined : verified,
+      search: search || undefined,
+      page,
+    }).then((res) => {
+      setProfiles(res.data as Row[])
+      setLastPage(res.last_page)
+      setTotal(res.total)
+    })
   }
 
-  useEffect(load, [])
+  useEffect(load, [verified, search, page])
+
+  // Debounce the search box so we don't fire a request per keystroke.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput)
+      setPage(1)
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [searchInput])
+
+  function handleVerifiedFilterChange(value: ProfileFilters['verified'] | 'all') {
+    setVerified(value)
+    setPage(1)
+  }
 
   async function handleVerify(profile: Row) {
     setError(null)
@@ -59,6 +95,27 @@ export function ProfilesPage() {
         <p className="mt-0.5 text-sm text-faint">تایید پروفایل و مدیریت سطح سفیرها</p>
       </div>
 
+      <div className="mb-4 flex flex-wrap gap-3">
+        <TextInput
+          icon={Search}
+          placeholder="جست‌وجوی نام یا نام‌کاربری اینستاگرام..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="max-w-xs"
+        />
+        <Select
+          value={verified}
+          onChange={(e) => handleVerifiedFilterChange(e.target.value as ProfileFilters['verified'] | 'all')}
+          className="w-auto"
+        >
+          {verifiedFilterOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </Select>
+      </div>
+
       {error && (
         <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
           <AlertCircle className="size-4 shrink-0" />
@@ -68,7 +125,12 @@ export function ProfilesPage() {
 
       {profiles === null && <Spinner label="در حال بارگذاری..." />}
 
-      {profiles?.length === 0 && <EmptyState icon={ShieldCheck} title="هنوز سفیری ثبت‌نام نکرده" />}
+      {profiles?.length === 0 && (
+        <EmptyState
+          icon={ShieldCheck}
+          title={verified !== 'all' || search ? 'سفیری با این فیلتر پیدا نشد' : 'هنوز سفیری ثبت‌نام نکرده'}
+        />
+      )}
 
       <div className="grid gap-4">
         {profiles?.map((profile) => (
@@ -140,6 +202,10 @@ export function ProfilesPage() {
           </Card>
         ))}
       </div>
+
+      {profiles && profiles.length > 0 && (
+        <Pagination currentPage={page} lastPage={lastPage} total={total} onPageChange={setPage} />
+      )}
     </DashboardLayout>
   )
 }

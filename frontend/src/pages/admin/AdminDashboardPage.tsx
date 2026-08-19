@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, BadgeCheck, CheckCircle2, ClipboardCheck, Megaphone, ShieldCheck, Users } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
-import { fetchAdminCampaigns, fetchAdminProfiles, fetchPendingSubmissions } from '../../lib/admin'
+import { fetchAdminCampaigns, fetchAdminProfiles, fetchSubmissions } from '../../lib/admin'
 import { Card } from '../../components/ui/Card'
 import { Spinner } from '../../components/ui/Spinner'
 
@@ -18,17 +18,21 @@ export function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
 
   useEffect(() => {
-    Promise.all([fetchPendingSubmissions(), fetchAdminCampaigns(), fetchAdminProfiles()]).then(
-      ([submissions, campaigns, profiles]) => {
-        setStats({
-          pendingSubmissions: submissions.total,
-          totalCampaigns: campaigns.total,
-          activeCampaigns: campaigns.data.filter((c) => c.status === 'active').length,
-          totalAmbassadors: profiles.total,
-          unverifiedAmbassadors: profiles.data.filter((p) => !p.verified_at).length,
-        })
-      },
-    )
+    Promise.all([
+      fetchSubmissions(),
+      fetchAdminCampaigns(),
+      fetchAdminCampaigns({ status: 'active' }),
+      fetchAdminProfiles(),
+      fetchAdminProfiles({ verified: 'no' }),
+    ]).then(([submissions, campaigns, activeCampaigns, profiles, unverifiedProfiles]) => {
+      setStats({
+        pendingSubmissions: submissions.total,
+        totalCampaigns: campaigns.total,
+        activeCampaigns: activeCampaigns.total,
+        totalAmbassadors: profiles.total,
+        unverifiedAmbassadors: unverifiedProfiles.total,
+      })
+    })
   }, [])
 
   if (!stats) {
