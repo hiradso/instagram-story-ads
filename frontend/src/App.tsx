@@ -15,6 +15,7 @@ import { AdminCampaignsPage } from './pages/admin/CampaignsPage'
 import { ProfilesPage } from './pages/admin/ProfilesPage'
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
 import { WithdrawalsPage } from './pages/admin/WithdrawalsPage'
+import { Settings } from './pages/Settings'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['advertiser']} />}>

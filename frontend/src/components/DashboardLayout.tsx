@@ -6,21 +6,16 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
+  Settings,
   Sparkles,
   User,
   Users,
   Wallet,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { formatNumber } from '../lib/labels'
+import { formatNumber, roleLabel } from '../lib/labels'
 import { InfoTooltip } from './ui/Tooltip'
 import { ThemeToggle } from './ui/ThemeToggle'
-
-const roleLabel: Record<string, string> = {
-  admin: 'ادمین',
-  advertiser: 'آگهی‌دهنده',
-  ambassador: 'سفیر',
-}
 
 interface NavItem {
   to: string
@@ -112,6 +107,14 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 </div>
               </div>
             )}
+
+            <Link
+              to="/settings"
+              className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+              title="تنظیمات حساب"
+            >
+              <Settings className="size-4" strokeWidth={1.75} />
+            </Link>
 
             <ThemeToggle />
 

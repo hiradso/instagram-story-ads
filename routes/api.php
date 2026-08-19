@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::patch('/me', [AuthController::class, 'updateMe']);
+    Route::put('/me/password', [AuthController::class, 'updatePassword']);
 
     Route::middleware('role:admin')->prefix('admin')->group(function () {
         Route::get('/ambassador-profiles', [AmbassadorProfileController::class, 'adminIndex']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdatePasswordRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -77,5 +78,24 @@ class AuthController extends Controller
         $request->user()->update($data);
 
         return response()->json($request->user());
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (! Hash::check($request->validated('current_password'), $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => ['رمز عبور فعلی اشتباهه.'],
+            ]);
+        }
+
+        $user->update(['password' => Hash::make($request->validated('password'))]);
+
+        // Keep the session that just proved the current password; sign
+        // out every other device/token.
+        $user->tokens()->where('id', '!=', $request->user()->currentAccessToken()->id)->delete();
+
+        return response()->json(['message' => 'رمز عبورت با موفقیت تغییر کرد.']);
     }
 }

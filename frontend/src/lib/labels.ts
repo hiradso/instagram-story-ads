@@ -9,9 +9,15 @@ import {
   XCircle,
   type LucideIcon,
 } from 'lucide-react'
-import type { AssignmentStatus, CampaignStatus, SubmissionStatus, WithdrawalStatus } from '../types'
+import type { AssignmentStatus, CampaignStatus, SubmissionStatus, UserRole, WithdrawalStatus } from '../types'
 
 type Tone = 'slate' | 'amber' | 'emerald' | 'orange' | 'blue' | 'red'
+
+export const roleLabel: Record<UserRole, string> = {
+  admin: 'ادمین',
+  advertiser: 'آگهی‌دهنده',
+  ambassador: 'سفیر',
+}
 
 export const campaignStatusLabel: Record<CampaignStatus, string> = {
   draft: 'پیش‌نویس',
