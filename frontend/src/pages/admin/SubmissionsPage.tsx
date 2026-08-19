@@ -91,10 +91,10 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
         <img
           src={imageUrl}
           alt="اسکرین‌شات بازدید"
-          className="aspect-[3/4] w-full rounded-xl object-cover ring-1 ring-slate-200 dark:ring-slate-800"
+          className="aspect-[9/16] w-full rounded-xl bg-slate-50 object-contain ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-800"
         />
       ) : (
-        <div className="flex aspect-[3/4] items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800 dark:text-slate-600">
+        <div className="flex aspect-[9/16] items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800 dark:text-slate-600">
           <ImageOff className="size-6 animate-pulse" strokeWidth={1.5} />
         </div>
       )}
