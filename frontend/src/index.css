@@ -16,6 +16,8 @@
   --color-accent-400: #fb923c;
   --color-accent-500: #f97316;
 
+  --color-surface: #fbfbfd;
+
   --animate-fade-in: fade-in 0.4s ease-out both;
   --animate-fade-in-up: fade-in-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-scale-in: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -52,7 +54,7 @@
 
 body {
   font-family: 'Vazirmatn', system-ui, sans-serif;
-  background: #f8fafc;
+  background: #eef1f6;
   transition: background-color 0.2s ease;
 }
 

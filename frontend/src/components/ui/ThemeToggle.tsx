@@ -20,7 +20,7 @@ export function ThemeToggle() {
       <Moon className="absolute right-1.5 size-4 text-indigo-300 transition-opacity duration-300" style={{ opacity: isDark ? 1 : 0.35 }} strokeWidth={2} />
 
       <span
-        className="absolute left-1 top-1 flex size-6 items-center justify-center rounded-full bg-white shadow-md transition-transform duration-300 ease-out dark:bg-slate-900"
+        className="absolute left-1 top-1 flex size-6 items-center justify-center rounded-full bg-surface shadow-md transition-transform duration-300 ease-out dark:bg-slate-900"
         style={{ transform: isDark ? 'translateX(1.5rem)' : 'translateX(0)' }}
       >
         {isDark ? (

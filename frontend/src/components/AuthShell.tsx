@@ -21,7 +21,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
           <p className="mt-1 text-sm text-subtle">{subtitle}</p>
         </div>
 
-        <div className="rounded-2xl bg-white/90 p-7 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200/70 backdrop-blur-sm dark:bg-slate-900/90 dark:shadow-black/20 dark:ring-slate-800/70">
+        <div className="rounded-2xl bg-surface/90 p-7 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200/70 backdrop-blur-sm dark:bg-slate-900/90 dark:shadow-black/20 dark:ring-slate-800/70">
           {children}
         </div>
       </div>
