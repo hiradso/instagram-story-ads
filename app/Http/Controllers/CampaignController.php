@@ -48,7 +48,20 @@ class CampaignController extends Controller
     {
         Gate::authorize('view', $campaign);
 
-        return response()->json($campaign->load(['category', 'provinces', 'assignments']));
+        $campaign->load([
+            'category',
+            'provinces',
+            'assignments.ambassador.ambassadorProfile',
+            'assignments.viewSubmission',
+        ]);
+
+        // The advertiser can see who's assigned to their campaign, but not
+        // an ambassador's contact details.
+        $campaign->assignments->each(
+            fn ($assignment) => $assignment->ambassador?->makeHidden(['email', 'phone'])
+        );
+
+        return response()->json($campaign);
     }
 
     public function update(UpdateCampaignRequest $request, Campaign $campaign): JsonResponse

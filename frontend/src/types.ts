@@ -47,6 +47,7 @@ export interface Campaign {
   created_at: string
   category?: Category
   provinces?: Province[]
+  assignments?: CampaignAssignmentWithAmbassador[]
 }
 
 export interface PaginatedResponse<T> {
@@ -94,6 +95,21 @@ export interface CampaignAssignment {
   post_deadline_at: string
   posted_at: string | null
   campaign: Campaign
+  view_submission: ViewSubmission | null
+}
+
+export interface CampaignAssignmentWithAmbassador {
+  id: number
+  ambassador_id: number
+  status: AssignmentStatus
+  assigned_at: string
+  post_deadline_at: string
+  posted_at: string | null
+  ambassador: {
+    id: number
+    name: string
+    ambassador_profile?: { instagram_username: string; instagram_url: string }
+  }
   view_submission: ViewSubmission | null
 }
 

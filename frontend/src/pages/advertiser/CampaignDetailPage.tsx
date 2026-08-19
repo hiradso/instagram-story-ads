@@ -1,17 +1,62 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { AlertCircle, Eye, MapPin, Pencil, Tag, Trash2, Wallet } from 'lucide-react'
+import { AlertCircle, Eye, Link2, MapPin, Pencil, Tag, Trash2, Users, Wallet } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { deleteCampaign, fetchCampaign } from '../../lib/campaigns'
-import { campaignStatusIcon, campaignStatusLabel, campaignStatusTone, formatToman } from '../../lib/labels'
+import {
+  assignmentStatusIcon,
+  assignmentStatusLabel,
+  assignmentStatusTone,
+  campaignStatusIcon,
+  campaignStatusLabel,
+  campaignStatusTone,
+  formatToman,
+} from '../../lib/labels'
 import { storageUrl } from '../../lib/storage'
 import { extractErrorMessage } from '../../lib/errors'
-import type { Campaign } from '../../types'
+import type { Campaign, CampaignAssignmentWithAmbassador } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { StatTile } from '../../components/ui/StatTile'
 import { Spinner } from '../../components/ui/Spinner'
+import { EmptyState } from '../../components/ui/EmptyState'
+
+function AssignmentRow({ assignment }: { assignment: CampaignAssignmentWithAmbassador }) {
+  const StatusIcon = assignmentStatusIcon[assignment.status]
+  const submission = assignment.view_submission
+
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 py-3 last:border-0 dark:border-slate-800">
+      <div>
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-heading">{assignment.ambassador.name}</span>
+          {assignment.ambassador.ambassador_profile && (
+            <a
+              href={assignment.ambassador.ambassador_profile.instagram_url}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 text-sm text-subtle hover:text-brand-600 dark:hover:text-brand-400"
+            >
+              <Link2 className="size-3.5" />@{assignment.ambassador.ambassador_profile.instagram_username}
+            </a>
+          )}
+        </div>
+        {submission && (
+          <p className="mt-0.5 text-sm text-faint">
+            {submission.approved_views !== null
+              ? `${submission.approved_views.toLocaleString('fa-IR')} بازدید تاییدشده`
+              : `${submission.claimed_views.toLocaleString('fa-IR')} بازدید اعلام‌شده`}
+            {submission.status === 'rejected' && submission.rejection_reason && ` — ${submission.rejection_reason}`}
+          </p>
+        )}
+      </div>
+      <Badge tone={assignmentStatusTone[assignment.status]} icon={<StatusIcon className="size-3.5" />}>
+        {assignmentStatusLabel[assignment.status]}
+      </Badge>
+    </div>
+  )
+}
 
 export function CampaignDetailPage() {
   const { id } = useParams()
@@ -154,6 +199,29 @@ export function CampaignDetailPage() {
             </Card>
           )}
         </div>
+      </div>
+
+      <div className="animate-fade-in-up mt-6">
+        <h3 className="mb-3 flex items-center gap-1.5 text-sm font-medium text-heading">
+          <Users className="size-4 text-faint" />
+          سفیرهای تخصیص‌داده‌شده
+        </h3>
+
+        {(!campaign.assignments || campaign.assignments.length === 0) && (
+          <EmptyState
+            icon={Users}
+            title="هنوز هیچ سفیری تخصیص داده نشده"
+            description="وقتی موتور تخصیص کمپینت رو به سفیرها اختصاص بده، اینجا نشون داده می‌شن."
+          />
+        )}
+
+        {campaign.assignments && campaign.assignments.length > 0 && (
+          <Card>
+            {campaign.assignments.map((a) => (
+              <AssignmentRow key={a.id} assignment={a} />
+            ))}
+          </Card>
+        )}
       </div>
     </DashboardLayout>
   )
