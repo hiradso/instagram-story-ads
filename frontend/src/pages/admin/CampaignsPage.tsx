@@ -111,12 +111,12 @@ export function AdminCampaignsPage() {
           placeholder="جست‌وجوی عنوان کمپین..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="max-w-xs"
+          className="min-w-48 flex-1"
         />
         <Select
           value={status}
           onChange={(e) => handleStatusFilterChange(e.target.value as CampaignStatus | 'all')}
-          className="w-auto"
+          className="w-auto shrink-0"
         >
           {statusFilterOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>

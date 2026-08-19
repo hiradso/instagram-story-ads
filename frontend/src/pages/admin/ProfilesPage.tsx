@@ -101,12 +101,12 @@ export function ProfilesPage() {
           placeholder="جست‌وجوی نام یا نام‌کاربری اینستاگرام..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="max-w-xs"
+          className="min-w-48 flex-1"
         />
         <Select
           value={verified}
           onChange={(e) => handleVerifiedFilterChange(e.target.value as ProfileFilters['verified'] | 'all')}
-          className="w-auto"
+          className="w-auto shrink-0"
         >
           {verifiedFilterOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -177,16 +177,16 @@ export function ProfilesPage() {
                   خودکار ارتقا می‌گیرن؛ این‌جا می‌تونی دستی هم تغییرش بدی.
                 </InfoTooltip>
               </label>
-              <select
+              <Select
                 value={profile.user.level}
                 onChange={(e) => handleLevelChange(profile, Number(e.target.value))}
                 disabled={busyId === profile.id}
-                className="rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white px-2.5 py-1.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-500/20"
+                className="w-auto shrink-0"
               >
                 <option value={1}>۱</option>
                 <option value={2}>۲</option>
                 <option value={3}>۳</option>
-              </select>
+              </Select>
 
               {!profile.verified_at && (
                 <Button

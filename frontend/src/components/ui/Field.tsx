@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
-import type { LucideIcon } from 'lucide-react'
+import { ChevronDown, type LucideIcon } from 'lucide-react'
 import { InfoTooltip } from './Tooltip'
 
 const baseInput =
@@ -22,9 +22,9 @@ export function TextInput({
   if (!Icon) return <input className={`${baseInput} ${className}`} {...rest} />
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}>
       <Icon className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-faint" />
-      <input className={`${baseInput} pr-9 ${className}`} {...rest} />
+      <input className={`${baseInput} pr-9`} {...rest} />
     </div>
   )
 }
@@ -34,5 +34,10 @@ export function Textarea({ className = '', ...rest }: TextareaHTMLAttributes<HTM
 }
 
 export function Select({ className = '', ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select className={`${baseInput} appearance-none bg-no-repeat ${className}`} {...rest} />
+  return (
+    <div className={`relative ${className}`}>
+      <select className={`${baseInput} appearance-none bg-no-repeat pl-8`} {...rest} />
+      <ChevronDown className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-faint" />
+    </div>
+  )
 }
