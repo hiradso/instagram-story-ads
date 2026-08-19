@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AmbassadorProfileController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CampaignAssignmentController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ReferenceDataController;
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 // advertiser/ambassador roles are self-service (enforced in RegisterRequest).
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('throttle:3,1');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:10,1');
 
 Route::get('/categories', [ReferenceDataController::class, 'categories']);
 Route::get('/provinces', [ReferenceDataController::class, 'provinces']);

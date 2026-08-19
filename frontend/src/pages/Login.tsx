@@ -51,7 +51,12 @@ export function Login() {
         </div>
 
         <div>
-          <Label>رمز عبور</Label>
+          <div className="mb-1.5 flex items-center justify-between">
+            <label className="text-sm font-medium text-body">رمز عبور</label>
+            <Link to="/forgot-password" className="text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+              رمزت رو فراموش کردی؟
+            </Link>
+          </div>
           <TextInput
             icon={Lock}
             type="password"
