@@ -108,7 +108,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               </div>
             )}
 
-            <HoverLabel label="تنظیمات حساب">
+            <HoverLabel label="تنظیمات حساب" position="bottom">
               <Link
                 to="/settings"
                 className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
@@ -119,7 +119,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
             <ThemeToggle />
 
-            <HoverLabel label="خروج">
+            <HoverLabel label="خروج" position="bottom">
               <button
                 onClick={() => logout()}
                 className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"

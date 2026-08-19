@@ -7,7 +7,7 @@ export function ThemeToggle() {
   const isDark = theme === 'dark'
 
   return (
-    <HoverLabel label={isDark ? 'حالت روشن' : 'حالت تاریک'}>
+    <HoverLabel label={isDark ? 'حالت روشن' : 'حالت تاریک'} position="bottom">
       <button
         type="button"
         dir="ltr"
