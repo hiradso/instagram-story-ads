@@ -54,3 +54,25 @@ export function InfoTooltip({ children }: { children: ReactNode }) {
     </span>
   )
 }
+
+/**
+ * Styled replacement for a native `title` attribute on an icon-only
+ * button/link — the browser's own title tooltip can't be restyled (sharp
+ * corners, no dark-mode awareness), so icon buttons should use this
+ * instead of `title=` whenever the label needs to look like the rest of
+ * the site's UI.
+ */
+export function HoverLabel({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <span className="group/tip relative inline-flex">
+      {children}
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full right-1/2 z-20 mb-2 translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-800 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tip:opacity-100 dark:bg-slate-700 dark:ring-1 dark:ring-slate-600"
+      >
+        {label}
+        <span className="absolute top-full right-1/2 size-2 -translate-y-1/2 translate-x-1/2 rotate-45 rounded-[2px] bg-slate-800 dark:bg-slate-700" />
+      </span>
+    </span>
+  )
+}

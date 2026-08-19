@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { formatNumber, roleLabel } from '../lib/labels'
-import { InfoTooltip } from './ui/Tooltip'
+import { HoverLabel, InfoTooltip } from './ui/Tooltip'
 import { ThemeToggle } from './ui/ThemeToggle'
 
 interface NavItem {
@@ -108,23 +108,25 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               </div>
             )}
 
-            <Link
-              to="/settings"
-              className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
-              title="تنظیمات حساب"
-            >
-              <Settings className="size-4" strokeWidth={1.75} />
-            </Link>
+            <HoverLabel label="تنظیمات حساب">
+              <Link
+                to="/settings"
+                className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+              >
+                <Settings className="size-4" strokeWidth={1.75} />
+              </Link>
+            </HoverLabel>
 
             <ThemeToggle />
 
-            <button
-              onClick={() => logout()}
-              className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-              title="خروج"
-            >
-              <LogOut className="size-4" strokeWidth={1.75} />
-            </button>
+            <HoverLabel label="خروج">
+              <button
+                onClick={() => logout()}
+                className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+              >
+                <LogOut className="size-4" strokeWidth={1.75} />
+              </button>
+            </HoverLabel>
           </div>
         </div>
       </header>
