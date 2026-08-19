@@ -7,6 +7,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { CampaignsListPage } from './pages/advertiser/CampaignsListPage'
 import { CampaignFormPage } from './pages/advertiser/CampaignFormPage'
 import { CampaignDetailPage } from './pages/advertiser/CampaignDetailPage'
+import { WalletPage as AdvertiserWalletPage } from './pages/advertiser/WalletPage'
 import { ProfilePage } from './pages/ambassador/ProfilePage'
 import { AssignmentsPage } from './pages/ambassador/AssignmentsPage'
 import { WalletPage } from './pages/ambassador/WalletPage'
@@ -34,6 +35,7 @@ function App() {
         <Route path="/advertiser/campaigns/new" element={<CampaignFormPage />} />
         <Route path="/advertiser/campaigns/:id" element={<CampaignDetailPage />} />
         <Route path="/advertiser/campaigns/:id/edit" element={<CampaignFormPage />} />
+        <Route path="/advertiser/wallet" element={<AdvertiserWalletPage />} />
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['ambassador']} />}>

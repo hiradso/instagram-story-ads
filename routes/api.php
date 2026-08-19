@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertiserWalletController;
 use App\Http\Controllers\AmbassadorProfileController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -56,6 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
         // POST, not PUT/PATCH: this accepts multipart uploads (a new creative image).
         Route::post('/campaigns/{campaign}', [CampaignController::class, 'update']);
         Route::delete('/campaigns/{campaign}', [CampaignController::class, 'destroy']);
+
+        Route::get('/wallet', [AdvertiserWalletController::class, 'show']);
+        Route::post('/wallet/deposit', [AdvertiserWalletController::class, 'deposit']);
     });
 
     Route::middleware('role:ambassador')->prefix('ambassador')->group(function () {

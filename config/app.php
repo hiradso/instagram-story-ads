@@ -54,6 +54,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    // Where the React SPA is served from — used to build redirect URLs
+    // back into the app after a payment gateway callback.
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5175'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

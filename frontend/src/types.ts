@@ -113,6 +113,22 @@ export interface CampaignAssignmentWithAmbassador {
   view_submission: ViewSubmission | null
 }
 
+export type WalletTransactionType = 'credit' | 'debit'
+
+export interface WalletTransaction {
+  id: number
+  type: WalletTransactionType
+  amount: string
+  balance_after: string
+  description: string | null
+  created_at: string
+}
+
+export interface AdvertiserWallet {
+  wallet_balance: string
+  transactions: PaginatedResponse<WalletTransaction>
+}
+
 export type WithdrawalStatus = 'pending' | 'approved' | 'rejected' | 'paid'
 
 export interface WithdrawalRequest {

@@ -24,7 +24,10 @@ interface NavItem {
 }
 
 const navByRole: Record<string, NavItem[]> = {
-  advertiser: [{ to: '/advertiser/campaigns', label: 'کمپین‌ها', icon: Megaphone }],
+  advertiser: [
+    { to: '/advertiser/campaigns', label: 'کمپین‌ها', icon: Megaphone },
+    { to: '/advertiser/wallet', label: 'کیف‌پول', icon: Wallet },
+  ],
   ambassador: [
     { to: '/ambassador/assignments', label: 'کمپین‌های من', icon: Camera },
     { to: '/ambassador/wallet', label: 'کیف‌پول', icon: Wallet },

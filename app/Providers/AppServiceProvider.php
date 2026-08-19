@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Payments\LogPaymentGateway;
+use App\Payments\PaymentGateway;
+use App\Payments\ZarinpalGateway;
 use App\Sms\KavenegarSmsGateway;
 use App\Sms\LogSmsGateway;
 use App\Sms\SmsGateway;
@@ -21,6 +24,16 @@ class AppServiceProvider extends ServiceProvider
                     config('sms.kavenegar.sender'),
                 ),
                 default => new LogSmsGateway,
+            };
+        });
+
+        $this->app->singleton(PaymentGateway::class, function () {
+            return match (config('payments.driver')) {
+                'zarinpal' => new ZarinpalGateway(
+                    config('payments.zarinpal.merchant_id'),
+                    config('payments.zarinpal.sandbox'),
+                ),
+                default => new LogPaymentGateway,
             };
         });
     }
