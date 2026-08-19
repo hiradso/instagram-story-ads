@@ -1,5 +1,5 @@
 import { api } from './api'
-import type { AmbassadorProfile, Campaign, CampaignAssignment, CampaignStatus, PaginatedResponse, User, ViewSubmission } from '../types'
+import type { AmbassadorProfile, Campaign, CampaignAssignment, CampaignStatus, PaginatedResponse, User, ViewSubmission, WithdrawalRequest } from '../types'
 
 export interface PendingSubmission extends ViewSubmission {
   campaign_assignment: CampaignAssignment & { ambassador: User }
@@ -51,4 +51,26 @@ export function verifyProfile(profileId: number) {
 
 export function updateUserLevel(userId: number, level: number) {
   return api.patch(`/admin/users/${userId}/level`, { level })
+}
+
+interface AdminWithdrawalRequest extends WithdrawalRequest {
+  user: User
+}
+
+export function fetchAdminWithdrawals() {
+  return api
+    .get<PaginatedResponse<AdminWithdrawalRequest>>('/admin/withdrawals')
+    .then((res) => res.data)
+}
+
+export function approveWithdrawal(withdrawalId: number, adminNote?: string) {
+  return api.post(`/admin/withdrawals/${withdrawalId}/approve`, { admin_note: adminNote ?? null })
+}
+
+export function rejectWithdrawal(withdrawalId: number, reason: string) {
+  return api.post(`/admin/withdrawals/${withdrawalId}/reject`, { reason })
+}
+
+export function markWithdrawalPaid(withdrawalId: number) {
+  return api.post(`/admin/withdrawals/${withdrawalId}/mark-paid`)
 }

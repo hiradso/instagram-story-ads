@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
     'type',
     'amount',
     'balance_after',
+    'source_type',
+    'source_id',
     'description',
 ])]
 class WalletTransaction extends Model

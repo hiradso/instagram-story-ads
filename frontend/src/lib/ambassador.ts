@@ -1,5 +1,5 @@
 import { api } from './api'
-import type { AmbassadorProfile, CampaignAssignment, PaginatedResponse } from '../types'
+import type { AmbassadorProfile, CampaignAssignment, PaginatedResponse, WithdrawalRequest } from '../types'
 
 export interface ProfileFormData {
   category_id: number
@@ -37,4 +37,14 @@ export function submitScreenshot(assignmentId: number, screenshot: File, claimed
   return api.post(`/ambassador/assignments/${assignmentId}/submission`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
+}
+
+export function fetchWithdrawals() {
+  return api
+    .get<PaginatedResponse<WithdrawalRequest>>('/ambassador/withdrawals')
+    .then((res) => res.data)
+}
+
+export function requestWithdrawal(amount: number) {
+  return api.post<WithdrawalRequest>('/ambassador/withdrawals', { amount }).then((res) => res.data)
 }

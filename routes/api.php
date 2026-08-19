@@ -7,6 +7,7 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ReferenceDataController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewSubmissionController;
+use App\Http\Controllers\WithdrawalRequestController;
 use Illuminate\Support\Facades\Route;
 
 // Admin accounts are never created through public registration; only
@@ -36,6 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/submissions/{submission}/screenshot', [ViewSubmissionController::class, 'screenshot']);
         Route::post('/submissions/{submission}/approve', [ViewSubmissionController::class, 'approve']);
         Route::post('/submissions/{submission}/reject', [ViewSubmissionController::class, 'reject']);
+
+        Route::get('/withdrawals', [WithdrawalRequestController::class, 'adminIndex']);
+        Route::post('/withdrawals/{withdrawal}/approve', [WithdrawalRequestController::class, 'approve']);
+        Route::post('/withdrawals/{withdrawal}/reject', [WithdrawalRequestController::class, 'reject']);
+        Route::post('/withdrawals/{withdrawal}/mark-paid', [WithdrawalRequestController::class, 'markPaid']);
     });
 
     Route::middleware('role:advertiser')->prefix('advertiser')->group(function () {
@@ -54,5 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/assignments', [CampaignAssignmentController::class, 'index']);
         Route::post('/assignments/{assignment}/submission', [CampaignAssignmentController::class, 'submitScreenshot']);
+
+        Route::get('/withdrawals', [WithdrawalRequestController::class, 'index']);
+        Route::post('/withdrawals', [WithdrawalRequestController::class, 'store']);
     });
 });

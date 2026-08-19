@@ -96,3 +96,17 @@ export interface CampaignAssignment {
   campaign: Campaign
   view_submission: ViewSubmission | null
 }
+
+export type WithdrawalStatus = 'pending' | 'approved' | 'rejected' | 'paid'
+
+export interface WithdrawalRequest {
+  id: number
+  user_id: number
+  amount: string
+  status: WithdrawalStatus
+  processed_by: number | null
+  processed_at: string | null
+  admin_note: string | null
+  created_at: string
+  user?: User
+}

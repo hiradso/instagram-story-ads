@@ -8,10 +8,12 @@ import { CampaignFormPage } from './pages/advertiser/CampaignFormPage'
 import { CampaignDetailPage } from './pages/advertiser/CampaignDetailPage'
 import { ProfilePage } from './pages/ambassador/ProfilePage'
 import { AssignmentsPage } from './pages/ambassador/AssignmentsPage'
+import { WalletPage } from './pages/ambassador/WalletPage'
 import { SubmissionsPage } from './pages/admin/SubmissionsPage'
 import { AdminCampaignsPage } from './pages/admin/CampaignsPage'
 import { ProfilesPage } from './pages/admin/ProfilesPage'
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
+import { WithdrawalsPage } from './pages/admin/WithdrawalsPage'
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
       <Route element={<ProtectedRoute allowedRoles={['ambassador']} />}>
         <Route path="/ambassador/profile" element={<ProfilePage />} />
         <Route path="/ambassador/assignments" element={<AssignmentsPage />} />
+        <Route path="/ambassador/wallet" element={<WalletPage />} />
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
@@ -40,6 +43,7 @@ function App() {
         <Route path="/admin/submissions" element={<SubmissionsPage />} />
         <Route path="/admin/campaigns" element={<AdminCampaignsPage />} />
         <Route path="/admin/profiles" element={<ProfilesPage />} />
+        <Route path="/admin/withdrawals" element={<WithdrawalsPage />} />
       </Route>
     </Routes>
   )

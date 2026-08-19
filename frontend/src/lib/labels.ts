@@ -9,7 +9,7 @@ import {
   XCircle,
   type LucideIcon,
 } from 'lucide-react'
-import type { AssignmentStatus, CampaignStatus, SubmissionStatus } from '../types'
+import type { AssignmentStatus, CampaignStatus, SubmissionStatus, WithdrawalStatus } from '../types'
 
 type Tone = 'slate' | 'amber' | 'emerald' | 'orange' | 'blue' | 'red'
 
@@ -79,4 +79,25 @@ export const submissionStatusLabel: Record<SubmissionStatus, string> = {
   pending: 'در انتظار بررسی ادمین',
   approved: 'تاییدشده',
   rejected: 'ردشده',
+}
+
+export const withdrawalStatusLabel: Record<WithdrawalStatus, string> = {
+  pending: 'در انتظار بررسی',
+  approved: 'تاییدشده',
+  rejected: 'ردشده',
+  paid: 'پرداخت‌شده',
+}
+
+export const withdrawalStatusTone: Record<WithdrawalStatus, Tone> = {
+  pending: 'amber',
+  approved: 'blue',
+  rejected: 'red',
+  paid: 'emerald',
+}
+
+export const withdrawalStatusIcon: Record<WithdrawalStatus, LucideIcon> = {
+  pending: Clock,
+  approved: BadgeCheck,
+  rejected: XCircle,
+  paid: CheckCircle2,
 }

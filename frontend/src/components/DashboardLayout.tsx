@@ -9,6 +9,7 @@ import {
   Sparkles,
   User,
   Users,
+  Wallet,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { formatNumber } from '../lib/labels'
@@ -31,6 +32,7 @@ const navByRole: Record<string, NavItem[]> = {
   advertiser: [{ to: '/advertiser/campaigns', label: 'کمپین‌ها', icon: Megaphone }],
   ambassador: [
     { to: '/ambassador/assignments', label: 'کمپین‌های من', icon: Camera },
+    { to: '/ambassador/wallet', label: 'کیف‌پول', icon: Wallet },
     { to: '/ambassador/profile', label: 'پروفایل', icon: User },
   ],
   admin: [
@@ -38,6 +40,7 @@ const navByRole: Record<string, NavItem[]> = {
     { to: '/admin/submissions', label: 'بازبینی اسکرین‌شات‌ها', icon: ClipboardCheck },
     { to: '/admin/campaigns', label: 'کمپین‌ها', icon: Megaphone },
     { to: '/admin/profiles', label: 'سفیرها', icon: Users },
+    { to: '/admin/withdrawals', label: 'برداشت‌ها', icon: Wallet },
   ],
 }
 
