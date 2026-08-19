@@ -78,33 +78,33 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
         <img
           src={imageUrl}
           alt="اسکرین‌شات بازدید"
-          className="aspect-[3/4] w-full rounded-xl object-cover ring-1 ring-slate-200"
+          className="aspect-[3/4] w-full rounded-xl object-cover ring-1 ring-slate-200 dark:ring-slate-800"
         />
       ) : (
-        <div className="flex aspect-[3/4] items-center justify-center rounded-xl bg-slate-50 text-slate-300">
+        <div className="flex aspect-[3/4] items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800 dark:text-slate-600">
           <ImageOff className="size-6 animate-pulse" strokeWidth={1.5} />
         </div>
       )}
 
       <div>
-        <h3 className="font-medium text-slate-900">{campaign.title}</h3>
-        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
+        <h3 className="font-medium text-heading">{campaign.title}</h3>
+        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-subtle">
           <span className="flex items-center gap-1.5">
-            <UserIcon className="size-3.5 text-slate-400" />
+            <UserIcon className="size-3.5 text-faint" />
             {ambassador.name}
           </span>
           <span className="flex items-center gap-1.5">
-            <Mail className="size-3.5 text-slate-400" />
+            <Mail className="size-3.5 text-faint" />
             {ambassador.email}
           </span>
           <span className="flex items-center gap-1.5">
-            <Eye className="size-3.5 text-slate-400" />
+            <Eye className="size-3.5 text-faint" />
             {submission.claimed_views.toLocaleString('fa-IR')} بازدید اعلام‌شده
           </span>
         </div>
 
         {error && (
-          <p className="mb-2 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+          <p className="mb-2 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">
             <AlertCircle className="size-4 shrink-0" />
             {error}
           </p>
@@ -112,7 +112,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
 
         {!showRejectForm ? (
           <div className="flex flex-wrap items-center gap-2">
-            <label className="flex items-center gap-1 text-xs text-slate-500">
+            <label className="flex items-center gap-1 text-xs text-subtle">
               بازدید تاییدشده:
               <InfoTooltip>
                 پیش‌فرض همون عددیه که سفیر اعلام کرده. اگه با عکس هم‌خونی نداره، قبل از تایید اصلاحش کن — دقیقاً
@@ -124,7 +124,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
               min={1}
               value={approvedViews}
               onChange={(e) => setApprovedViews(e.target.value)}
-              className="w-24 rounded-xl border border-slate-200 px-2.5 py-1.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
+              className="w-24 rounded-xl border border-slate-200 px-2.5 py-1.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             />
             <Button
               variant="success"
@@ -141,7 +141,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
               onClick={() => setShowRejectForm(true)}
               disabled={submitting}
               icon={<XCircle className="size-3.5 text-red-500" />}
-              className="text-red-600"
+              className="text-red-600 dark:text-red-400"
             >
               رد
             </Button>
@@ -154,7 +154,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
               placeholder="دلیل رد"
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              className="flex-1 rounded-xl border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-red-400 focus:ring-4 focus:ring-red-100"
+              className="flex-1 rounded-xl border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-red-400 focus:ring-4 focus:ring-red-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             />
             <Button type="submit" variant="danger" size="sm" loading={submitting}>
               ثبت رد
@@ -187,8 +187,8 @@ export function SubmissionsPage() {
   return (
     <DashboardLayout>
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900">اسکرین‌شات‌های در انتظار بررسی</h2>
-        <p className="mt-0.5 text-sm text-slate-400">بازدید ادعاشده رو با اسکرین‌شات تطبیق بده و تایید یا رد کن</p>
+        <h2 className="text-xl font-bold text-heading">اسکرین‌شات‌های در انتظار بررسی</h2>
+        <p className="mt-0.5 text-sm text-faint">بازدید ادعاشده رو با اسکرین‌شات تطبیق بده و تایید یا رد کن</p>
       </div>
 
       {submissions === null && <Spinner label="در حال بارگذاری..." />}

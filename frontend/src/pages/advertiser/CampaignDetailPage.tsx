@@ -43,7 +43,7 @@ export function CampaignDetailPage() {
   if (error) {
     return (
       <DashboardLayout>
-        <p className="flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <p className="flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
           <AlertCircle className="size-4 shrink-0" />
           {error}
         </p>
@@ -67,7 +67,7 @@ export function CampaignDetailPage() {
     <DashboardLayout>
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-slate-900">{campaign.title}</h2>
+          <h2 className="text-xl font-bold text-heading">{campaign.title}</h2>
           <Badge tone={campaignStatusTone[campaign.status]} icon={<StatusIcon className="size-3.5" />}>
             {campaignStatusLabel[campaign.status]}
           </Badge>
@@ -93,7 +93,7 @@ export function CampaignDetailPage() {
       </div>
 
       {!isDraft && (
-        <p className="mb-4 text-sm text-slate-400">
+        <p className="mb-4 text-sm text-faint">
           چون این کمپین دیگه پیش‌نویس نیست، فقط ادمین می‌تونه تغییرش بده.
         </p>
       )}
@@ -103,12 +103,12 @@ export function CampaignDetailPage() {
           <img
             src={storageUrl(campaign.creative_path)}
             alt={campaign.title}
-            className="aspect-square w-full rounded-xl object-cover ring-1 ring-slate-200"
+            className="aspect-square w-full rounded-xl object-cover ring-1 ring-slate-200 dark:ring-slate-800"
           />
         </Card>
 
         <div className="space-y-4 sm:col-span-3">
-          {campaign.description && <Card className="text-sm text-slate-600">{campaign.description}</Card>}
+          {campaign.description && <Card className="text-sm text-body">{campaign.description}</Card>}
 
           <div className="grid grid-cols-2 gap-3">
             <StatTile icon={Tag} label="دسته‌بندی" value={campaign.category?.name ?? '—'} />
@@ -117,16 +117,16 @@ export function CampaignDetailPage() {
 
           <Card>
             <div className="mb-2 flex items-center justify-between text-sm">
-              <span className="flex items-center gap-1.5 text-slate-500">
+              <span className="flex items-center gap-1.5 text-subtle">
                 <Eye className="size-4" />
                 بازدید تحویل‌شده
               </span>
-              <span className="font-medium text-slate-900">
+              <span className="font-medium text-heading">
                 {campaign.views_delivered.toLocaleString('fa-IR')} از{' '}
                 {campaign.capacity_views.toLocaleString('fa-IR')}
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
               <div
                 className="h-full rounded-full bg-gradient-to-l from-brand-500 to-accent-400 transition-all duration-700"
                 style={{ width: `${viewsPct}%` }}
@@ -134,11 +134,11 @@ export function CampaignDetailPage() {
             </div>
 
             <div className="mt-4 flex items-center justify-between text-sm">
-              <span className="flex items-center gap-1.5 text-slate-500">
+              <span className="flex items-center gap-1.5 text-subtle">
                 <Wallet className="size-4" />
                 بودجه باقی‌مونده
               </span>
-              <span className="font-medium text-slate-900">
+              <span className="font-medium text-heading">
                 {formatToman(campaign.budget_remaining)} از {formatToman(campaign.budget_total)}
               </span>
             </div>
@@ -146,9 +146,9 @@ export function CampaignDetailPage() {
 
           {campaign.provinces && campaign.provinces.length > 0 && (
             <Card className="flex items-center gap-2 text-sm">
-              <MapPin className="size-4 shrink-0 text-slate-400" />
-              <span className="text-slate-500">استان‌های هدف:</span>
-              <span className="font-medium text-slate-900">
+              <MapPin className="size-4 shrink-0 text-faint" />
+              <span className="text-subtle">استان‌های هدف:</span>
+              <span className="font-medium text-heading">
                 {campaign.provinces.map((p) => p.name).join('، ')}
               </span>
             </Card>

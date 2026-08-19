@@ -65,12 +65,12 @@ export function AdminCampaignsPage() {
   return (
     <DashboardLayout>
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900">همه‌ی کمپین‌ها</h2>
-        <p className="mt-0.5 text-sm text-slate-400">فعال‌سازی، توقف و پیگیری پیشرفت کمپین‌ها</p>
+        <h2 className="text-xl font-bold text-heading">همه‌ی کمپین‌ها</h2>
+        <p className="mt-0.5 text-sm text-faint">فعال‌سازی، توقف و پیگیری پیشرفت کمپین‌ها</p>
       </div>
 
       {error && (
-        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
           <AlertCircle className="size-4 shrink-0" />
           {error}
         </p>
@@ -89,12 +89,12 @@ export function AdminCampaignsPage() {
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <div className="mb-1.5 flex items-center gap-2">
-                    <h3 className="truncate font-medium text-slate-900">{campaign.title}</h3>
+                    <h3 className="truncate font-medium text-heading">{campaign.title}</h3>
                     <Badge tone={campaignStatusTone[campaign.status]} icon={<StatusIcon className="size-3.5" />}>
                       {campaignStatusLabel[campaign.status]}
                     </Badge>
                   </div>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-subtle">
                     بودجه: {formatToman(campaign.budget_total)} · بازدید:{' '}
                     {campaign.views_delivered.toLocaleString('fa-IR')} از{' '}
                     {campaign.capacity_views.toLocaleString('fa-IR')}
@@ -121,7 +121,7 @@ export function AdminCampaignsPage() {
               </div>
 
               {campaign.status !== 'draft' && (
-                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                   <div
                     className="h-full rounded-full bg-gradient-to-l from-brand-500 to-accent-400 transition-all duration-700"
                     style={{ width: `${viewsPct}%` }}

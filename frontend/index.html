@@ -12,6 +12,16 @@
       rel="stylesheet"
       type="text/css"
     />
+    <script>
+      // Apply the saved theme before paint, so there's no flash of the
+      // wrong theme while React boots.
+      try {
+        var t = localStorage.getItem('theme')
+        if (t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark')
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

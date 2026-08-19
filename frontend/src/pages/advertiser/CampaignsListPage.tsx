@@ -25,8 +25,8 @@ export function CampaignsListPage() {
     <DashboardLayout>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">کمپین‌های من</h2>
-          <p className="mt-0.5 text-sm text-slate-400">مدیریت و پیگیری کمپین‌های تبلیغاتی</p>
+          <h2 className="text-xl font-bold text-heading">کمپین‌های من</h2>
+          <p className="mt-0.5 text-sm text-faint">مدیریت و پیگیری کمپین‌های تبلیغاتی</p>
         </div>
         <Link to="/advertiser/campaigns/new">
           <Button icon={<Plus className="size-4" />}>کمپین جدید</Button>
@@ -34,7 +34,7 @@ export function CampaignsListPage() {
       </div>
 
       {error && (
-        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
           <AlertCircle className="size-4 shrink-0" />
           {error}
         </p>
@@ -65,24 +65,24 @@ export function CampaignsListPage() {
               <Card hover className="animate-fade-in-up group flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <div className="mb-1.5 flex items-center gap-2">
-                    <h3 className="truncate font-medium text-slate-900">{campaign.title}</h3>
+                    <h3 className="truncate font-medium text-heading">{campaign.title}</h3>
                     <Badge tone={campaignStatusTone[campaign.status]} icon={<StatusIcon className="size-3.5" />}>
                       {campaignStatusLabel[campaign.status]}
                     </Badge>
                   </div>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-500">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-subtle">
                     <span className="flex items-center gap-1.5">
-                      <Wallet className="size-3.5 text-slate-400" />
+                      <Wallet className="size-3.5 text-faint" />
                       {formatToman(campaign.budget_total)}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <Eye className="size-3.5 text-slate-400" />
+                      <Eye className="size-3.5 text-faint" />
                       {campaign.views_delivered.toLocaleString('fa-IR')} از{' '}
                       {campaign.capacity_views.toLocaleString('fa-IR')}
                     </span>
                   </div>
                 </div>
-                <ArrowLeft className="size-4 shrink-0 text-slate-300 transition-transform group-hover:-translate-x-0.5" />
+                <ArrowLeft className="size-4 shrink-0 text-slate-300 transition-transform dark:text-slate-600 group-hover:-translate-x-0.5" />
               </Card>
             </Link>
           )

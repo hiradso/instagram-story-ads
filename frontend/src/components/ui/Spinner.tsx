@@ -6,7 +6,7 @@ export function Spinner({ label }: { label?: string }) {
         <span />
         <span />
       </span>
-      {label && <span className="text-sm text-slate-400">{label}</span>}
+      {label && <span className="text-sm text-faint">{label}</span>}
     </div>
   )
 }

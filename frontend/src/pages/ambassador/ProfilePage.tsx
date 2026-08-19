@@ -115,7 +115,7 @@ export function ProfilePage() {
     return (
       <DashboardLayout>
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-900">پروفایل سفیر</h2>
+          <h2 className="text-xl font-bold text-heading">پروفایل سفیر</h2>
           <Button variant="secondary" size="sm" onClick={startEdit} icon={<Pencil className="size-3.5" />}>
             ویرایش
           </Button>
@@ -127,7 +127,7 @@ export function ProfilePage() {
               href={profile.instagram_url}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-3 font-medium text-slate-900 hover:text-brand-600"
+              className="flex items-center gap-3 font-medium text-heading hover:text-brand-600 dark:hover:text-brand-400"
             >
               <span className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 via-fuchsia-500 to-orange-400 text-white">
                 <Link2 className="size-5" strokeWidth={1.75} />
@@ -156,13 +156,13 @@ export function ProfilePage() {
             <StatTile icon={Eye} label="میانگین بازدید ۷ روزه" value={profile.avg_views_7d.toLocaleString('fa-IR')} />
           </div>
 
-          <Card className="flex items-center gap-3 bg-gradient-to-l from-brand-50 to-accent-400/10">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-white text-brand-500 ring-1 ring-slate-200/70">
+          <Card className="flex items-center gap-3 bg-gradient-to-l from-brand-50 to-accent-400/10 dark:from-brand-500/10 dark:to-accent-500/5">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-white text-brand-500 ring-1 ring-slate-200/70 dark:bg-slate-900 dark:text-brand-400 dark:ring-slate-700">
               <Wallet className="size-5" strokeWidth={1.75} />
             </span>
             <div>
-              <p className="text-xs text-slate-400">موجودی کیف‌پول</p>
-              <p className="text-lg font-bold text-slate-900">{formatToman(profile.wallet_balance)}</p>
+              <p className="text-xs text-faint">موجودی کیف‌پول</p>
+              <p className="text-lg font-bold text-heading">{formatToman(profile.wallet_balance)}</p>
             </div>
           </Card>
         </div>
@@ -172,13 +172,13 @@ export function ProfilePage() {
 
   return (
     <DashboardLayout>
-      <h2 className="mb-6 text-xl font-bold text-slate-900">
+      <h2 className="mb-6 text-xl font-bold text-heading">
         {profile ? 'ویرایش پروفایل سفیر' : 'تکمیل پروفایل سفیر'}
       </h2>
 
       <Card as="form" onSubmit={handleSubmit} className="max-w-xl space-y-4">
         {error && (
-          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
             <AlertCircle className="size-4 shrink-0" />
             {error}
           </p>

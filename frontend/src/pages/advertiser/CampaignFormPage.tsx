@@ -124,12 +124,12 @@ export function CampaignFormPage() {
         <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 to-accent-500 text-white">
           <Sparkles className="size-4" />
         </span>
-        <h2 className="text-xl font-bold text-slate-900">{isEdit ? 'ویرایش کمپین' : 'کمپین جدید'}</h2>
+        <h2 className="text-xl font-bold text-heading">{isEdit ? 'ویرایش کمپین' : 'کمپین جدید'}</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="grid max-w-2xl gap-5 sm:grid-cols-5">
         {error && (
-          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700 sm:col-span-5">
+          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400 sm:col-span-5">
             <AlertCircle className="size-4 shrink-0" />
             {error}
           </p>
@@ -137,11 +137,11 @@ export function CampaignFormPage() {
 
         <Card className="sm:col-span-2">
           <Label>عکس کریتیو {isEdit && '(اختیاری)'}</Label>
-          <label className="group relative flex aspect-square cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 transition-colors hover:border-brand-300 hover:bg-brand-50/40">
+          <label className="group relative flex aspect-square cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 transition-colors hover:border-brand-300 hover:bg-brand-50/40 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-brand-500/50 dark:hover:bg-brand-500/10">
             {displayImage ? (
               <img src={displayImage} alt="پیش‌نمایش کریتیو" className="size-full object-cover" />
             ) : (
-              <div className="flex flex-col items-center gap-2 text-slate-400">
+              <div className="flex flex-col items-center gap-2 text-faint">
                 <ImagePlus className="size-8" strokeWidth={1.5} />
                 <span className="text-xs">برای آپلود کلیک کن</span>
               </div>
@@ -243,11 +243,11 @@ export function CampaignFormPage() {
                 استان‌های هدف
               </span>
             </Label>
-            <div className="grid max-h-40 grid-cols-2 gap-1 overflow-y-auto rounded-xl border border-slate-200 p-3 sm:grid-cols-3">
+            <div className="grid max-h-40 grid-cols-2 gap-1 overflow-y-auto rounded-xl border border-slate-200 p-3 dark:border-slate-700 sm:grid-cols-3">
               {provinces.map((p) => (
                 <label
                   key={p.id}
-                  className="flex items-center gap-2 rounded-lg px-1.5 py-1 text-sm text-slate-600 hover:bg-slate-50"
+                  className="flex items-center gap-2 rounded-lg px-1.5 py-1 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   <input
                     type="checkbox"

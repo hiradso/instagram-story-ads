@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* Manual (not OS-preference-only) dark mode: dark: utilities activate
+   when a .dark class is present on <html>, toggled by ThemeToggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Vazirmatn', system-ui, sans-serif;
 
@@ -49,11 +53,51 @@
 body {
   font-family: 'Vazirmatn', system-ui, sans-serif;
   background: #f8fafc;
+  transition: background-color 0.2s ease;
+}
+
+.dark body {
+  background: #0b0f1a;
+  color-scheme: dark;
 }
 
 ::selection {
   background: var(--color-brand-100);
   color: var(--color-brand-600);
+}
+
+.dark ::selection {
+  background: var(--color-brand-600);
+  color: #fff;
+}
+
+/* Semantic text/surface classes — the light+dark pair is defined once
+   here instead of repeating "text-slate-900 dark:text-white" (etc.) on
+   every element across every page. Pages should reach for these first;
+   raw slate-* + dark:* utilities are only for one-off cases these don't
+   cover. */
+@layer components {
+  .text-heading {
+    @apply text-slate-900 dark:text-white;
+  }
+  .text-body {
+    @apply text-slate-600 dark:text-slate-300;
+  }
+  .text-subtle {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+  .text-faint {
+    @apply text-slate-400 dark:text-slate-500;
+  }
+  .surface-muted {
+    @apply bg-slate-50 dark:bg-slate-800/60;
+  }
+  .border-default {
+    @apply border-slate-200 dark:border-slate-700;
+  }
+  .ring-default {
+    @apply ring-slate-200/70 dark:ring-slate-800;
+  }
 }
 
 /* "Story pulse" — full-page loader. A static gradient badge (matches

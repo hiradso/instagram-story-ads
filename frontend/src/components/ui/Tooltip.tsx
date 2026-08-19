@@ -36,7 +36,7 @@ export function InfoTooltip({ children }: { children: ReactNode }) {
           e.stopPropagation()
           setOpen((o) => !o)
         }}
-        className="text-slate-300 transition-colors hover:text-brand-500"
+        className="text-slate-300 transition-colors hover:text-brand-500 dark:text-slate-600 dark:hover:text-brand-400"
       >
         <HelpCircle className="size-3.5" strokeWidth={2} />
       </button>
@@ -45,10 +45,10 @@ export function InfoTooltip({ children }: { children: ReactNode }) {
         <span
           id={id}
           role="tooltip"
-          className="animate-scale-in pointer-events-none absolute bottom-full right-1/2 z-20 mb-2 w-52 translate-x-1/2 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white shadow-lg"
+          className="animate-scale-in pointer-events-none absolute bottom-full right-1/2 z-20 mb-2 w-52 translate-x-1/2 rounded-lg bg-slate-800 px-3 py-2 text-xs leading-relaxed text-white shadow-lg dark:bg-slate-700 dark:ring-1 dark:ring-slate-600"
         >
           {children}
-          <span className="absolute top-full right-1/2 size-2 -translate-y-1/2 translate-x-1/2 rotate-45 bg-slate-800" />
+          <span className="absolute top-full right-1/2 size-2 -translate-y-1/2 translate-x-1/2 rotate-45 bg-slate-800 dark:bg-slate-700" />
         </span>
       )}
     </span>

@@ -33,7 +33,7 @@ export function Login() {
     <AuthShell title="ورود به استوری‌یار" subtitle="مدیریت کمپین تبلیغات استوری اینستاگرام">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
             <AlertCircle className="size-4 shrink-0" />
             {error}
           </p>
@@ -65,9 +65,9 @@ export function Login() {
           {submitting ? 'در حال ورود...' : 'ورود'}
         </Button>
 
-        <p className="text-center text-sm text-slate-500">
+        <p className="text-center text-sm text-subtle">
           حساب نداری؟{' '}
-          <Link to="/register" className="font-medium text-brand-600 hover:text-brand-700">
+          <Link to="/register" className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
             ثبت‌نام کن
           </Link>
         </p>

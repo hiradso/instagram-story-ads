@@ -13,6 +13,7 @@ import {
 import { useAuth } from '../context/AuthContext'
 import { formatNumber } from '../lib/labels'
 import { InfoTooltip } from './ui/Tooltip'
+import { ThemeToggle } from './ui/ThemeToggle'
 
 const roleLabel: Record<string, string> = {
   admin: 'ادمین',
@@ -50,15 +51,15 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const items = user ? navByRole[user.role] ?? [] : []
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-white/80 backdrop-blur-md dark:border-slate-800/70 dark:bg-slate-900/80">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
           <div className="flex items-center gap-1">
             <Link to="/" className="ml-5 flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 text-white shadow-sm shadow-brand-500/30">
                 <Sparkles className="size-4" strokeWidth={2} />
               </span>
-              <h1 className="text-base font-bold text-slate-900">استوری‌یار</h1>
+              <h1 className="text-base font-bold text-heading">استوری‌یار</h1>
             </Link>
 
             <nav className="flex items-center gap-1">
@@ -73,8 +74,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                     to={item.to}
                     className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                       active
-                        ? 'bg-brand-50 text-brand-600'
-                        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                        ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
+                        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
                     }`}
                   >
                     <item.icon className="size-4" strokeWidth={active ? 2.25 : 1.75} />
@@ -92,8 +93,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   {initials(user.name)}
                 </span>
                 <div className="hidden text-xs leading-tight sm:block">
-                  <p className="font-medium text-slate-700">{user.name}</p>
-                  <p className="flex items-center gap-1 text-slate-400">
+                  <p className="font-medium text-heading">{user.name}</p>
+                  <p className="flex items-center gap-1 text-faint">
                     {roleLabel[user.role]}
                     {user.role === 'ambassador' && (
                       <>
@@ -108,9 +109,12 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 </div>
               </div>
             )}
+
+            <ThemeToggle />
+
             <button
               onClick={() => logout()}
-              className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+              className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
               title="خروج"
             >
               <LogOut className="size-4" strokeWidth={1.75} />

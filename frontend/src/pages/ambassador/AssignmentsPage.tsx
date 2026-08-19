@@ -49,12 +49,12 @@ function AssignmentCard({
     <Card className="animate-fade-in-up">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-accent-400/10 text-brand-500 ring-1 ring-slate-200/70">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-accent-400/10 text-brand-500 ring-1 ring-slate-200/70 dark:ring-slate-800">
             <Camera className="size-5" strokeWidth={1.75} />
           </span>
           <div>
-            <h3 className="font-medium text-slate-900">{assignment.campaign.title}</h3>
-            <p className="flex items-center gap-1 text-xs text-slate-400">
+            <h3 className="font-medium text-heading">{assignment.campaign.title}</h3>
+            <p className="flex items-center gap-1 text-xs text-faint">
               <Clock className="size-3" />
               مهلت تا {new Date(assignment.post_deadline_at).toLocaleString('fa-IR')}
             </p>
@@ -66,7 +66,7 @@ function AssignmentCard({
       </div>
 
       {submission && (
-        <div className="animate-fade-in space-y-1 rounded-xl bg-slate-50 px-3.5 py-3 text-sm text-slate-600 ring-1 ring-slate-200/70">
+        <div className="animate-fade-in space-y-1 rounded-xl bg-slate-50 px-3.5 py-3 text-sm text-slate-600 ring-1 ring-slate-200/70 dark:bg-slate-800/60 dark:text-slate-300 dark:ring-slate-800">
           <p className="flex items-center gap-1.5">
             {submission.status === 'approved' && <CheckCircle2 className="size-3.5 text-emerald-500" />}
             {submission.status === 'rejected' && <XCircle className="size-3.5 text-red-500" />}
@@ -77,19 +77,19 @@ function AssignmentCard({
           {submission.approved_views !== null && (
             <p>بازدید تاییدشده: {submission.approved_views.toLocaleString('fa-IR')}</p>
           )}
-          {submission.rejection_reason && <p className="text-red-600">دلیل رد: {submission.rejection_reason}</p>}
+          {submission.rejection_reason && <p className="text-red-600 dark:text-red-400">دلیل رد: {submission.rejection_reason}</p>}
         </div>
       )}
 
       {canSubmit && (
         <form onSubmit={handleSubmit} className="mt-3 flex flex-wrap items-end gap-2.5">
           {error && (
-            <p className="flex w-full items-center gap-1.5 text-sm text-red-600">
+            <p className="flex w-full items-center gap-1.5 text-sm text-red-600 dark:text-red-400">
               <AlertCircle className="size-3.5 shrink-0" />
               {error}
             </p>
           )}
-          <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-500 transition-colors hover:border-brand-300 hover:bg-brand-50/40">
+          <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-500 transition-colors hover:border-brand-300 hover:bg-brand-50/40 dark:border-slate-700 dark:text-slate-400 dark:hover:border-brand-500/50 dark:hover:bg-brand-500/10">
             <ImagePlus className="size-4" />
             {file ? file.name : 'انتخاب اسکرین‌شات'}
             <input
@@ -106,7 +106,7 @@ function AssignmentCard({
             placeholder="تعداد بازدید"
             value={claimedViews}
             onChange={(e) => setClaimedViews(e.target.value)}
-            className="w-32 rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100"
+            className="w-32 rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
           />
           <Button type="submit" size="sm" loading={submitting} icon={<Upload className="size-3.5" />}>
             ثبت
@@ -132,12 +132,12 @@ export function AssignmentsPage() {
   return (
     <DashboardLayout>
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900">کمپین‌های تخصیص‌داده‌شده</h2>
-        <p className="mt-0.5 text-sm text-slate-400">استوری‌هات رو منتشر کن و اسکرین‌شات بازدید رو ثبت کن</p>
+        <h2 className="text-xl font-bold text-heading">کمپین‌های تخصیص‌داده‌شده</h2>
+        <p className="mt-0.5 text-sm text-faint">استوری‌هات رو منتشر کن و اسکرین‌شات بازدید رو ثبت کن</p>
       </div>
 
       {error && (
-        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <p className="mb-4 flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
           <AlertCircle className="size-4 shrink-0" />
           {error}
         </p>
