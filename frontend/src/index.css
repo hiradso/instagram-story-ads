@@ -27,7 +27,7 @@
   --color-accent-400: #fb923c;
   --color-accent-500: #f97316;
 
-  --color-surface: #fbfbfd;
+  --color-surface: #f6f6f8;
 
   --animate-fade-in: fade-in 0.4s ease-out both;
   --animate-fade-in-up: fade-in-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -198,5 +198,32 @@ body {
   40% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* Skeleton placeholder for a number/line that's about to arrive — a
+   brand-tinted sweep instead of the generic gray shimmer, so a loading
+   state still reads as "this app" rather than a stock skeleton. */
+.loader-shimmer {
+  display: inline-block;
+  background: linear-gradient(
+    100deg,
+    var(--color-brand-100) 20%,
+    var(--color-brand-50) 40%,
+    var(--color-brand-100) 60%
+  );
+  background-size: 200% 100%;
+  animation: loader-shimmer-sweep 1.6s ease-in-out infinite;
+}
+.dark .loader-shimmer {
+  background: linear-gradient(100deg, #3b1249 20%, #4a1a5c 40%, #3b1249 60%);
+  background-size: 200% 100%;
+}
+@keyframes loader-shimmer-sweep {
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -50% 0;
   }
 }

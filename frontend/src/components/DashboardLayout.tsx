@@ -75,7 +75,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   }, [open])
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-screen bg-slate-100 dark:bg-slate-950">
       {open && (
         <div
           onClick={() => setOpen(false)}

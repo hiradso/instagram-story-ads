@@ -121,24 +121,31 @@ export function Landing() {
         </div>
       </section>
 
-      {/* Platform stats — real, live numbers (see PlatformStatsController) */}
-      {stats && (
-        <section className="border-y border-slate-200/70 bg-surface/60 dark:border-slate-800/70 dark:bg-slate-900/40">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-6 py-10 sm:grid-cols-4">
-            {statItems.map((item) => (
-              <div key={item.key} className="text-center">
-                <div className="mx-auto mb-2 flex size-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
-                  <item.icon className="size-4" strokeWidth={1.75} />
-                </div>
-                <p className="text-2xl font-extrabold text-heading sm:text-3xl">
+      {/* Platform stats — real, live numbers (see PlatformStatsController).
+          Always rendered (never conditionally mounted) so the section below
+          doesn't jump once the numbers arrive — only its contents swap
+          between a skeleton and the real counters. */}
+      <section className="border-y border-slate-200/70 bg-surface/60 dark:border-slate-800/70 dark:bg-slate-900/40">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-6 py-10 sm:grid-cols-4">
+          {statItems.map((item, i) => (
+            <div key={item.key} className="text-center">
+              <div className="mx-auto mb-2 flex size-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                <item.icon className="size-4" strokeWidth={1.75} />
+              </div>
+              {stats ? (
+                <p className="animate-fade-in text-2xl font-extrabold text-heading sm:text-3xl">
                   <AnimatedCounter value={stats[item.key]} />
                 </p>
-                <p className="mt-1 text-xs text-faint sm:text-sm">{item.label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+              ) : (
+                <p className="flex justify-center py-1.5" style={{ animationDelay: `${i * 80}ms` }}>
+                  <span className="loader-shimmer h-6 w-12 rounded-md sm:h-7 sm:w-16" />
+                </p>
+              )}
+              <p className="mt-1 text-xs text-faint sm:text-sm">{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* How it works */}
       <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24">

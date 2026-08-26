@@ -1,11 +1,7 @@
 export function Spinner({ label }: { label?: string }) {
   return (
     <div className="animate-fade-in flex flex-col items-center justify-center gap-3 py-16">
-      <span className="loader-dots text-lg">
-        <span />
-        <span />
-        <span />
-      </span>
+      <span className="loader-story size-8" />
       {label && <span className="text-sm text-faint">{label}</span>}
     </div>
   )
