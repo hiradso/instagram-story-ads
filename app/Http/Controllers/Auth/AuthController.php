@@ -21,16 +21,22 @@ class AuthController extends Controller
             $referrerId = User::where('referral_code', $code)->value('id');
         }
 
-        $user = User::create([
+        $user = new User([
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
             'phone' => $request->validated('phone'),
             'password' => Hash::make($request->validated('password')),
-            'role' => $request->validated('role'),
-            'referred_by_id' => $referrerId,
         ]);
 
-        // create() returns the in-memory model as given, not what the DB
+        // role/referred_by_id aren't mass-assignable (see User::$fillable) —
+        // force them in explicitly, since they're server-validated/resolved
+        // values here, not a raw request array.
+        $user->forceFill([
+            'role' => $request->validated('role'),
+            'referred_by_id' => $referrerId,
+        ])->save();
+
+        // save() leaves the in-memory model as given, not what the DB
         // actually stored (e.g. the level/status column defaults) — same
         // class of bug already fixed once in AmbassadorProfileController.
         $user->refresh();

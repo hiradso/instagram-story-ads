@@ -15,10 +15,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable([
-    'name', 'email', 'phone', 'password', 'role', 'level', 'status', 'wallet_balance',
-    'referral_code', 'referred_by_id', 'referral_bonus_paid_at',
-])]
+// role/level/status/wallet_balance/referred_by_id/referral_bonus_paid_at/
+// referral_code are deliberately NOT fillable — they're only ever set by
+// trusted server logic (via forceFill or direct attribute assignment),
+// never from a raw request array, so a future `User::create($request->all())`
+// or `$user->update($request->all())` can't let a client set its own role
+// or wallet balance.
+#[Fillable(['name', 'email', 'phone', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {

@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+// budget_remaining/capacity_views/views_delivered/status are deliberately
+// NOT fillable — they're derived/business-logic values, only ever set by
+// trusted server code (CampaignController, ViewSubmissionService) via
+// forceFill, never taken directly from a request.
 #[Fillable([
     'advertiser_id',
     'category_id',
@@ -17,10 +21,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'creative_path',
     'price_per_1000_views',
     'budget_total',
-    'budget_remaining',
-    'capacity_views',
-    'views_delivered',
-    'status',
     'assignment_mode',
     'starts_at',
     'ends_at',

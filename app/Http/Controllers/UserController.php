@@ -41,13 +41,13 @@ class UserController extends Controller
     // through the exact same validation a self-service signup would.
     public function store(RegisterRequest $request): JsonResponse
     {
-        $user = User::create([
+        $user = new User([
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
             'phone' => $request->validated('phone'),
             'password' => Hash::make($request->validated('password')),
-            'role' => $request->validated('role'),
         ]);
+        $user->forceFill(['role' => $request->validated('role')])->save();
         $user->refresh();
 
         return response()->json($user, 201);
@@ -59,7 +59,7 @@ class UserController extends Controller
             'level' => ['required', 'integer', 'between:1,3'],
         ]);
 
-        $user->update(['level' => $request->integer('level')]);
+        $user->forceFill(['level' => $request->integer('level')])->save();
 
         return response()->json($user);
     }
@@ -77,7 +77,7 @@ class UserController extends Controller
             'status' => ['required', 'in:active,suspended'],
         ]);
 
-        $user->update(['status' => $request->string('status')->toString()]);
+        $user->forceFill(['status' => $request->string('status')->toString()])->save();
 
         if ($user->status === 'suspended') {
             $user->tokens()->delete();

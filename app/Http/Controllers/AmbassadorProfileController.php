@@ -92,7 +92,7 @@ class AmbassadorProfileController extends Controller
 
     public function verify(AmbassadorProfile $ambassadorProfile): JsonResponse
     {
-        $ambassadorProfile->update(['verified_at' => now()]);
+        $ambassadorProfile->forceFill(['verified_at' => now()])->save();
 
         return response()->json($ambassadorProfile);
     }

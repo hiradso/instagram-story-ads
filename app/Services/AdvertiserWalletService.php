@@ -63,7 +63,7 @@ class AdvertiserWalletService
         DB::transaction(function () use ($deposit, $result) {
             $user = User::whereKey($deposit->user_id)->lockForUpdate()->firstOrFail();
             $newBalance = bcadd((string) $user->wallet_balance, (string) $deposit->amount, 2);
-            $user->update(['wallet_balance' => $newBalance]);
+            $user->forceFill(['wallet_balance' => $newBalance])->save();
 
             WalletTransaction::create([
                 'user_id' => $user->id,

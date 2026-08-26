@@ -25,7 +25,7 @@ class UserLevelService
             ->max();
 
         if ($eligibleLevel && $eligibleLevel > $user->level) {
-            $user->update(['level' => $eligibleLevel]);
+            $user->forceFill(['level' => $eligibleLevel])->save();
         }
     }
 }

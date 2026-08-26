@@ -40,11 +40,11 @@ class ReferralService
                     return false;
                 }
                 $newBalance = bcadd((string) $profile->wallet_balance, self::BONUS_AMOUNT, 2);
-                $profile->update(['wallet_balance' => $newBalance]);
+                $profile->forceFill(['wallet_balance' => $newBalance])->save();
             } else {
                 $referrer = User::whereKey($referrer->id)->lockForUpdate()->first();
                 $newBalance = bcadd((string) $referrer->wallet_balance, self::BONUS_AMOUNT, 2);
-                $referrer->update(['wallet_balance' => $newBalance]);
+                $referrer->forceFill(['wallet_balance' => $newBalance])->save();
             }
 
             // 'referral' is a plain tag, not a real morph class — nothing
@@ -69,7 +69,7 @@ class ReferralService
             return;
         }
 
-        $referredUser->update(['referral_bonus_paid_at' => now()]);
+        $referredUser->forceFill(['referral_bonus_paid_at' => now()])->save();
         $referrer->notify(new ReferralBonusNotification(self::BONUS_AMOUNT, $referredUser->name));
     }
 }

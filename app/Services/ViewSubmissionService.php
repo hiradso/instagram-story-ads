@@ -102,12 +102,12 @@ class ViewSubmissionService
 
             $assignment->update(['status' => 'approved']);
 
-            $campaign->update([
+            $campaign->forceFill([
                 'views_delivered' => $campaign->views_delivered + $approvedViews,
                 'budget_remaining' => bcsub((string) $campaign->budget_remaining, $amount, 2),
-            ]);
+            ])->save();
 
-            $profile->update(['wallet_balance' => $newBalance]);
+            $profile->forceFill(['wallet_balance' => $newBalance])->save();
 
             WalletTransaction::create([
                 'user_id' => $assignment->ambassador_id,

@@ -28,7 +28,7 @@ class WithdrawalService
             }
 
             $newBalance = bcsub((string) $profile->wallet_balance, $amount, 2);
-            $profile->update(['wallet_balance' => $newBalance]);
+            $profile->forceFill(['wallet_balance' => $newBalance])->save();
 
             $withdrawal = WithdrawalRequest::create([
                 'user_id' => $ambassador->id,
@@ -80,7 +80,7 @@ class WithdrawalService
             $profile = AmbassadorProfile::where('user_id', $withdrawal->user_id)->lockForUpdate()->firstOrFail();
 
             $newBalance = bcadd((string) $profile->wallet_balance, (string) $withdrawal->amount, 2);
-            $profile->update(['wallet_balance' => $newBalance]);
+            $profile->forceFill(['wallet_balance' => $newBalance])->save();
 
             WalletTransaction::create([
                 'user_id' => $withdrawal->user_id,

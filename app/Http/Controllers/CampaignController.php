@@ -31,15 +31,21 @@ class CampaignController extends Controller
         $creativePath = $request->file('creative')->store('campaign-creatives', 'public');
         $capacityViews = (int) floor($data['budget_total'] / $data['price_per_1000_views'] * 1000);
 
-        $campaign = $request->user()->campaigns()->create([
+        $campaign = $request->user()->campaigns()->make([
             ...collect($data)->except(['creative', 'province_ids'])->all(),
             'creative_path' => $creativePath,
+            'assignment_mode' => $data['assignment_mode'] ?? 'auto',
+        ]);
+
+        // budget_remaining/capacity_views/views_delivered/status aren't
+        // mass-assignable (see Campaign::$fillable) — force them in
+        // explicitly, since they're computed here, not client input.
+        $campaign->forceFill([
             'budget_remaining' => $data['budget_total'],
             'capacity_views' => $capacityViews,
             'views_delivered' => 0,
             'status' => 'draft',
-            'assignment_mode' => $data['assignment_mode'] ?? 'auto',
-        ]);
+        ])->save();
 
         if (! empty($data['province_ids'])) {
             $campaign->provinces()->sync($data['province_ids']);
@@ -129,7 +135,7 @@ class CampaignController extends Controller
         ]);
 
         $newStatus = $request->string('status')->toString();
-        $campaign->update(['status' => $newStatus]);
+        $campaign->forceFill(['status' => $newStatus])->save();
 
         if ($newStatus === 'active') {
             $campaign->advertiser->notify(new CampaignActivatedNotification($campaign));

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+// wallet_balance/verified_at are deliberately NOT fillable — only trusted
+// server logic (ReferralService, ViewSubmissionService, WithdrawalService,
+// AmbassadorProfileController::verify) ever sets them, via forceFill.
 #[Fillable([
     'user_id',
     'category_id',
@@ -22,8 +25,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     'impressions',
     'engagement_rate',
     'resume_path',
-    'wallet_balance',
-    'verified_at',
 ])]
 class AmbassadorProfile extends Model
 {
