@@ -76,23 +76,35 @@ const hoverLabelPosition = {
 export function HoverLabel({
   label,
   position = 'top',
+  align = 'center',
   children,
 }: {
   label: string
   position?: 'top' | 'bottom'
+  /**
+   * 'center' (default) centers the bubble on the trigger — fine as long
+   * as there's room on both sides. Use 'end' for a trigger that sits
+   * flush against the edge of the screen (e.g. the sidebar's own edge),
+   * where a centered bubble would spill off-screen; it anchors the
+   * bubble's near edge to the trigger instead, growing away from the
+   * screen edge.
+   */
+  align?: 'center' | 'end'
   children: ReactNode
 }) {
   const pos = hoverLabelPosition[position]
+  const bubbleAlign = align === 'end' ? 'right-0' : 'right-1/2 translate-x-1/2'
+  const arrowAlign = align === 'end' ? 'right-3' : 'right-1/2 translate-x-1/2'
 
   return (
     <span className="group/tip relative inline-flex">
       {children}
       <span
         role="tooltip"
-        className={`pointer-events-none absolute ${pos.bubble} right-1/2 z-20 translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-800 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tip:opacity-100 dark:bg-slate-700 dark:ring-1 dark:ring-slate-600`}
+        className={`pointer-events-none absolute ${pos.bubble} ${bubbleAlign} z-20 whitespace-nowrap rounded-lg bg-slate-800 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tip:opacity-100 dark:bg-slate-700 dark:ring-1 dark:ring-slate-600`}
       >
         {label}
-        <span className={`absolute ${pos.arrow} right-1/2 size-2 translate-x-1/2 rotate-45 rounded-[2px] bg-slate-800 dark:bg-slate-700`} />
+        <span className={`absolute ${pos.arrow} ${arrowAlign} size-2 rotate-45 rounded-[2px] bg-slate-800 dark:bg-slate-700`} />
       </span>
     </span>
   )

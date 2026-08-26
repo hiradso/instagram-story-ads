@@ -176,7 +176,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
         <div className={`flex items-center justify-between gap-2 border-t px-4 py-4 ${isAdmin ? 'border-white/10' : 'border-slate-200/70 dark:border-slate-800/70'}`}>
           <div className="flex items-center gap-1">
-            <HoverLabel label="تنظیمات حساب" position="top">
+            <HoverLabel label="تنظیمات حساب" position="top" align="end">
               <Link
                 to="/settings"
                 className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
