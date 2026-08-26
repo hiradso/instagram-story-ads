@@ -75,7 +75,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   }, [open])
 
   return (
-    <div className="flex min-h-screen bg-slate-100 dark:bg-slate-950">
+    <div className="flex min-h-screen bg-slate-200 dark:bg-slate-950">
       {open && (
         <div
           onClick={() => setOpen(false)}
@@ -133,7 +133,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               onClick={() => setOpen(false)}
               aria-label="بستن منو"
               className={`flex size-8 items-center justify-center rounded-lg md:hidden ${
-                isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
               }`}
             >
               <X className="size-4.5" strokeWidth={1.75} />
@@ -185,7 +185,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                         : 'text-indigo-200/70 hover:bg-white/5 hover:text-amber-100'
                       : active
                         ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
-                        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
+                        : 'text-slate-500 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
                   }`}
                 >
                   {isAdmin && active && (
@@ -208,7 +208,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 <Link
                   to="/settings"
                   className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
-                    isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+                    isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
                   }`}
                 >
                   <Settings className="size-4" strokeWidth={1.75} />
@@ -238,7 +238,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             type="button"
             onClick={() => setOpen(true)}
             aria-label="باز کردن منو"
-            className="flex size-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+            className="flex size-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"
           >
             <Menu className="size-5" strokeWidth={1.75} />
           </button>

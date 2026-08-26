@@ -42,7 +42,7 @@ function UserMenu() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-xl py-1 pr-1 pl-2.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+        className="flex items-center gap-2 rounded-xl py-1 pr-1 pl-2.5 transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
       >
         <span className="flex size-8 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
           {initials(user.name)}
@@ -113,7 +113,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const { user } = useAuth()
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-200 dark:bg-slate-950">
       <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-surface/80 backdrop-blur-md dark:border-slate-800/70 dark:bg-slate-900/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
           <Link to="/" className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                   className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                     active
                       ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
-                      : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
+                      : 'text-slate-500 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
                   }`}
                 >
                   {item.label}
