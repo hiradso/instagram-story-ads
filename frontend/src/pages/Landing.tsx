@@ -19,6 +19,7 @@ import { PublicLayout } from '../components/PublicLayout'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { AnimatedCounter } from '../components/ui/AnimatedCounter'
+import { PageLoader } from '../components/ui/PageLoader'
 import { fetchPlatformStats, type PlatformStats } from '../lib/platformStats'
 import { fetchPricingStats, type PricingStats } from '../lib/pricing'
 import { formatToman } from '../lib/labels'
@@ -88,6 +89,8 @@ export function Landing() {
 
   return (
     <PublicLayout>
+      <PageLoader ready={stats !== null && pricing !== null} />
+
       {/* Hero */}
       <section>
         <div className="animate-fade-in-up mx-auto max-w-4xl px-6 py-20 text-center sm:py-28">
