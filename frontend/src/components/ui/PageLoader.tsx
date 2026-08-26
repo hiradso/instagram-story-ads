@@ -48,8 +48,10 @@ export function PageLoader({ ready }: { ready: boolean }) {
   useEffect(() => {
     if (!mounted) return
     document.body.style.overflow = 'hidden'
+    document.documentElement.classList.add('scrollbar-reserved')
     return () => {
       document.body.style.overflow = ''
+      document.documentElement.classList.remove('scrollbar-reserved')
     }
   }, [mounted])
 

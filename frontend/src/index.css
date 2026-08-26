@@ -63,12 +63,24 @@
   }
 }
 
-html {
-  /* Always reserves the scrollbar's width, whether or not the page
-     currently overflows — without this, anything that toggles
-     `overflow: hidden` on the body (a modal, a mobile drawer, the page
-     preloader) causes a horizontal jitter as the scrollbar appears and
-     disappears and the content width shifts by its width. */
+/* Reserves the scrollbar's width only while something has actually
+   toggled `overflow: hidden` on the body (the mobile nav drawer, the
+   page preloader — see the `scrollbar-reserved` class they add/remove
+   on <html> alongside that toggle, in the same synchronous effect so
+   both changes land in one layout pass). Without reserving it at that
+   exact moment, removing body's real scrollbar (because it's now
+   hidden) makes the page suddenly wider — a horizontal jitter.
+   Deliberately NOT applied permanently: in this engine, a reserved
+   gutter shrinks the true viewport/initial containing block itself —
+   confirmed empirically, even `position: fixed; right: 0` lands short
+   of the real edge by the gutter's width, and nothing in the document
+   can paint inside that strip. Reserving it at all times (as this used
+   to) left a permanent sliver of mismatched background past any
+   edge-to-edge element — most visible against the admin dashboard's
+   sidebar, which runs a starkly different color than the page. Reserving
+   it only for the toggle's brief duration keeps the jitter fix while
+   letting edge-to-edge content reach the true edge the rest of the time. */
+html.scrollbar-reserved {
   scrollbar-gutter: stable;
 }
 
@@ -235,6 +247,27 @@ body {
   100% {
     background-position: -50% 0;
   }
+}
+
+/* The same stone photo, much more muted, behind the admin dashboard's
+   main content column too — not just the sidebar. A heavy wash (page
+   background at ~93% opacity) over it keeps cards and text fully
+   readable; the stone only shows as a faint hint in the margins and
+   gaps between them, the way it does in most of the dark-fantasy
+   dashboard references. */
+.admin-content-bg {
+  background-image: linear-gradient(rgba(226, 232, 240, 0.94), rgba(226, 232, 240, 0.94)), url('/images/admin-stone-wall.png');
+  background-repeat: no-repeat, repeat;
+  background-size:
+    auto,
+    220px 110px;
+}
+.dark .admin-content-bg {
+  background-image: linear-gradient(rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.92)), url('/images/admin-stone-wall.png');
+  background-repeat: no-repeat, repeat;
+  background-size:
+    auto,
+    220px 110px;
 }
 
 /* Admin sidebar's "throne room" treatment: a real photographed stone
