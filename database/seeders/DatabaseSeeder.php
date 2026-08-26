@@ -22,13 +22,19 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
         ]);
 
-        User::firstOrCreate(
+        // 'role' isn't mass-assignable (see User::$fillable) — force it in
+        // explicitly rather than relying on firstOrCreate's create() array.
+        $admin = User::firstOrCreate(
             ['email' => 'admin@storyyar.local'],
             [
                 'name' => 'ادمین',
                 'password' => Hash::make('password'),
-                'role' => 'admin',
             ]
         );
+        $admin->forceFill(['role' => 'admin'])->save();
+
+        if (app()->environment('local')) {
+            $this->call(DemoSeeder::class);
+        }
     }
 }
