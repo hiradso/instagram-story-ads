@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'استوری‌یار — مدیریت کمپین تبلیغات استوری',
-        short_name: 'استوری‌یار',
+        name: 'ادیار (Adyar) — مدیریت کمپین تبلیغات استوری',
+        short_name: 'ادیار',
         description: 'پلتفرم مدیریت کمپین‌های تبلیغاتی استوری اینستاگرام',
         lang: 'fa',
         dir: 'rtl',

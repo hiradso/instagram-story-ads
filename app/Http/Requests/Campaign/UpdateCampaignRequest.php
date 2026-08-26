@@ -27,6 +27,23 @@ class UpdateCampaignRequest extends FormRequest
             'ends_at' => ['nullable', 'date', 'after:starts_at'],
             'province_ids' => ['nullable', 'array'],
             'province_ids.*' => ['integer', 'exists:provinces,id'],
+            'assignment_mode' => ['sometimes', 'in:auto,manual'],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'category_id' => 'دسته‌بندی',
+            'title' => 'عنوان کمپین',
+            'description' => 'توضیحات',
+            'creative' => 'عکس کریتیو',
+            'price_per_1000_views' => 'قیمت هر ۱۰۰۰ بازدید',
+            'budget_total' => 'بودجه کل',
+            'starts_at' => 'تاریخ شروع',
+            'ends_at' => 'تاریخ پایان',
+            'province_ids' => 'استان‌های هدف',
+            'assignment_mode' => 'روش تخصیص',
         ];
     }
 }

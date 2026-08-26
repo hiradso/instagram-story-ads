@@ -8,7 +8,7 @@ import { formatToman } from '../../lib/labels'
 import type { AdvertiserWallet } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
-import { Label, TextInput } from '../../components/ui/Field'
+import { Label, NumberInput } from '../../components/ui/Field'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 import { Pagination } from '../../components/ui/Pagination'
@@ -97,10 +97,9 @@ export function WalletPage() {
             <Label tooltip={`حداقل مبلغ شارژ ${MIN_DEPOSIT.toLocaleString('fa-IR')} تومانه. بعد از ثبت به درگاه پرداخت زرین‌پال منتقل می‌شی.`}>
               مبلغ شارژ کیف‌پول (تومان)
             </Label>
-            <TextInput
+            <NumberInput
               icon={CreditCard}
-              type="number"
-              min={MIN_DEPOSIT}
+              grouped
               required
               value={amount}
               onChange={(e) => setAmount(e.target.value)}

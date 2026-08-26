@@ -29,6 +29,6 @@ class SubmissionApprovedNotification extends Notification implements ShouldQueue
         $views = number_format((int) $this->submission->approved_views);
         $amount = number_format((float) $this->amount);
 
-        return "استوری‌یار: بازدید تو ({$views}) تایید شد و {$amount} تومان به کیف‌پولت اضافه شد.";
+        return "ادیار: بازدید تو ({$views}) تایید شد و {$amount} تومان به کیف‌پولت اضافه شد.";
     }
 }

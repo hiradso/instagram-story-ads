@@ -25,4 +25,15 @@ class RegisterRequest extends FormRequest
             'role' => ['required', 'in:advertiser,ambassador'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'نام',
+            'email' => 'ایمیل',
+            'phone' => 'شماره موبایل',
+            'password' => 'رمز عبور',
+            'role' => 'نوع حساب',
+        ];
+    }
 }

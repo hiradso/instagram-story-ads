@@ -9,7 +9,9 @@ import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { EmptyState } from '../../components/ui/EmptyState'
+import { NumberInput } from '../../components/ui/Field'
 import { Spinner } from '../../components/ui/Spinner'
+import { UtmLinkBuilder } from '../../components/ui/UtmLinkBuilder'
 
 function AssignmentCard({
   assignment,
@@ -65,6 +67,10 @@ function AssignmentCard({
         </Badge>
       </div>
 
+      <div className="mb-3">
+        <UtmLinkBuilder defaultCampaign={assignment.campaign.title} defaultSource="instagram" />
+      </div>
+
       {submission && (
         <div className="animate-fade-in space-y-1 rounded-xl bg-slate-50 px-3.5 py-3 text-sm text-slate-600 ring-1 ring-slate-200/70 dark:bg-slate-800/60 dark:text-slate-300 dark:ring-slate-800">
           <p className="flex items-center gap-1.5">
@@ -99,14 +105,12 @@ function AssignmentCard({
               className="hidden"
             />
           </label>
-          <input
-            type="number"
-            min={1}
+          <NumberInput
             required
             placeholder="تعداد بازدید"
             value={claimedViews}
             onChange={(e) => setClaimedViews(e.target.value)}
-            className="w-32 rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+            className="w-32"
           />
           <Button type="submit" size="sm" loading={submitting} icon={<Upload className="size-3.5" />}>
             ثبت

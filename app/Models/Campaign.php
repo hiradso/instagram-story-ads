@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'capacity_views',
     'views_delivered',
     'status',
+    'assignment_mode',
     'starts_at',
     'ends_at',
 ])]
@@ -54,6 +55,11 @@ class Campaign extends Model
     public function assignments(): HasMany
     {
         return $this->hasMany(CampaignAssignment::class);
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
     }
 
     /**

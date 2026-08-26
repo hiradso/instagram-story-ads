@@ -16,12 +16,24 @@ class AmbassadorProfileController extends Controller
             abort(422, 'قبلاً پروفایل سفیر ساختی؛ برای ویرایش از مسیر آپدیت استفاده کن.');
         }
 
-        $profile = $request->user()->ambassadorProfile()->create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('resume')) {
+            $data['resume_path'] = $request->file('resume')->store('ambassador-resumes', 'public');
+        }
+
+        $profile = $request->user()->ambassadorProfile()->create(
+            collect($data)->except(['resume', 'advertised_city_ids'])->all()
+        );
+
+        if (! empty($data['advertised_city_ids'])) {
+            $profile->advertisedCities()->sync($data['advertised_city_ids']);
+        }
 
         // create() returns the in-memory model as given, not what the DB
         // actually stored (e.g. the wallet_balance column default) —
         // reload it, with relations, so the response matches show().
-        $profile->refresh()->load(['category', 'province', 'city']);
+        $profile->refresh()->load(['category', 'province', 'city', 'advertisedCities']);
 
         return response()->json($profile, 201);
     }
@@ -29,7 +41,7 @@ class AmbassadorProfileController extends Controller
     public function show(Request $request): JsonResponse
     {
         $profile = $request->user()->ambassadorProfile()
-            ->with(['category', 'province', 'city'])
+            ->with(['category', 'province', 'city', 'advertisedCities'])
             ->firstOrFail();
 
         return response()->json($profile);
@@ -38,8 +50,19 @@ class AmbassadorProfileController extends Controller
     public function update(UpdateAmbassadorProfileRequest $request): JsonResponse
     {
         $profile = $request->user()->ambassadorProfile()->firstOrFail();
-        $profile->update($request->validated());
-        $profile->load(['category', 'province', 'city']);
+        $data = $request->validated();
+
+        if ($request->hasFile('resume')) {
+            $data['resume_path'] = $request->file('resume')->store('ambassador-resumes', 'public');
+        }
+
+        $profile->update(collect($data)->except(['resume', 'advertised_city_ids'])->all());
+
+        if (array_key_exists('advertised_city_ids', $data)) {
+            $profile->advertisedCities()->sync($data['advertised_city_ids'] ?? []);
+        }
+
+        $profile->load(['category', 'province', 'city', 'advertisedCities']);
 
         return response()->json($profile);
     }

@@ -10,6 +10,8 @@ import { CampaignsListPage } from './pages/advertiser/CampaignsListPage'
 import { CampaignFormPage } from './pages/advertiser/CampaignFormPage'
 import { CampaignDetailPage } from './pages/advertiser/CampaignDetailPage'
 import { WalletPage as AdvertiserWalletPage } from './pages/advertiser/WalletPage'
+import { AmbassadorDirectoryPage } from './pages/advertiser/AmbassadorDirectoryPage'
+import { AmbassadorProfileDetailPage } from './pages/advertiser/AmbassadorProfileDetailPage'
 import { ProfilePage } from './pages/ambassador/ProfilePage'
 import { AssignmentsPage } from './pages/ambassador/AssignmentsPage'
 import { WalletPage } from './pages/ambassador/WalletPage'
@@ -18,7 +20,11 @@ import { AdminCampaignsPage } from './pages/admin/CampaignsPage'
 import { ProfilesPage } from './pages/admin/ProfilesPage'
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
 import { WithdrawalsPage } from './pages/admin/WithdrawalsPage'
+import { UsersPage } from './pages/admin/UsersPage'
+import { UserFormPage } from './pages/admin/UserFormPage'
 import { Settings } from './pages/Settings'
+import { ConversationsPage } from './pages/ConversationsPage'
+import { ConversationChatPage } from './pages/ConversationChatPage'
 
 function App() {
   return (
@@ -40,6 +46,8 @@ function App() {
         <Route path="/advertiser/campaigns/:id" element={<CampaignDetailPage />} />
         <Route path="/advertiser/campaigns/:id/edit" element={<CampaignFormPage />} />
         <Route path="/advertiser/wallet" element={<AdvertiserWalletPage />} />
+        <Route path="/advertiser/ambassadors" element={<AmbassadorDirectoryPage />} />
+        <Route path="/advertiser/ambassadors/:id" element={<AmbassadorProfileDetailPage />} />
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['ambassador']} />}>
@@ -48,12 +56,19 @@ function App() {
         <Route path="/ambassador/wallet" element={<WalletPage />} />
       </Route>
 
+      <Route element={<ProtectedRoute allowedRoles={['advertiser', 'ambassador']} />}>
+        <Route path="/conversations" element={<ConversationsPage />} />
+        <Route path="/conversations/:id" element={<ConversationChatPage />} />
+      </Route>
+
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
         <Route path="/admin" element={<AdminDashboardPage />} />
         <Route path="/admin/submissions" element={<SubmissionsPage />} />
         <Route path="/admin/campaigns" element={<AdminCampaignsPage />} />
         <Route path="/admin/profiles" element={<ProfilesPage />} />
         <Route path="/admin/withdrawals" element={<WithdrawalsPage />} />
+        <Route path="/admin/users" element={<UsersPage />} />
+        <Route path="/admin/users/new" element={<UserFormPage />} />
       </Route>
     </Routes>
   )

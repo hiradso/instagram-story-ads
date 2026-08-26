@@ -9,6 +9,7 @@ use App\Sms\KavenegarSmsGateway;
 use App\Sms\LogSmsGateway;
 use App\Sms\SmsGateway;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,6 +44,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Kept in sync with the frontend's password-strength meter
+        // (lib/passwordStrength.ts) so a password the UI marks as
+        // strong enough is never rejected by the backend, and vice versa.
+        Password::defaults(fn () => Password::min(8)->mixedCase()->numbers());
     }
 }

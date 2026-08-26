@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { AlertCircle, ImagePlus, MapPin, Save, Sparkles } from 'lucide-react'
+import { ImagePlus, MapPin, MessageCircle, Save, Sparkles, Zap } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import {
   createCampaign,
@@ -10,11 +10,13 @@ import {
   updateCampaign,
   type CampaignFormData,
 } from '../../lib/campaigns'
-import { extractErrorMessage } from '../../lib/errors'
+import { useToast } from '../../context/ToastContext'
+import { extractErrorMessage, extractFieldErrors } from '../../lib/errors'
 import type { Category, Province } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
-import { Label, Select, TextInput, Textarea } from '../../components/ui/Field'
+import { Label, NumberInput, Select, TextInput, Textarea } from '../../components/ui/Field'
+import { JalaliDatePicker } from '../../components/ui/JalaliDatePicker'
 import { Spinner } from '../../components/ui/Spinner'
 import { storageUrl } from '../../lib/storage'
 
@@ -28,12 +30,14 @@ const emptyForm: CampaignFormData = {
   starts_at: '',
   ends_at: '',
   province_ids: [],
+  assignment_mode: 'auto',
 }
 
 export function CampaignFormPage() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
+  const { showToast } = useToast()
 
   const [categories, setCategories] = useState<Category[]>([])
   const [provinces, setProvinces] = useState<Province[]>([])
@@ -42,7 +46,7 @@ export function CampaignFormPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
     Promise.all([fetchCategories(), fetchProvinces()]).then(([cats, provs]) => {
@@ -65,12 +69,13 @@ export function CampaignFormPage() {
           starts_at: campaign.starts_at?.slice(0, 10) ?? '',
           ends_at: campaign.ends_at?.slice(0, 10) ?? '',
           province_ids: campaign.provinces?.map((p) => p.id) ?? [],
+          assignment_mode: campaign.assignment_mode,
         })
         setExistingCreativePath(campaign.creative_path)
       })
-      .catch(() => setError('نشد کمپین رو بگیریم.'))
+      .catch(() => showToast('error', 'نشد کمپین رو بگیریم.'))
       .finally(() => setLoading(false))
-  }, [id])
+  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!form.creative) return
@@ -90,19 +95,30 @@ export function CampaignFormPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setError(null)
+    setFieldErrors({})
 
-    if (!isEdit && !form.creative) {
-      setError('عکس کریتیو کمپین الزامیه.')
+    const nextErrors: Record<string, string> = {}
+    if (!form.title.trim()) nextErrors.title = 'عنوان کمپین الزامیه.'
+    if (!form.category_id) nextErrors.category_id = 'انتخاب دسته‌بندی الزامیه.'
+    if (!form.price_per_1000_views) nextErrors.price_per_1000_views = 'قیمت هر ۱۰۰۰ بازدید الزامیه.'
+    if (!form.budget_total) nextErrors.budget_total = 'بودجه کل الزامیه.'
+    if (!isEdit && !form.creative) nextErrors.creative = 'عکس کریتیو کمپین الزامیه.'
+    if (form.starts_at && form.ends_at && form.ends_at < form.starts_at) {
+      nextErrors.ends_at = 'تاریخ پایان باید بعد از تاریخ شروع باشه.'
+    }
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(nextErrors)
       return
     }
 
     setSubmitting(true)
     try {
       const campaign = isEdit ? await updateCampaign(Number(id), form) : await createCampaign(form)
+      showToast('success', isEdit ? 'تغییرات کمپین ذخیره شد.' : 'کمپین با موفقیت ساخته شد.')
       navigate(`/advertiser/campaigns/${campaign.id}`)
     } catch (err) {
-      setError(extractErrorMessage(err))
+      setFieldErrors(extractFieldErrors(err))
+      showToast('error', extractErrorMessage(err))
     } finally {
       setSubmitting(false)
     }
@@ -127,14 +143,7 @@ export function CampaignFormPage() {
         <h2 className="text-xl font-bold text-heading">{isEdit ? 'ویرایش کمپین' : 'کمپین جدید'}</h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid max-w-2xl gap-5 sm:grid-cols-5">
-        {error && (
-          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400 sm:col-span-5">
-            <AlertCircle className="size-4 shrink-0" />
-            {error}
-          </p>
-        )}
-
+      <form onSubmit={handleSubmit} noValidate className="grid max-w-2xl gap-5 sm:grid-cols-5">
         <Card className="sm:col-span-2">
           <Label>عکس کریتیو {isEdit && '(اختیاری)'}</Label>
           <label className="group relative flex aspect-square cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 transition-colors hover:border-brand-300 hover:bg-brand-50/40 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-brand-500/50 dark:hover:bg-brand-500/10">
@@ -153,12 +162,19 @@ export function CampaignFormPage() {
               className="absolute inset-0 cursor-pointer opacity-0"
             />
           </label>
+          {fieldErrors.creative && (
+            <p className="animate-fade-in mt-1.5 text-xs text-red-600 dark:text-red-400">{fieldErrors.creative}</p>
+          )}
         </Card>
 
         <Card className="space-y-4 sm:col-span-3">
           <div>
             <Label>عنوان کمپین</Label>
-            <TextInput required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+            <TextInput
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              error={fieldErrors.title}
+            />
           </div>
 
           <div>
@@ -167,15 +183,16 @@ export function CampaignFormPage() {
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               rows={3}
+              error={fieldErrors.description}
             />
           </div>
 
           <div>
             <Label>دسته‌بندی</Label>
             <Select
-              required
               value={form.category_id || ''}
               onChange={(e) => setForm({ ...form, category_id: Number(e.target.value) })}
+              error={fieldErrors.category_id}
             >
               <option value="" disabled>
                 انتخاب کن
@@ -195,24 +212,22 @@ export function CampaignFormPage() {
               <Label tooltip="این مبلغی‌یه که سفیر به‌ازای هر ۱۰۰۰ بازدید تاییدشده دریافت می‌کنه. هرچی بالاتر باشه، کمپینت جذاب‌تر و اولویت‌دارتر می‌شه.">
                 قیمت هر ۱۰۰۰ بازدید (تومان)
               </Label>
-              <TextInput
-                type="number"
-                required
-                min={1}
+              <NumberInput
+                grouped
                 value={form.price_per_1000_views}
                 onChange={(e) => setForm({ ...form, price_per_1000_views: e.target.value })}
+                error={fieldErrors.price_per_1000_views}
               />
             </div>
             <div>
               <Label tooltip="کل بودجه‌ای که برای این کمپین کنار می‌ذاری. سقف بازدیدی که می‌تونی بخری از تقسیم همین عدد بر قیمت هر ۱۰۰۰ بازدید محاسبه می‌شه.">
                 بودجه کل (تومان)
               </Label>
-              <TextInput
-                type="number"
-                required
-                min={1}
+              <NumberInput
+                grouped
                 value={form.budget_total}
                 onChange={(e) => setForm({ ...form, budget_total: e.target.value })}
+                error={fieldErrors.budget_total}
               />
             </div>
           </div>
@@ -220,18 +235,18 @@ export function CampaignFormPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>تاریخ شروع</Label>
-              <TextInput
-                type="date"
+              <JalaliDatePicker
                 value={form.starts_at}
-                onChange={(e) => setForm({ ...form, starts_at: e.target.value })}
+                onChange={(iso) => setForm({ ...form, starts_at: iso })}
+                error={fieldErrors.starts_at}
               />
             </div>
             <div>
               <Label>تاریخ پایان</Label>
-              <TextInput
-                type="date"
+              <JalaliDatePicker
                 value={form.ends_at}
-                onChange={(e) => setForm({ ...form, ends_at: e.target.value })}
+                onChange={(iso) => setForm({ ...form, ends_at: iso })}
+                error={fieldErrors.ends_at}
               />
             </div>
           </div>
@@ -259,6 +274,38 @@ export function CampaignFormPage() {
                 </label>
               ))}
             </div>
+          </div>
+        </Card>
+
+        <Card className="space-y-3 sm:col-span-5">
+          <Label tooltip="با «تخصیص خودکار» سیستم خودش هر ۵ دقیقه سفیرهای مناسب رو پیدا و تخصیص می‌ده. با «انتخاب دستی» خودت از فهرست سفیرهای تاییدشده می‌گردی، باهاشون گفت‌وگو می‌کنی و بعد از توافق شروع همکاری رو می‌زنی.">
+            روش تخصیص سفیر
+          </Label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setForm({ ...form, assignment_mode: 'auto' })}
+              className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition-all ${
+                form.assignment_mode === 'auto'
+                  ? 'border-brand-400 bg-brand-50 text-brand-700 ring-2 ring-brand-100 dark:bg-brand-500/10 dark:text-brand-400'
+                  : 'border-slate-200 text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600'
+              }`}
+            >
+              <Zap className="size-4" />
+              تخصیص خودکار
+            </button>
+            <button
+              type="button"
+              onClick={() => setForm({ ...form, assignment_mode: 'manual' })}
+              className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition-all ${
+                form.assignment_mode === 'manual'
+                  ? 'border-brand-400 bg-brand-50 text-brand-700 ring-2 ring-brand-100 dark:bg-brand-500/10 dark:text-brand-400'
+                  : 'border-slate-200 text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600'
+              }`}
+            >
+              <MessageCircle className="size-4" />
+              خودم سفیر انتخاب کنم
+            </button>
           </div>
         </Card>
 

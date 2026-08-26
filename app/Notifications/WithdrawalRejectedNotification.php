@@ -26,6 +26,6 @@ class WithdrawalRejectedNotification extends Notification implements ShouldQueue
     {
         $amount = number_format((float) $this->withdrawal->amount);
 
-        return "استوری‌یار: درخواست برداشت {$amount} تومانت رد شد. دلیل: {$this->reason}. مبلغ به کیف‌پولت برگشت.";
+        return "ادیار: درخواست برداشت {$amount} تومانت رد شد. دلیل: {$this->reason}. مبلغ به کیف‌پولت برگشت.";
     }
 }

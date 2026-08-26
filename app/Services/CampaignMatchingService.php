@@ -23,7 +23,7 @@ class CampaignMatchingService
             /** @var Campaign $campaign */
             $campaign = Campaign::whereKey($campaign->id)->lockForUpdate()->firstOrFail();
 
-            if ($campaign->status !== 'active') {
+            if ($campaign->status !== 'active' || $campaign->assignment_mode !== 'auto') {
                 return 0;
             }
 

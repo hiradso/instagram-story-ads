@@ -28,11 +28,11 @@ export function About() {
       <section className="mx-auto max-w-3xl px-6 py-16 text-center">
         <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-700 ring-1 ring-brand-200 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">
           <Heart className="size-3.5" />
-          درباره‌ی استوری‌یار
+          درباره‌ی ادیار
         </span>
         <h1 className="text-3xl font-extrabold text-heading sm:text-4xl">یه پل ساده بین برند و مخاطب واقعی</h1>
         <p className="mt-4 text-base leading-relaxed text-subtle">
-          استوری‌یار برای حل یه مشکل ساده ساخته شده: برندها برای دیده‌شدن به صاحبان پیج‌های اینستاگرام نیاز دارن، و
+          ادیار برای حل یه مشکل ساده ساخته شده: برندها برای دیده‌شدن به صاحبان پیج‌های اینستاگرام نیاز دارن، و
           صاحبان پیج هم به‌دنبال راهی مطمئن برای کسب درآمد از محتواشون‌ان. ما این دو طرف رو بدون نیاز به چانه‌زنی،
           پیگیری دستی یا نگرانی از پرداخت‌نشدن، به هم وصل می‌کنیم.
         </p>
@@ -46,7 +46,7 @@ export function About() {
             </span>
             <h2 className="font-bold text-heading">برای آگهی‌دهنده‌ها</h2>
             <p className="text-sm leading-relaxed text-subtle">
-              دیگه لازم نیست دستی دنبال صاحب پیج مرتبط بگردی و رو قول شفاهی حساب کنی. کمپینت رو بساز، استوری‌یار
+              دیگه لازم نیست دستی دنبال صاحب پیج مرتبط بگردی و رو قول شفاهی حساب کنی. کمپینت رو بساز، ادیار
               اون رو به سفیرهای واقعاً مرتبط با حوزه‌ی کسب‌وکارت تخصیص می‌ده، و تو فقط بابت بازدید واقعی و
               تاییدشده هزینه می‌کنی.
             </p>
@@ -58,7 +58,7 @@ export function About() {
             </span>
             <h2 className="font-bold text-heading">برای سفیرها</h2>
             <p className="text-sm leading-relaxed text-subtle">
-              اگه پیج اینستاگرامت مخاطب واقعی داره، استوری‌یار راهی مستقیم برای تبدیل اون مخاطب به درآمده — بدون
+              اگه پیج اینستاگرامت مخاطب واقعی داره، ادیار راهی مستقیم برای تبدیل اون مخاطب به درآمده — بدون
               واسطه، بدون تاخیر تو پرداخت، و با کمپین‌هایی که واقعاً به حوزه‌ی پیجت مرتبطن.
             </p>
           </Card>

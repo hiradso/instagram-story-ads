@@ -28,7 +28,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 import { InfoTooltip } from '../../components/ui/Tooltip'
 import { Pagination } from '../../components/ui/Pagination'
-import { Select } from '../../components/ui/Field'
+import { NumberInput, Select } from '../../components/ui/Field'
 
 const statusFilterOptions: { value: NonNullable<SubmissionFilters['status']>; label: string }[] = [
   { value: 'pending', label: 'در انتظار بررسی' },
@@ -145,13 +145,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
                 همین عدد مبنای محاسبه‌ی مبلغ واریزیه.
               </InfoTooltip>
             </label>
-            <input
-              type="number"
-              min={1}
-              value={approvedViews}
-              onChange={(e) => setApprovedViews(e.target.value)}
-              className="w-24 rounded-xl border border-slate-200 px-2.5 py-1.5 text-sm outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-            />
+            <NumberInput value={approvedViews} onChange={(e) => setApprovedViews(e.target.value)} className="w-24" />
             <Button
               variant="success"
               size="sm"

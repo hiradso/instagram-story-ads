@@ -9,7 +9,7 @@ import {
   XCircle,
   type LucideIcon,
 } from 'lucide-react'
-import type { AssignmentStatus, CampaignStatus, SubmissionStatus, UserRole, WithdrawalStatus } from '../types'
+import type { AssignmentStatus, CampaignStatus, SubmissionStatus, User, UserRole, WithdrawalStatus } from '../types'
 
 type Tone = 'slate' | 'amber' | 'emerald' | 'orange' | 'blue' | 'red'
 
@@ -17,6 +17,22 @@ export const roleLabel: Record<UserRole, string> = {
   admin: 'ادمین',
   advertiser: 'آگهی‌دهنده',
   ambassador: 'سفیر',
+}
+
+export const roleHome: Record<UserRole, string> = {
+  admin: '/admin',
+  advertiser: '/advertiser/campaigns',
+  ambassador: '/ambassador/assignments',
+}
+
+export const userStatusLabel: Record<User['status'], string> = {
+  active: 'فعال',
+  suspended: 'مسدودشده',
+}
+
+export const userStatusTone: Record<User['status'], Tone> = {
+  active: 'emerald',
+  suspended: 'red',
 }
 
 export const campaignStatusLabel: Record<CampaignStatus, string> = {
@@ -52,6 +68,28 @@ export function formatNumber(value: string | number) {
 
 export function formatToman(value: string | number) {
   return `${formatNumber(value)} تومان`
+}
+
+const persianDigits = '۰۱۲۳۴۵۶۷۸۹'
+const arabicDigits = '٠١٢٣٤٥٦٧٨٩'
+
+/**
+ * Many Iranian keyboard layouts type Persian (or Arabic-indic) digits
+ * directly — if that lands in a value we're about to Number()/parseInt(),
+ * it silently becomes NaN. Normalize to plain ASCII digits so every text
+ * input that accepts numbers keeps working no matter which digits the
+ * user's keyboard actually produced.
+ */
+export function toEnglishDigits(value: string): string {
+  return value.replace(/[۰-۹٠-٩]/g, (char) => {
+    const persianIndex = persianDigits.indexOf(char)
+    if (persianIndex !== -1) return String(persianIndex)
+    return String(arabicDigits.indexOf(char))
+  })
+}
+
+export function toPersianDigits(value: string): string {
+  return value.replace(/[0-9]/g, (char) => persianDigits[Number(char)])
 }
 
 export const assignmentStatusLabel: Record<AssignmentStatus, string> = {

@@ -26,6 +26,6 @@ class SubmissionRejectedNotification extends Notification implements ShouldQueue
 
     public function toSms(mixed $notifiable): string
     {
-        return "استوری‌یار: اسکرین‌شات ثبت‌شده رد شد. دلیل: {$this->submission->rejection_reason}";
+        return "ادیار: اسکرین‌شات ثبت‌شده رد شد. دلیل: {$this->submission->rejection_reason}";
     }
 }

@@ -22,4 +22,12 @@ class UpdatePasswordRequest extends FormRequest
             'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'current_password' => 'رمز عبور فعلی',
+            'password' => 'رمز عبور جدید',
+        ];
+    }
 }

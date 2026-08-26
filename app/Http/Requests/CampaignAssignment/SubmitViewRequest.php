@@ -21,4 +21,12 @@ class SubmitViewRequest extends FormRequest
             'claimed_views' => ['required', 'integer', 'min:1'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'screenshot' => 'اسکرین‌شات',
+            'claimed_views' => 'تعداد بازدید',
+        ];
+    }
 }

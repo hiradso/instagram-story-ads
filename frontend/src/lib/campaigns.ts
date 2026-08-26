@@ -1,5 +1,5 @@
 import { api } from './api'
-import type { Campaign, Category, PaginatedResponse, Province } from '../types'
+import type { AssignmentMode, Campaign, Category, PaginatedResponse, Province } from '../types'
 
 export function fetchCampaigns() {
   return api.get<PaginatedResponse<Campaign>>('/advertiser/campaigns').then((res) => res.data)
@@ -19,6 +19,7 @@ export interface CampaignFormData {
   starts_at: string
   ends_at: string
   province_ids: number[]
+  assignment_mode: AssignmentMode
 }
 
 function toFormData(data: CampaignFormData) {
@@ -32,6 +33,7 @@ function toFormData(data: CampaignFormData) {
   if (data.starts_at) formData.append('starts_at', data.starts_at)
   if (data.ends_at) formData.append('ends_at', data.ends_at)
   data.province_ids.forEach((id) => formData.append('province_ids[]', String(id)))
+  formData.append('assignment_mode', data.assignment_mode)
   return formData
 }
 

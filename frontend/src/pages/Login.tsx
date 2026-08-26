@@ -1,52 +1,50 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AlertCircle, LogIn, Mail, Lock } from 'lucide-react'
+import { LogIn, Mail } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { extractErrorMessage } from '../lib/errors'
+import { useToast } from '../context/ToastContext'
+import { extractErrorMessage, extractFieldErrors } from '../lib/errors'
+import { roleHome } from '../lib/labels'
 import { AuthShell } from '../components/AuthShell'
 import { Button } from '../components/ui/Button'
-import { Label, TextInput } from '../components/ui/Field'
+import { Label, PasswordInput, TextInput } from '../components/ui/Field'
 
 export function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setError(null)
+    setFieldErrors({})
     setSubmitting(true)
     try {
-      await login(email, password)
-      navigate('/')
+      const user = await login(email, password)
+      showToast('success', 'خوش اومدی!')
+      navigate(roleHome[user.role])
     } catch (err) {
-      setError(extractErrorMessage(err))
+      setFieldErrors(extractFieldErrors(err))
+      showToast('error', extractErrorMessage(err))
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <AuthShell title="ورود به استوری‌یار" subtitle="مدیریت کمپین تبلیغات استوری اینستاگرام">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
-            <AlertCircle className="size-4 shrink-0" />
-            {error}
-          </p>
-        )}
-
+    <AuthShell title="ورود به ادیار" subtitle="مدیریت کمپین تبلیغات استوری اینستاگرام">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <div>
           <Label>ایمیل</Label>
           <TextInput
             icon={Mail}
             type="email"
-            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={fieldErrors.email}
           />
         </div>
 
@@ -57,13 +55,7 @@ export function Login() {
               رمزت رو فراموش کردی؟
             </Link>
           </div>
-          <TextInput
-            icon={Lock}
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} error={fieldErrors.password} />
         </div>
 
         <Button type="submit" loading={submitting} icon={<LogIn className="size-4" />} className="w-full">

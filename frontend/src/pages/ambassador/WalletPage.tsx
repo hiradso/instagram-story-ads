@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { AlertCircle, ArrowDownToLine, Send, Wallet } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchProfile, fetchWithdrawals, requestWithdrawal } from '../../lib/ambassador'
@@ -8,7 +9,7 @@ import type { AmbassadorProfile, WithdrawalRequest } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
-import { Label, TextInput } from '../../components/ui/Field'
+import { Label, NumberInput } from '../../components/ui/Field'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 
@@ -16,13 +17,16 @@ const MIN_WITHDRAWAL = 100000
 
 export function WalletPage() {
   const [profile, setProfile] = useState<AmbassadorProfile | null>(null)
+  const [profileMissing, setProfileMissing] = useState(false)
   const [withdrawals, setWithdrawals] = useState<WithdrawalRequest[] | null>(null)
   const [amount, setAmount] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   function load() {
-    fetchProfile().then(setProfile)
+    fetchProfile()
+      .then(setProfile)
+      .catch(() => setProfileMissing(true))
     fetchWithdrawals().then((res) => setWithdrawals(res.data))
   }
 
@@ -53,7 +57,18 @@ export function WalletPage() {
         <p className="mt-0.5 text-sm text-faint">موجودیت رو ببین و درخواست برداشت وجه بده</p>
       </div>
 
-      {!profile ? (
+      {profileMissing ? (
+        <EmptyState
+          icon={Wallet}
+          title="اول پروفایلت رو تکمیل کن"
+          description="برای دیدن کیف‌پول و درخواست برداشت، باید اول اطلاعات پیج اینستاگرامت رو ثبت کنی."
+          action={
+            <Link to="/ambassador/profile">
+              <Button size="sm">تکمیل پروفایل</Button>
+            </Link>
+          }
+        />
+      ) : !profile ? (
         <Spinner label="در حال بارگذاری..." />
       ) : (
         <div className="animate-fade-in-up space-y-4">
@@ -71,11 +86,9 @@ export function WalletPage() {
             <Label tooltip={`حداقل مبلغ برداشت ${MIN_WITHDRAWAL.toLocaleString('fa-IR')} تومانه. مبلغ درخواستی بلافاصله از موجودیت کم می‌شه و اگه ادمین رد کنه، برمی‌گرده.`}>
               مبلغ درخواست برداشت (تومان)
             </Label>
-            <TextInput
+            <NumberInput
               icon={ArrowDownToLine}
-              type="number"
-              min={MIN_WITHDRAWAL}
-              max={balance}
+              grouped
               required
               value={amount}
               onChange={(e) => setAmount(e.target.value)}

@@ -16,6 +16,7 @@ class AllocateCampaigns extends Command
     {
         $campaigns = Campaign::query()
             ->where('status', 'active')
+            ->where('assignment_mode', 'auto')
             ->whereColumn('views_delivered', '<', 'capacity_views')
             ->get();
 

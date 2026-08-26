@@ -45,6 +45,16 @@ class User extends Authenticatable
         return $this->hasMany(WithdrawalRequest::class);
     }
 
+    public function advertiserConversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'advertiser_id');
+    }
+
+    public function ambassadorConversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'ambassador_id');
+    }
+
     public function walletDeposits(): HasMany
     {
         return $this->hasMany(WalletDeposit::class);

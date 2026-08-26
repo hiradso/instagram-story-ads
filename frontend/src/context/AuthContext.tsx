@@ -5,7 +5,7 @@ import type { User, UserRole } from '../types'
 interface AuthContextValue {
   user: User | null
   loading: boolean
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<User>
   register: (
     name: string,
     email: string,
@@ -13,7 +13,7 @@ interface AuthContextValue {
     password: string,
     passwordConfirmation: string,
     role: UserRole,
-  ) => Promise<void>
+  ) => Promise<User>
   logout: () => Promise<void>
   setUser: (user: User) => void
 }
@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = await api.post<{ user: User; token: string }>('/login', { email, password })
     localStorage.setItem('token', res.data.token)
     setUser(res.data.user)
+    return res.data.user
   }
 
   async function register(
@@ -62,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
     localStorage.setItem('token', res.data.token)
     setUser(res.data.user)
+    return res.data.user
   }
 
   async function logout() {

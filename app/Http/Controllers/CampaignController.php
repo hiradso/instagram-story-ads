@@ -35,6 +35,7 @@ class CampaignController extends Controller
             'capacity_views' => $capacityViews,
             'views_delivered' => 0,
             'status' => 'draft',
+            'assignment_mode' => $data['assignment_mode'] ?? 'auto',
         ]);
 
         if (! empty($data['province_ids'])) {

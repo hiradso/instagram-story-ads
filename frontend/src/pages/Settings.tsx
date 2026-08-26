@@ -1,56 +1,45 @@
 import { useState, type FormEvent } from 'react'
-import { AlertCircle, CheckCircle2, KeyRound, Lock, Mail, Phone, Save, User as UserIcon } from 'lucide-react'
+import { Lock, Mail, Phone, Save, User as UserIcon } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import { updatePassword, updatePhone } from '../lib/account'
-import { extractErrorMessage } from '../lib/errors'
-import { roleLabel } from '../lib/labels'
+import { extractErrorMessage, extractFieldErrors } from '../lib/errors'
+import { roleLabel, toEnglishDigits } from '../lib/labels'
+import { evaluatePasswordStrength } from '../lib/passwordStrength'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Label, TextInput } from '../components/ui/Field'
+import { Label, PasswordInput, PasswordStrengthMeter, TextInput } from '../components/ui/Field'
 
 function PhoneForm() {
   const { user, setUser } = useAuth()
+  const { showToast } = useToast()
   const [phone, setPhone] = useState(user?.phone ?? '')
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [fieldError, setFieldError] = useState<string | undefined>()
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setError(null)
-    setSuccess(false)
+    setFieldError(undefined)
     setSubmitting(true)
     try {
       const updated = await updatePhone(phone)
       setUser(updated)
-      setSuccess(true)
+      showToast('success', 'شماره موبایلت به‌روز شد.')
     } catch (err) {
-      setError(extractErrorMessage(err))
+      setFieldError(extractFieldErrors(err).phone)
+      showToast('error', extractErrorMessage(err))
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <Card as="form" onSubmit={handleSubmit} className="max-w-lg space-y-4">
+    <Card as="form" onSubmit={handleSubmit} noValidate className="max-w-lg space-y-4">
       <h3 className="flex items-center gap-1.5 font-medium text-heading">
         <Phone className="size-4 text-faint" />
         شماره موبایل
       </h3>
-
-      {error && (
-        <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
-          <AlertCircle className="size-4 shrink-0" />
-          {error}
-        </p>
-      )}
-      {success && (
-        <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
-          <CheckCircle2 className="size-4 shrink-0" />
-          شماره موبایلت به‌روز شد.
-        </p>
-      )}
 
       <div>
         <Label tooltip="این شماره برای پیامک‌های اطلاع‌رسانی (تخصیص کمپین، تایید بازدید، بازیابی رمز عبور) استفاده می‌شه.">
@@ -60,9 +49,9 @@ function PhoneForm() {
           icon={Phone}
           type="tel"
           placeholder="09xxxxxxxxx"
-          pattern="^09\d{9}$"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => setPhone(toEnglishDigits(e.target.value))}
+          error={fieldError}
         />
       </div>
 
@@ -74,81 +63,69 @@ function PhoneForm() {
 }
 
 function PasswordForm() {
+  const { showToast } = useToast()
   const [currentPassword, setCurrentPassword] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setError(null)
-    setSuccess(false)
+    setFieldErrors({})
+
+    if (!evaluatePasswordStrength(password).meetsMinimum) {
+      setFieldErrors({ password: 'رمز عبور باید حداقل ۸ کاراکتر و شامل حرف بزرگ، حرف کوچیک و عدد باشه.' })
+      return
+    }
+    if (password !== passwordConfirmation) {
+      setFieldErrors({ password_confirmation: 'تکرار رمز عبور مطابقت نداره.' })
+      return
+    }
+
     setSubmitting(true)
     try {
       await updatePassword(currentPassword, password, passwordConfirmation)
       setCurrentPassword('')
       setPassword('')
       setPasswordConfirmation('')
-      setSuccess(true)
+      showToast('success', 'رمز عبورت تغییر کرد و از بقیه‌ی دستگاه‌ها خارج شدی.')
     } catch (err) {
-      setError(extractErrorMessage(err))
+      setFieldErrors(extractFieldErrors(err))
+      showToast('error', extractErrorMessage(err))
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <Card as="form" onSubmit={handleSubmit} className="max-w-lg space-y-4">
+    <Card as="form" onSubmit={handleSubmit} noValidate className="max-w-lg space-y-4">
       <h3 className="flex items-center gap-1.5 font-medium text-heading">
         <Lock className="size-4 text-faint" />
         تغییر رمز عبور
       </h3>
 
-      {error && (
-        <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-500/10 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
-          <AlertCircle className="size-4 shrink-0" />
-          {error}
-        </p>
-      )}
-      {success && (
-        <p className="animate-fade-in flex items-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
-          <CheckCircle2 className="size-4 shrink-0" />
-          رمز عبورت تغییر کرد و از بقیه‌ی دستگاه‌ها خارج شدن.
-        </p>
-      )}
-
       <div>
         <Label>رمز عبور فعلی</Label>
-        <TextInput
-          icon={KeyRound}
-          type="password"
-          required
+        <PasswordInput
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
+          error={fieldErrors.current_password}
         />
       </div>
 
       <div>
         <Label>رمز عبور جدید</Label>
-        <TextInput
-          icon={Lock}
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} error={fieldErrors.password} />
+        <PasswordStrengthMeter password={password} />
       </div>
 
       <div>
         <Label>تکرار رمز عبور جدید</Label>
-        <TextInput
-          icon={Lock}
-          type="password"
-          required
+        <PasswordInput
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
+          error={fieldErrors.password_confirmation}
         />
       </div>
 

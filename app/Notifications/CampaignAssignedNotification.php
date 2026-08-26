@@ -26,6 +26,6 @@ class CampaignAssignedNotification extends Notification implements ShouldQueue
 
     public function toSms(mixed $notifiable): string
     {
-        return "استوری‌یار: کمپین «{$this->campaign->title}» بهت تخصیص داده شد. تا ۲۴ ساعت آینده استوری رو بذار و اسکرین‌شات بازدید رو تو پنل ثبت کن.";
+        return "ادیار: کمپین «{$this->campaign->title}» بهت تخصیص داده شد. تا ۲۴ ساعت آینده استوری رو بذار و اسکرین‌شات بازدید رو تو پنل ثبت کن.";
     }
 }

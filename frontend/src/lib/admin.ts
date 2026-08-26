@@ -72,6 +72,34 @@ export function updateUserLevel(userId: number, level: number) {
   return api.patch(`/admin/users/${userId}/level`, { level })
 }
 
+export interface UserFilters {
+  role?: 'advertiser' | 'ambassador' | 'all'
+  status?: 'active' | 'suspended' | 'all'
+  search?: string
+  page?: number
+}
+
+export function fetchAdminUsers(filters: UserFilters = {}) {
+  return api.get<PaginatedResponse<User>>('/admin/users', { params: filters }).then((res) => res.data)
+}
+
+export interface CreateUserData {
+  name: string
+  email: string
+  phone: string
+  password: string
+  password_confirmation: string
+  role: 'advertiser' | 'ambassador'
+}
+
+export function createUser(data: CreateUserData) {
+  return api.post<User>('/admin/users', data).then((res) => res.data)
+}
+
+export function updateUserStatus(userId: number, status: 'active' | 'suspended') {
+  return api.patch<User>(`/admin/users/${userId}/status`, { status }).then((res) => res.data)
+}
+
 interface AdminWithdrawalRequest extends WithdrawalRequest {
   user: User
 }

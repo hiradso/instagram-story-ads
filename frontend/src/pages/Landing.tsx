@@ -1,4 +1,4 @@
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   BadgeCheck,
@@ -11,11 +11,9 @@ import {
   Wallet,
   Zap,
 } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
 import { PublicLayout } from '../components/PublicLayout'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Spinner } from '../components/ui/Spinner'
 
 const advertiserSteps = [
   { title: 'ثبت‌نام و شارژ کیف‌پول', description: 'حساب آگهی‌دهنده بساز و کیف‌پولت رو از طریق زرین‌پال شارژ کن.' },
@@ -65,22 +63,6 @@ const features = [
 ]
 
 export function Landing() {
-  const { user, loading } = useAuth()
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <Spinner label="در حال بارگذاری..." />
-      </div>
-    )
-  }
-
-  if (user) {
-    const roleHome =
-      user.role === 'advertiser' ? '/advertiser/campaigns' : user.role === 'ambassador' ? '/ambassador/assignments' : '/admin'
-    return <Navigate to={roleHome} replace />
-  }
-
   return (
     <PublicLayout>
       {/* Hero */}
@@ -101,8 +83,7 @@ export function Landing() {
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-base text-subtle sm:text-lg">
-            استوری‌یار آگهی‌دهنده‌ها رو به‌صورت خودکار به صاحبان پیج‌های اینستاگرام مرتبط با حوزه‌ی کسب‌وکارشون وصل می‌کنه —
-            کمپین بساز، منتظر تخصیص بمون، و فقط بابت بازدید واقعی پرداخت کن.
+            معتبرترین پلتفرم تبلیغات در شبکه‌های اجتماعی
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -123,7 +104,7 @@ export function Landing() {
       {/* How it works */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mb-10 text-center">
-          <h2 className="text-2xl font-bold text-heading">استوری‌یار چطور کار می‌کنه؟</h2>
+          <h2 className="text-2xl font-bold text-heading">ادیار چطور کار می‌کنه؟</h2>
           <p className="mt-2 text-sm text-faint">هم برای آگهی‌دهنده‌ها، هم برای سفیرها — یه مسیر ساده و شفاف</p>
         </div>
 

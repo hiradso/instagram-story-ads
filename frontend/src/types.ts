@@ -29,6 +29,8 @@ export type CampaignStatus =
   | 'completed'
   | 'cancelled'
 
+export type AssignmentMode = 'auto' | 'manual'
+
 export interface Campaign {
   id: number
   advertiser_id: number
@@ -42,6 +44,7 @@ export interface Campaign {
   capacity_views: number
   views_delivered: number
   status: CampaignStatus
+  assignment_mode: AssignmentMode
   starts_at: string | null
   ends_at: string | null
   created_at: string
@@ -65,13 +68,20 @@ export interface AmbassadorProfile {
   city_id: number
   instagram_username: string
   instagram_url: string
+  bio: string | null
   follower_count: number
   avg_views_7d: number
+  reach: number | null
+  impressions: number | null
+  engagement_rate: string | null
+  resume_path: string | null
   wallet_balance: string
   verified_at: string | null
   category?: Category
   province?: Province
   city?: { id: number; name: string }
+  advertised_cities?: { id: number; name: string }[]
+  user?: User
 }
 
 export type AssignmentStatus = 'assigned' | 'posted' | 'submitted' | 'approved' | 'rejected' | 'expired'
@@ -141,4 +151,29 @@ export interface WithdrawalRequest {
   admin_note: string | null
   created_at: string
   user?: User
+}
+
+export type ConversationStatus = 'open' | 'agreed' | 'declined'
+
+export interface Conversation {
+  id: number
+  campaign_id: number
+  advertiser_id: number
+  ambassador_id: number
+  status: ConversationStatus
+  brief_file_path: string | null
+  created_at: string
+  updated_at: string
+  campaign?: Campaign
+  advertiser?: User
+  ambassador?: User
+}
+
+export interface Message {
+  id: number
+  conversation_id: number
+  sender_id: number
+  body: string
+  created_at: string
+  sender?: { id: number; name: string; role: UserRole }
 }

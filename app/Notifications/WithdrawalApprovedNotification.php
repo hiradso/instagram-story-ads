@@ -26,6 +26,6 @@ class WithdrawalApprovedNotification extends Notification implements ShouldQueue
     {
         $amount = number_format((float) $this->withdrawal->amount);
 
-        return "استوری‌یار: درخواست برداشت {$amount} تومانت تایید شد و به‌زودی واریز می‌شه.";
+        return "ادیار: درخواست برداشت {$amount} تومانت تایید شد و به‌زودی واریز می‌شه.";
     }
 }

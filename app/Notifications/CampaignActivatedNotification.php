@@ -26,6 +26,6 @@ class CampaignActivatedNotification extends Notification implements ShouldQueue
 
     public function toSms(mixed $notifiable): string
     {
-        return "استوری‌یار: کمپین «{$this->campaign->title}» تایید و فعال شد. تخصیص به سفیرها به‌زودی شروع می‌شه.";
+        return "ادیار: کمپین «{$this->campaign->title}» تایید و فعال شد. تخصیص به سفیرها به‌زودی شروع می‌شه.";
     }
 }

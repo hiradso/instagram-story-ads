@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdvertiserWalletController;
+use App\Http\Controllers\AmbassadorDirectoryController;
 use App\Http\Controllers\AmbassadorProfileController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CampaignAssignmentController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\ReferenceDataController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewSubmissionController;
@@ -37,7 +39,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/campaigns', [CampaignController::class, 'adminIndex']);
         Route::patch('/campaigns/{campaign}/status', [CampaignController::class, 'updateStatus']);
 
+        Route::get('/users', [UserController::class, 'adminIndex']);
+        Route::post('/users', [UserController::class, 'store']);
         Route::patch('/users/{user}/level', [UserController::class, 'updateLevel']);
+        Route::patch('/users/{user}/status', [UserController::class, 'updateStatus']);
 
         Route::get('/submissions', [ViewSubmissionController::class, 'index']);
         Route::get('/submissions/{submission}/screenshot', [ViewSubmissionController::class, 'screenshot']);
@@ -60,11 +65,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/wallet', [AdvertiserWalletController::class, 'show']);
         Route::post('/wallet/deposit', [AdvertiserWalletController::class, 'deposit']);
+
+        Route::get('/ambassadors', [AmbassadorDirectoryController::class, 'index']);
+        Route::get('/ambassadors/{ambassadorProfile}', [AmbassadorDirectoryController::class, 'show']);
+
+        Route::post('/conversations', [ConversationController::class, 'store']);
+        Route::post('/conversations/{conversation}/agree', [ConversationController::class, 'agree']);
     });
 
     Route::middleware('role:ambassador')->prefix('ambassador')->group(function () {
         Route::get('/profile', [AmbassadorProfileController::class, 'show']);
         Route::post('/profile', [AmbassadorProfileController::class, 'store']);
+        // POST, not PUT: this accepts a multipart resume upload (see the
+        // `_method=PUT` spoof field the frontend sends alongside it).
         Route::put('/profile', [AmbassadorProfileController::class, 'update']);
 
         Route::get('/assignments', [CampaignAssignmentController::class, 'index']);
@@ -72,5 +85,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/withdrawals', [WithdrawalRequestController::class, 'index']);
         Route::post('/withdrawals', [WithdrawalRequestController::class, 'store']);
+    });
+
+    Route::middleware('role:advertiser,ambassador')->group(function () {
+        Route::get('/conversations', [ConversationController::class, 'index']);
+        Route::get('/conversations/{conversation}/messages', [ConversationController::class, 'messages']);
+        Route::post('/conversations/{conversation}/messages', [ConversationController::class, 'sendMessage']);
+        Route::post('/conversations/{conversation}/decline', [ConversationController::class, 'decline']);
     });
 });

@@ -23,4 +23,13 @@ class ResetPasswordRequest extends FormRequest
             'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'phone' => 'شماره موبایل',
+            'code' => 'کد تایید',
+            'password' => 'رمز عبور',
+        ];
+    }
 }

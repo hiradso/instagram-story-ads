@@ -20,4 +20,11 @@ class RejectSubmissionRequest extends FormRequest
             'reason' => ['required', 'string', 'max:255'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'reason' => 'دلیل رد',
+        ];
+    }
 }

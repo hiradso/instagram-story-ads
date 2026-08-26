@@ -21,6 +21,7 @@ import { Button } from '../../components/ui/Button'
 import { StatTile } from '../../components/ui/StatTile'
 import { Spinner } from '../../components/ui/Spinner'
 import { EmptyState } from '../../components/ui/EmptyState'
+import { UtmLinkBuilder } from '../../components/ui/UtmLinkBuilder'
 
 function AssignmentRow({ assignment }: { assignment: CampaignAssignmentWithAmbassador }) {
   const StatusIcon = assignmentStatusIcon[assignment.status]
@@ -116,6 +117,7 @@ export function CampaignDetailPage() {
           <Badge tone={campaignStatusTone[campaign.status]} icon={<StatusIcon className="size-3.5" />}>
             {campaignStatusLabel[campaign.status]}
           </Badge>
+          {campaign.assignment_mode === 'manual' && <Badge tone="blue">تخصیص دستی</Badge>}
         </div>
         {isDraft && (
           <div className="flex gap-2">
@@ -198,6 +200,8 @@ export function CampaignDetailPage() {
               </span>
             </Card>
           )}
+
+          <UtmLinkBuilder defaultCampaign={campaign.title} defaultSource="advertiser" />
         </div>
       </div>
 
@@ -211,7 +215,18 @@ export function CampaignDetailPage() {
           <EmptyState
             icon={Users}
             title="هنوز هیچ سفیری تخصیص داده نشده"
-            description="وقتی موتور تخصیص کمپینت رو به سفیرها اختصاص بده، اینجا نشون داده می‌شن."
+            description={
+              campaign.assignment_mode === 'manual'
+                ? 'این کمپین با روش دستی کار می‌کنه — از صفحه‌ی «پیدا کردن سفیر» با یکی گفت‌وگو کن و توافق کن.'
+                : 'وقتی موتور تخصیص کمپینت رو به سفیرها اختصاص بده، اینجا نشون داده می‌شن.'
+            }
+            action={
+              campaign.assignment_mode === 'manual' ? (
+                <Link to="/advertiser/ambassadors">
+                  <Button size="sm">پیدا کردن سفیر</Button>
+                </Link>
+              ) : undefined
+            }
           />
         )}
 

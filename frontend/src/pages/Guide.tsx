@@ -110,7 +110,7 @@ export function Guide() {
   return (
     <PublicLayout>
       <section className="mx-auto max-w-3xl px-6 py-14 text-center">
-        <h1 className="text-3xl font-extrabold text-heading">راهنمای استفاده از استوری‌یار</h1>
+        <h1 className="text-3xl font-extrabold text-heading">راهنمای استفاده از ادیار</h1>
         <p className="mt-3 text-sm text-subtle sm:text-base">
           یه مسیر گام‌به‌گام برای شروع، چه آگهی‌دهنده باشی چه سفیر
         </p>

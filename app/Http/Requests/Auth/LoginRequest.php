@@ -21,4 +21,12 @@ class LoginRequest extends FormRequest
             'password' => ['required', 'string'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'email' => 'ایمیل',
+            'password' => 'رمز عبور',
+        ];
+    }
 }

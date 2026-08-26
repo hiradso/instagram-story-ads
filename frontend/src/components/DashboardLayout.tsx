@@ -6,9 +6,11 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
+  MessageCircle,
   Settings,
   Sparkles,
   User,
+  UserCog,
   Users,
   Wallet,
 } from 'lucide-react'
@@ -26,10 +28,13 @@ interface NavItem {
 const navByRole: Record<string, NavItem[]> = {
   advertiser: [
     { to: '/advertiser/campaigns', label: 'کمپین‌ها', icon: Megaphone },
+    { to: '/advertiser/ambassadors', label: 'پیدا کردن سفیر', icon: Users },
+    { to: '/conversations', label: 'گفت‌وگوها', icon: MessageCircle },
     { to: '/advertiser/wallet', label: 'کیف‌پول', icon: Wallet },
   ],
   ambassador: [
     { to: '/ambassador/assignments', label: 'کمپین‌های من', icon: Camera },
+    { to: '/conversations', label: 'گفت‌وگوها', icon: MessageCircle },
     { to: '/ambassador/wallet', label: 'کیف‌پول', icon: Wallet },
     { to: '/ambassador/profile', label: 'پروفایل', icon: User },
   ],
@@ -39,6 +44,7 @@ const navByRole: Record<string, NavItem[]> = {
     { to: '/admin/campaigns', label: 'کمپین‌ها', icon: Megaphone },
     { to: '/admin/profiles', label: 'سفیرها', icon: Users },
     { to: '/admin/withdrawals', label: 'برداشت‌ها', icon: Wallet },
+    { to: '/admin/users', label: 'کاربران', icon: UserCog },
   ],
 }
 
@@ -60,7 +66,12 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               <span className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 text-white shadow-sm shadow-brand-500/30">
                 <Sparkles className="size-4" strokeWidth={2} />
               </span>
-              <h1 className="text-base font-bold text-heading">استوری‌یار</h1>
+              <h1 className="flex items-baseline gap-1.5 text-base font-bold text-heading">
+                ادیار
+                <span className="text-xs font-medium text-faint" dir="ltr">
+                  Adyar
+                </span>
+              </h1>
             </Link>
 
             <nav className="flex items-center gap-1">

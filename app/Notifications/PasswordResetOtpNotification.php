@@ -23,6 +23,6 @@ class PasswordResetOtpNotification extends Notification implements ShouldQueue
 
     public function toSms(mixed $notifiable): string
     {
-        return "استوری‌یار: کد بازیابی رمز عبورت {$this->code}ه. این کد تا ۱۰ دقیقه معتبره و به هیچ‌کس نگو.";
+        return "ادیار: کد بازیابی رمز عبورت {$this->code}ه. این کد تا ۱۰ دقیقه معتبره و به هیچ‌کس نگو.";
     }
 }
