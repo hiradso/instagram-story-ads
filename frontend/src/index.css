@@ -237,43 +237,50 @@ body {
   }
 }
 
-/* Admin sidebar's "throne room" treatment — a fine stone-grain texture
-   (an inline SVG noise filter, no image asset needed) plus a vignette
-   for depth, behind the sidebar's real content. Two palettes: a warm
-   parchment/sepia read in light mode, a torch-lit crimson-and-shadow
-   read in dark mode — the sidebar itself swaps palette the same way
-   (see DashboardLayout's isAdmin branch), so this needs to follow it
-   rather than assume one dark background.
-   mix-blend-mode: overlay was the wrong choice for the noise layer —
-   overlay preserves (roughly multiplies) a dark base color, so grain
-   painted over near-black pixels stayed essentially invisible. The
-   noise layer below instead composites real, warm-tinted, semi-transparent
-   pixels (via an SVG feColorMatrix baking the tint + alpha directly into
-   the noise) — that shows up regardless of how dark the color underneath is. */
-/* Stone-block coursing — plain horizontal mortar lines rather than a
-   full offset-brick pattern, which is easy to get subtly misaligned by
-   hand and hard to notice without eyes on a render. Stacked-slab
-   ("ashlar") coursing reads just as much like a castle wall and can't
-   go visually wrong the same way. */
+/* Admin sidebar's "throne room" treatment: a real photographed stone
+   wall (CC0, ambientCG "Bricks089" via Wikimedia Commons — a dark
+   medieval stone-block texture, self-hosted at
+   /public/images/admin-stone-wall.png like the rest of the site's
+   assets rather than hotlinked), tinted and vignetted per theme so it
+   reads as sunlit stone in light mode and torch-lit stone in dark mode.
+   A CSS-only vignette+grain version came first here but read as too
+   abstract — an actual photo is what was asked for.
+   The tint layer is a flat semi-transparent wash (not a gradient) so
+   the stone's own contrast still shows through evenly; the vignettes
+   on top of it add the directional light/shadow. Layer order matters:
+   CSS paints the first-listed background-image on top, so the photo is
+   listed last (bottom), with the tint and vignettes composited over it. */
 .throne-texture {
-  background-image: radial-gradient(ellipse 140% 60% at 50% -10%, rgba(180, 60, 20, 0.08), transparent 60%),
-    radial-gradient(ellipse 100% 55% at 50% 115%, rgba(120, 53, 15, 0.18), transparent 65%),
-    repeating-linear-gradient(rgba(87, 40, 10, 0.16) 0, rgba(87, 40, 10, 0.16) 2px, transparent 2px, transparent 46px);
+  background-image: radial-gradient(ellipse 140% 60% at 50% -10%, rgba(180, 60, 20, 0.1), transparent 60%),
+    radial-gradient(ellipse 100% 55% at 50% 115%, rgba(120, 53, 15, 0.22), transparent 65%),
+    linear-gradient(rgba(253, 246, 227, 0.5), rgba(253, 246, 227, 0.5)), url('/images/admin-stone-wall.png');
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+  background-size:
+    auto,
+    auto,
+    auto,
+    220px 110px;
 }
 .dark .throne-texture {
-  background-image: radial-gradient(ellipse 140% 60% at 50% -10%, rgba(217, 164, 65, 0.16), transparent 60%),
-    radial-gradient(ellipse 100% 55% at 50% 115%, rgba(0, 0, 0, 0.55), transparent 65%),
-    repeating-linear-gradient(rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.4) 2px, transparent 2px, transparent 46px);
+  background-image: radial-gradient(ellipse 140% 60% at 50% -10%, rgba(217, 164, 65, 0.18), transparent 60%),
+    radial-gradient(ellipse 100% 55% at 50% 115%, rgba(0, 0, 0, 0.6), transparent 65%),
+    linear-gradient(rgba(10, 2, 2, 0.72), rgba(10, 2, 2, 0.72)), url('/images/admin-stone-wall.png');
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+  background-size:
+    auto,
+    auto,
+    auto,
+    220px 110px;
 }
 .throne-texture::after {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.22;
+  opacity: 0.1;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch' result='noise'/%3E%3CfeColorMatrix in='noise' type='matrix' values='0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0 0.3  0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .dark .throne-texture::after {
-  opacity: 0.4;
+  opacity: 0.18;
 }
 
 /* Slow torch-like flicker behind the crest badge — subtle, never fast
