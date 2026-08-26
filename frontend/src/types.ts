@@ -118,7 +118,13 @@ export interface CampaignAssignmentWithAmbassador {
   ambassador: {
     id: number
     name: string
-    ambassador_profile?: { instagram_username: string; instagram_url: string }
+    ambassador_profile?: {
+      instagram_username: string
+      instagram_url: string
+      engagement_rate: string | null
+      reach: number | null
+      impressions: number | null
+    }
   }
   view_submission: ViewSubmission | null
 }

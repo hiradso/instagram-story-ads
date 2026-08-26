@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { AlertCircle, Eye, Link2, MapPin, Pencil, Tag, Trash2, Users, Wallet } from 'lucide-react'
+import { AlertCircle, Eye, Link2, MapPin, Pencil, Tag, Target, Trash2, Users, Wallet } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { deleteCampaign, fetchCampaign } from '../../lib/campaigns'
 import {
@@ -10,6 +10,7 @@ import {
   campaignStatusIcon,
   campaignStatusLabel,
   campaignStatusTone,
+  formatNumber,
   formatToman,
 } from '../../lib/labels'
 import { storageUrl } from '../../lib/storage'
@@ -52,9 +53,20 @@ function AssignmentRow({ assignment }: { assignment: CampaignAssignmentWithAmbas
           </p>
         )}
       </div>
-      <Badge tone={assignmentStatusTone[assignment.status]} icon={<StatusIcon className="size-3.5" />}>
-        {assignmentStatusLabel[assignment.status]}
-      </Badge>
+      <div className="flex items-center gap-2">
+        {assignment.ambassador.ambassador_profile?.engagement_rate !== null &&
+          assignment.ambassador.ambassador_profile?.engagement_rate !== undefined && (
+            <span
+              title="نرخ تعامل اجتماعی این سفیر"
+              className="flex items-center gap-1 text-xs text-subtle"
+            >
+              <Target className="size-3" />٪{formatNumber(assignment.ambassador.ambassador_profile.engagement_rate)}
+            </span>
+          )}
+        <Badge tone={assignmentStatusTone[assignment.status]} icon={<StatusIcon className="size-3.5" />}>
+          {assignmentStatusLabel[assignment.status]}
+        </Badge>
+      </div>
     </div>
   )
 }
@@ -109,6 +121,16 @@ export function CampaignDetailPage() {
   const StatusIcon = campaignStatusIcon[campaign.status]
   const viewsPct = Math.min(100, Math.round((campaign.views_delivered / campaign.capacity_views) * 100))
 
+  // Real, per-assignment engagement rates the ambassadors reported on
+  // their own profile — averaged only over the ones who actually filled
+  // it in, not assumed for the rest.
+  const engagementRates = (campaign.assignments ?? [])
+    .map((a) => a.ambassador.ambassador_profile?.engagement_rate)
+    .filter((rate): rate is string => rate !== null && rate !== undefined)
+    .map(Number)
+  const avgEngagementRate =
+    engagementRates.length > 0 ? engagementRates.reduce((sum, rate) => sum + rate, 0) / engagementRates.length : null
+
   return (
     <DashboardLayout>
       <div className="mb-6 flex items-center justify-between">
@@ -160,6 +182,13 @@ export function CampaignDetailPage() {
           <div className="grid grid-cols-2 gap-3">
             <StatTile icon={Tag} label="دسته‌بندی" value={campaign.category?.name ?? '—'} />
             <StatTile icon={Wallet} label="قیمت هر ۱۰۰۰ بازدید" value={formatToman(campaign.price_per_1000_views)} />
+            {avgEngagementRate !== null && (
+              <StatTile
+                icon={Target}
+                label="میانگین نرخ تعامل سفیرها"
+                value={`٪${formatNumber(avgEngagementRate)}`}
+              />
+            )}
           </div>
 
           <Card>
