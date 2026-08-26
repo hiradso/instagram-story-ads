@@ -4,6 +4,7 @@ import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAssignments, submitScreenshot } from '../../lib/ambassador'
 import { assignmentStatusIcon, assignmentStatusLabel, assignmentStatusTone, submissionStatusLabel } from '../../lib/labels'
 import { extractErrorMessage } from '../../lib/errors'
+import { staggerStyle } from '../../lib/animation'
 import type { CampaignAssignment } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
@@ -15,9 +16,11 @@ import { UtmLinkBuilder } from '../../components/ui/UtmLinkBuilder'
 
 function AssignmentCard({
   assignment,
+  index,
   onSubmitted,
 }: {
   assignment: CampaignAssignment
+  index: number
   onSubmitted: () => void
 }) {
   const [file, setFile] = useState<File | null>(null)
@@ -48,7 +51,7 @@ function AssignmentCard({
   }
 
   return (
-    <Card className="animate-fade-in-up">
+    <Card style={staggerStyle(index)} className="animate-fade-in-up">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-slate-200/70 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-slate-800">
@@ -158,8 +161,8 @@ export function AssignmentsPage() {
       )}
 
       <div className="grid gap-4">
-        {assignments?.map((assignment) => (
-          <AssignmentCard key={assignment.id} assignment={assignment} onSubmitted={load} />
+        {assignments?.map((assignment, i) => (
+          <AssignmentCard key={assignment.id} assignment={assignment} index={i} onSubmitted={load} />
         ))}
       </div>
     </DashboardLayout>

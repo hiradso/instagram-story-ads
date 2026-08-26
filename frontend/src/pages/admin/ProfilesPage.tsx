@@ -3,6 +3,7 @@ import { AlertCircle, BadgeCheck, Clock, Link2, Search, ShieldCheck, Users, Wall
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAdminProfiles, updateUserLevel, verifyProfile, type ProfileFilters } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
+import { staggerStyle } from '../../lib/animation'
 import type { AmbassadorProfile, User } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
@@ -133,8 +134,8 @@ export function ProfilesPage() {
       )}
 
       <div className="grid gap-4">
-        {profiles?.map((profile) => (
-          <Card key={profile.id} className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
+        {profiles?.map((profile, i) => (
+          <Card key={profile.id} style={staggerStyle(i)} className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="mb-1.5 flex items-center gap-2">
                 <h3 className="font-medium text-heading">{profile.user.name}</h3>

@@ -5,6 +5,7 @@ import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAdminUsers, updateUserStatus, type UserFilters } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
 import { roleLabel, userStatusLabel, userStatusTone } from '../../lib/labels'
+import { staggerStyle } from '../../lib/animation'
 import type { User } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
@@ -153,8 +154,8 @@ export function UsersPage() {
       )}
 
       <div className="grid gap-4">
-        {users?.map((user) => (
-          <Card key={user.id} className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
+        {users?.map((user, i) => (
+          <Card key={user.id} style={staggerStyle(i)} className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="mb-1.5 flex items-center gap-2">
                 <h3 className="font-medium text-heading">{user.name}</h3>

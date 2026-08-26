@@ -21,6 +21,7 @@ import {
 } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
 import { submissionStatusIcon, submissionStatusLabel, submissionStatusTone } from '../../lib/labels'
+import { staggerStyle } from '../../lib/animation'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -37,7 +38,15 @@ const statusFilterOptions: { value: NonNullable<SubmissionFilters['status']>; la
   { value: 'all', label: 'همه' },
 ]
 
-function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmission; onReviewed: () => void }) {
+function SubmissionCard({
+  submission,
+  index,
+  onReviewed,
+}: {
+  submission: PendingSubmission
+  index: number
+  onReviewed: () => void
+}) {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [approvedViews, setApprovedViews] = useState(String(submission.claimed_views))
   const [rejectReason, setRejectReason] = useState('')
@@ -86,7 +95,7 @@ function SubmissionCard({ submission, onReviewed }: { submission: PendingSubmiss
   const StatusIcon = submissionStatusIcon[submission.status]
 
   return (
-    <Card className="animate-fade-in-up grid gap-4 sm:grid-cols-[180px_1fr]">
+    <Card style={staggerStyle(index)} className="animate-fade-in-up grid gap-4 sm:grid-cols-[180px_1fr]">
       {imageUrl ? (
         <img
           src={imageUrl}
@@ -249,8 +258,8 @@ export function SubmissionsPage() {
       )}
 
       <div className="grid gap-4">
-        {submissions?.map((s) => (
-          <SubmissionCard key={s.id} submission={s} onReviewed={load} />
+        {submissions?.map((s, i) => (
+          <SubmissionCard key={s.id} submission={s} index={i} onReviewed={load} />
         ))}
       </div>
 

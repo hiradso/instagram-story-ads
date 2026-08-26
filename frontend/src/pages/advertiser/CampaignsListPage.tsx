@@ -4,6 +4,7 @@ import { AlertCircle, ArrowLeft, Eye, Megaphone, Plus, Wallet } from 'lucide-rea
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchCampaigns } from '../../lib/campaigns'
 import { campaignStatusIcon, campaignStatusLabel, campaignStatusTone, formatToman } from '../../lib/labels'
+import { staggerStyle } from '../../lib/animation'
 import { Button } from '../../components/ui/Button'
 import { Badge } from '../../components/ui/Badge'
 import { Card } from '../../components/ui/Card'
@@ -58,11 +59,11 @@ export function CampaignsListPage() {
       )}
 
       <div className="grid gap-3">
-        {campaigns?.map((campaign) => {
+        {campaigns?.map((campaign, i) => {
           const StatusIcon = campaignStatusIcon[campaign.status]
           return (
             <Link key={campaign.id} to={`/advertiser/campaigns/${campaign.id}`}>
-              <Card hover className="animate-fade-in-up group flex items-center justify-between gap-4">
+              <Card hover style={staggerStyle(i)} className="animate-fade-in-up group flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <div className="mb-1.5 flex items-center gap-2">
                     <h3 className="truncate font-medium text-heading">{campaign.title}</h3>

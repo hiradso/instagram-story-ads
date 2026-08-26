@@ -4,6 +4,7 @@ import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAdminCampaigns, updateCampaignStatus } from '../../lib/admin'
 import { campaignStatusIcon, campaignStatusLabel, campaignStatusTone, formatToman } from '../../lib/labels'
 import { extractErrorMessage } from '../../lib/errors'
+import { staggerStyle } from '../../lib/animation'
 import type { Campaign, CampaignStatus } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
@@ -143,11 +144,11 @@ export function AdminCampaignsPage() {
       )}
 
       <div className="grid gap-4">
-        {campaigns?.map((campaign) => {
+        {campaigns?.map((campaign, i) => {
           const StatusIcon = campaignStatusIcon[campaign.status]
           const viewsPct = Math.min(100, Math.round((campaign.views_delivered / campaign.capacity_views) * 100))
           return (
-            <Card key={campaign.id} className="animate-fade-in-up">
+            <Card key={campaign.id} style={staggerStyle(i)} className="animate-fade-in-up">
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <div className="mb-1.5 flex items-center gap-2">

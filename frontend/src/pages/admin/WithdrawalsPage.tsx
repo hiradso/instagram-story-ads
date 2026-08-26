@@ -9,6 +9,7 @@ import {
 } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
 import { formatToman, withdrawalStatusLabel, withdrawalStatusTone } from '../../lib/labels'
+import { staggerStyle } from '../../lib/animation'
 import type { User, WithdrawalRequest } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
@@ -20,7 +21,7 @@ interface Row extends WithdrawalRequest {
   user: User
 }
 
-function WithdrawalCard({ withdrawal, onChanged }: { withdrawal: Row; onChanged: () => void }) {
+function WithdrawalCard({ withdrawal, index, onChanged }: { withdrawal: Row; index: number; onChanged: () => void }) {
   const [rejectReason, setRejectReason] = useState('')
   const [showRejectForm, setShowRejectForm] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,7 +65,7 @@ function WithdrawalCard({ withdrawal, onChanged }: { withdrawal: Row; onChanged:
   }
 
   return (
-    <Card className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
+    <Card style={staggerStyle(index)} className="animate-fade-in-up flex flex-wrap items-center justify-between gap-4">
       <div>
         <div className="mb-1.5 flex items-center gap-2">
           <h3 className="font-medium text-heading">{formatToman(withdrawal.amount)}</h3>
@@ -170,8 +171,8 @@ export function WithdrawalsPage() {
       )}
 
       <div className="grid gap-4">
-        {withdrawals?.map((w) => (
-          <WithdrawalCard key={w.id} withdrawal={w} onChanged={load} />
+        {withdrawals?.map((w, i) => (
+          <WithdrawalCard key={w.id} withdrawal={w} index={i} onChanged={load} />
         ))}
       </div>
     </DashboardLayout>

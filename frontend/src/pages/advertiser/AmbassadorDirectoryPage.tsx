@@ -5,6 +5,7 @@ import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAmbassadorDirectory, type DirectoryFilters } from '../../lib/directory'
 import { fetchCategories, fetchProvinces } from '../../lib/campaigns'
 import { formatNumber } from '../../lib/labels'
+import { staggerStyle } from '../../lib/animation'
 import type { AmbassadorProfile, Category, Province } from '../../types'
 import { Card } from '../../components/ui/Card'
 import { EmptyState } from '../../components/ui/EmptyState'
@@ -113,8 +114,8 @@ export function AmbassadorDirectoryPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {profiles?.map((profile) => (
-          <Card key={profile.id} hover className="animate-fade-in-up flex flex-col gap-3">
+        {profiles?.map((profile, i) => (
+          <Card key={profile.id} hover style={staggerStyle(i)} className="animate-fade-in-up flex flex-col gap-3">
             <div className="flex items-center gap-2.5">
               <span className="flex size-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
                 {profile.instagram_username.slice(0, 1).toUpperCase()}
