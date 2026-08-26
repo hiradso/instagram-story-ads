@@ -326,7 +326,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <div className={`flex min-w-0 flex-1 flex-col ${isAdmin ? 'admin-content-bg' : ''}`}>
+      <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-slate-200/70 bg-surface/80 px-4 py-3 backdrop-blur-md md:hidden dark:border-slate-800/70 dark:bg-slate-900/80">
           <button
             type="button"
