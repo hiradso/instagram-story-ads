@@ -45,9 +45,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={toast.id}
             role="alert"
             className={`animate-fade-in-up pointer-events-auto flex w-full max-w-sm items-start gap-2.5 rounded-xl px-4 py-3 shadow-lg ring-1 ${
+              // A floating overlay like this can land over anything behind
+              // it (a page's own gradient, the sidebar logo, ...), so its
+              // background must be solid/opaque on its own — the subtle
+              // low-opacity tint pattern used for inline banners elsewhere
+              // in the app only works because those sit inside an
+              // already-opaque card/page background, not floating freely.
               toast.type === 'success'
-                ? 'bg-emerald-50 text-emerald-800 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20'
-                : 'bg-red-50 text-red-800 ring-red-200 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20'
+                ? 'bg-emerald-50 text-emerald-800 ring-emerald-200 dark:bg-slate-800 dark:text-emerald-300 dark:ring-emerald-500/30'
+                : 'bg-red-50 text-red-800 ring-red-200 dark:bg-slate-800 dark:text-red-300 dark:ring-red-500/30'
             }`}
           >
             {toast.type === 'success' ? (
