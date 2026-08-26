@@ -14,6 +14,7 @@ interface AuthContextValue {
     password: string,
     passwordConfirmation: string,
     role: UserRole,
+    referralCode?: string,
   ) => Promise<User>
   logout: () => Promise<void>
   setUser: (user: User) => void
@@ -60,6 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
     passwordConfirmation: string,
     role: UserRole,
+    referralCode?: string,
   ) {
     const res = await api.post<{ user: User; token: string }>('/register', {
       name,
@@ -68,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password,
       password_confirmation: passwordConfirmation,
       role,
+      referral_code: referralCode || null,
     })
     localStorage.setItem('token', res.data.token)
     setUser(res.data.user)

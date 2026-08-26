@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Megaphone, Phone, User, UserPlus, Camera, Mail } from 'lucide-react'
+import { Gift, Megaphone, Phone, User, UserPlus, Camera, Mail } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 import { extractErrorMessage, extractFieldErrors } from '../lib/errors'
@@ -22,6 +22,7 @@ export function Register() {
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [role, setRole] = useState<UserRole>(searchParams.get('role') === 'ambassador' ? 'ambassador' : 'advertiser')
+  const referralCode = searchParams.get('ref') ?? undefined
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
@@ -44,7 +45,7 @@ export function Register() {
 
     setSubmitting(true)
     try {
-      const user = await register(name, email, phone, password, passwordConfirmation, role)
+      const user = await register(name, email, phone, password, passwordConfirmation, role, referralCode)
       showToast('success', 'ثبت‌نامت با موفقیت انجام شد. خوش اومدی!')
       navigate(roleHome[user.role])
     } catch (err) {
@@ -58,6 +59,13 @@ export function Register() {
   return (
     <AuthShell title="ثبت‌نام در ادیار" subtitle="مدیریت کمپین تبلیغات استوری اینستاگرام">
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        {referralCode && (
+          <p className="flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2.5 text-sm text-brand-700 dark:bg-brand-500/10 dark:text-brand-400">
+            <Gift className="size-4 shrink-0" />
+            با کد معرفی «{referralCode}» ثبت‌نام می‌کنی
+          </p>
+        )}
+
         <div>
           <Label>نام</Label>
           <TextInput

@@ -23,6 +23,7 @@ class ViewSubmissionService
     public function __construct(
         private UserLevelService $levelService,
         private ScreenshotProcessor $screenshotProcessor,
+        private ReferralService $referralService,
     ) {}
 
     /**
@@ -121,7 +122,13 @@ class ViewSubmissionService
             $this->levelService->maybePromote($assignment->ambassador);
         });
 
-        $submission->campaignAssignment->ambassador->notify(new SubmissionApprovedNotification($submission, $amount));
+        $ambassador = $submission->campaignAssignment->ambassador;
+        $ambassador->notify(new SubmissionApprovedNotification($submission, $amount));
+
+        $this->referralService->rewardIfEligible(
+            $ambassador,
+            "بابت اولین بازدید تاییدشده‌ی {$ambassador->name}",
+        );
     }
 
     public function reject(ViewSubmission $submission, User $admin, string $reason): void

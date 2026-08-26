@@ -23,6 +23,10 @@ class RegisterRequest extends FormRequest
             'phone' => ['nullable', 'regex:/^09\d{9}$/'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'role' => ['required', 'in:advertiser,ambassador'],
+            // Not validated against `exists:users,referral_code` on purpose
+            // — an unrecognized or empty code should never block signup,
+            // it just means no referrer gets credited.
+            'referral_code' => ['nullable', 'string', 'max:16'],
         ];
     }
 
@@ -34,6 +38,7 @@ class RegisterRequest extends FormRequest
             'phone' => 'شماره موبایل',
             'password' => 'رمز عبور',
             'role' => 'نوع حساب',
+            'referral_code' => 'کد معرف',
         ];
     }
 }

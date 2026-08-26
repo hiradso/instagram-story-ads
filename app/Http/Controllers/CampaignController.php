@@ -6,12 +6,15 @@ use App\Http\Requests\Campaign\StoreCampaignRequest;
 use App\Http\Requests\Campaign\UpdateCampaignRequest;
 use App\Models\Campaign;
 use App\Notifications\CampaignActivatedNotification;
+use App\Services\ReferralService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class CampaignController extends Controller
 {
+    public function __construct(private ReferralService $referralService) {}
+
     public function index(Request $request): JsonResponse
     {
         $campaigns = $request->user()->campaigns()
@@ -130,6 +133,11 @@ class CampaignController extends Controller
 
         if ($newStatus === 'active') {
             $campaign->advertiser->notify(new CampaignActivatedNotification($campaign));
+
+            $this->referralService->rewardIfEligible(
+                $campaign->advertiser,
+                "بابت اولین کمپین فعال‌شده‌ی {$campaign->advertiser->name}",
+            );
         }
 
         return response()->json($campaign);

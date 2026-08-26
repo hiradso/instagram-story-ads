@@ -16,12 +16,18 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
+        $referrerId = null;
+        if ($code = $request->validated('referral_code')) {
+            $referrerId = User::where('referral_code', $code)->value('id');
+        }
+
         $user = User::create([
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
             'phone' => $request->validated('phone'),
             'password' => Hash::make($request->validated('password')),
             'role' => $request->validated('role'),
+            'referred_by_id' => $referrerId,
         ]);
 
         // create() returns the in-memory model as given, not what the DB
@@ -67,6 +73,18 @@ class AuthController extends Controller
     public function me(Request $request): JsonResponse
     {
         return response()->json($request->user());
+    }
+
+    public function referrals(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'referral_code' => $user->referral_code,
+            'referrals_count' => $user->referrals()->count(),
+            'rewarded_referrals_count' => $user->referrals()->whereNotNull('referral_bonus_paid_at')->count(),
+            'total_earned' => (string) $user->walletTransactions()->where('source_type', 'referral')->sum('amount'),
+        ]);
     }
 
     public function updateMe(Request $request): JsonResponse

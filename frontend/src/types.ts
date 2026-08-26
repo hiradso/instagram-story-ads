@@ -8,6 +8,7 @@ export interface User {
   role: UserRole
   level: number
   status: 'active' | 'suspended'
+  referral_code: string | null
 }
 
 export interface Category {

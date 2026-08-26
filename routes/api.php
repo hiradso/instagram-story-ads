@@ -38,6 +38,7 @@ Route::get('/provinces/{province}/cities', [ReferenceDataController::class, 'cit
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/me/referrals', [AuthController::class, 'referrals']);
     Route::patch('/me', [AuthController::class, 'updateMe']);
     Route::put('/me/password', [AuthController::class, 'updatePassword']);
 
