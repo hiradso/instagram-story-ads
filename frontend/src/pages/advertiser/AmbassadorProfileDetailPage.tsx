@@ -16,7 +16,7 @@ import { fetchAmbassadorDirectoryProfile } from '../../lib/directory'
 import { fetchCampaigns } from '../../lib/campaigns'
 import { startConversation } from '../../lib/conversations'
 import { extractErrorMessage, extractFieldErrors } from '../../lib/errors'
-import { formatNumber } from '../../lib/labels'
+import { ambassadorLevelTone, formatNumber } from '../../lib/labels'
 import { storageUrl } from '../../lib/storage'
 import type { AmbassadorProfile, Campaign } from '../../types'
 import { Card } from '../../components/ui/Card'
@@ -115,6 +115,11 @@ export function AmbassadorProfileDetailPage() {
                 <Badge tone="emerald" icon={<BadgeCheck className="size-3.5" />}>
                   تاییدشده
                 </Badge>
+                {profile.user && (
+                  <Badge tone={ambassadorLevelTone[profile.user.level] ?? 'slate'}>
+                    سطح {formatNumber(profile.user.level)}
+                  </Badge>
+                )}
               </div>
               <a
                 href={profile.instagram_url}

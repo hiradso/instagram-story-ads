@@ -35,6 +35,15 @@ export const userStatusTone: Record<User['status'], Tone> = {
   suspended: 'red',
 }
 
+// Ambassador tier — higher level means more approved view submissions
+// (see config/campaigns.php level_up_thresholds), shown to advertisers as a
+// trust signal when browsing the ambassador directory.
+export const ambassadorLevelTone: Record<number, Tone> = {
+  1: 'slate',
+  2: 'blue',
+  3: 'amber',
+}
+
 export const campaignStatusLabel: Record<CampaignStatus, string> = {
   draft: 'پیش‌نویس',
   pending_review: 'در انتظار بررسی',

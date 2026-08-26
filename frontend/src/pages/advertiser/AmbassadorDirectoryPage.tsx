@@ -4,10 +4,11 @@ import { Eye, Search, Users } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAmbassadorDirectory, type DirectoryFilters } from '../../lib/directory'
 import { fetchCategories, fetchProvinces } from '../../lib/campaigns'
-import { formatNumber } from '../../lib/labels'
+import { ambassadorLevelTone, formatNumber } from '../../lib/labels'
 import { staggerStyle } from '../../lib/animation'
 import type { AmbassadorProfile, Category, Province } from '../../types'
 import { Card } from '../../components/ui/Card'
+import { Badge } from '../../components/ui/Badge'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 import { Pagination } from '../../components/ui/Pagination'
@@ -120,8 +121,15 @@ export function AmbassadorDirectoryPage() {
               <span className="flex size-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
                 {profile.instagram_username.slice(0, 1).toUpperCase()}
               </span>
-              <div className="min-w-0">
-                <p className="truncate font-medium text-heading">@{profile.instagram_username}</p>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <p className="truncate font-medium text-heading">@{profile.instagram_username}</p>
+                  {profile.user && (
+                    <Badge tone={ambassadorLevelTone[profile.user.level] ?? 'slate'}>
+                      سطح {formatNumber(profile.user.level)}
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-xs text-faint">
                   {profile.category?.name} · {profile.province?.name}
                 </p>
