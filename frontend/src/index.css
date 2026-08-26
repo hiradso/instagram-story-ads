@@ -4,6 +4,16 @@
    when a .dark class is present on <html>, toggled by ThemeToggle. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Self-hosted (see index.html's preload) — a single variable-weight file
+   covers every weight the site uses, avoiding an extra CDN round-trip. */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-sans: 'Vazirmatn', system-ui, sans-serif;
 
