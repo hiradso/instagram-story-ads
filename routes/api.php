@@ -4,6 +4,7 @@ use App\Http\Controllers\AdvertiserWalletController;
 use App\Http\Controllers\AmbassadorDirectoryController;
 use App\Http\Controllers\AmbassadorProfileController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\LoginOtpController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CampaignAssignmentController;
 use App\Http\Controllers\CampaignController;
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 // advertiser/ambassador roles are self-service (enforced in RegisterRequest).
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/login/otp/request', [LoginOtpController::class, 'request'])->middleware('throttle:3,1');
+Route::post('/login/otp/verify', [LoginOtpController::class, 'verify'])->middleware('throttle:10,1');
 
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('throttle:3,1');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:10,1');

@@ -6,6 +6,7 @@ interface AuthContextValue {
   user: User | null
   loading: boolean
   login: (email: string, password: string) => Promise<User>
+  loginWithOtp: (phone: string, code: string) => Promise<User>
   register: (
     name: string,
     email: string,
@@ -45,6 +46,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return res.data.user
   }
 
+  async function loginWithOtp(phone: string, code: string) {
+    const res = await api.post<{ user: User; token: string }>('/login/otp/verify', { phone, code })
+    localStorage.setItem('token', res.data.token)
+    setUser(res.data.user)
+    return res.data.user
+  }
+
   async function register(
     name: string,
     email: string,
@@ -76,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, setUser }}>
+    <AuthContext.Provider value={{ user, loading, login, loginWithOtp, register, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   )
