@@ -11,7 +11,6 @@ import {
   Menu,
   MessageCircle,
   Settings,
-  Skull,
   Sparkles,
   Star,
   Swords,
@@ -25,6 +24,37 @@ import { useAuth } from '../context/AuthContext'
 import { formatNumber, roleLabel } from '../lib/labels'
 import { HoverLabel, InfoTooltip } from './ui/Tooltip'
 import { ThemeToggle } from './ui/ThemeToggle'
+
+/**
+ * A hand-drawn skull silhouette (not lucide's Skull, whose thin stroke
+ * outline turns into a shapeless blob at watermark size) — a filled
+ * shape with the eyes/nose/jaw cut out via an SVG mask, so it stays a
+ * clean silhouette at any size and against any background behind it.
+ */
+function AdminSkull({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
+      <mask id="adyar-admin-skull-mask" maskUnits="userSpaceOnUse">
+        <rect width="100" height="100" fill="black" />
+        {/* Cranium + jaw, built from shapes whose coordinates are
+            mirrored by construction (every x-pair sums to 100) rather
+            than a hand-typed bezier path — easy to get subtly lopsided
+            by arithmetic mistake, hard to notice without eyes on a
+            render. */}
+        <ellipse cx="50" cy="40" rx="36" ry="33" fill="white" />
+        <path d="M25 50 L75 50 66 82 50 96 34 82Z" fill="white" />
+        <ellipse cx="33" cy="38" rx="9" ry="12" fill="black" />
+        <ellipse cx="67" cy="38" rx="9" ry="12" fill="black" />
+        <path d="M50 46 44 60 50 66 56 60Z" fill="black" />
+        <rect x="36" y="84" width="4" height="10" fill="black" />
+        <rect x="44" y="86" width="4" height="10" fill="black" />
+        <rect x="52" y="86" width="4" height="10" fill="black" />
+        <rect x="60" y="84" width="4" height="10" fill="black" />
+      </mask>
+      <rect width="100" height="100" fill="currentColor" mask="url(#adyar-admin-skull-mask)" />
+    </svg>
+  )
+}
 
 interface NavItem {
   to: string
@@ -96,7 +126,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           open ? 'translate-x-0' : 'translate-x-full'
         } ${
           isAdmin
-            ? 'bg-gradient-to-b from-[#4c0a0a] via-[#2b0505] to-[#0a0202] ring-1 ring-amber-400/10'
+            ? 'bg-gradient-to-b from-amber-50 via-orange-50 to-amber-100 ring-1 ring-red-800/15 dark:from-[#4c0a0a] dark:via-[#2b0505] dark:to-[#0a0202] dark:ring-amber-400/10'
             : tier === 3
               ? 'border-l border-brand-200/60 bg-surface dark:border-brand-900/50 dark:bg-slate-900'
               : 'border-l border-slate-200/70 bg-surface dark:border-slate-800/70 dark:bg-slate-900'
@@ -105,13 +135,11 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         {isAdmin && (
           <>
             <div className="throne-texture pointer-events-none absolute inset-0" />
-            {/* Skulls at the foot of the throne — a large, near-invisible
-                watermark rather than a literal illustration, so it reads
-                as "throne room" ambience and not a cartoon sticker. */}
-            <Skull
-              className="pointer-events-none absolute -bottom-6 left-1/2 size-44 -translate-x-1/2 text-black/25"
-              strokeWidth={0.6}
-            />
+            {/* A skull at the foot of the throne — a large, quiet
+                watermark rather than a literal illustration. Ink-dark on
+                the light parchment palette, ghostly pale in the dark
+                torch-lit one. */}
+            <AdminSkull className="pointer-events-none absolute -bottom-6 left-1/2 size-44 -translate-x-1/2 text-red-950/15 dark:text-white/10" />
             {/* A couple of embers drifting up from the hearth — staggered
                 timing/drift so they don't read as a repeating loop. */}
             <span className="ember" style={{ right: '18%', animationDuration: '5.5s', animationDelay: '0.2s', ['--ember-drift' as string]: '6px' }} />
@@ -168,12 +196,12 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   />
                 )}
                 <span
-                  className={`relative flex size-9 items-center justify-center rounded-xl text-white shadow-sm ${
+                  className={`relative flex size-9 items-center justify-center rounded-xl shadow-sm ${
                     isAdmin
-                      ? 'bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-[#2a0505] shadow-amber-500/40 ring-1 ring-amber-200/50'
+                      ? 'bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-red-950 shadow-amber-500/40 ring-1 ring-amber-600/30 dark:ring-amber-200/50'
                       : tier === 3
-                        ? 'bg-gradient-to-tl from-brand-600 via-accent-500 to-accent-400 shadow-accent-500/40 ring-1 ring-accent-200/50'
-                        : 'bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 shadow-brand-500/30'
+                        ? 'bg-gradient-to-tl from-brand-600 via-accent-500 to-accent-400 text-white shadow-accent-500/40 ring-1 ring-accent-200/50'
+                        : 'bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 text-white shadow-brand-500/30'
                   }`}
                 >
                   {isAdmin ? (
@@ -185,9 +213,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   )}
                 </span>
               </span>
-              <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>
+              <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-red-950 dark:text-amber-50' : 'text-heading'}`}>
                 ادیار
-                <span className={`text-xs font-medium ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`} dir="ltr">
+                <span className={`text-xs font-medium ${isAdmin ? 'text-red-900/50 dark:text-amber-200/50' : 'text-faint'}`} dir="ltr">
                   Adyar
                 </span>
               </h1>
@@ -198,7 +226,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               onClick={() => setOpen(false)}
               aria-label="بستن منو"
               className={`flex size-8 items-center justify-center rounded-lg md:hidden ${
-                isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+                isAdmin
+                  ? 'text-red-900/60 hover:bg-red-900/5 hover:text-red-950 dark:text-amber-200/60 dark:hover:bg-white/5 dark:hover:text-amber-100'
+                  : 'text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
               }`}
             >
               <X className="size-4.5" strokeWidth={1.75} />
@@ -206,31 +236,35 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
 
           {isAdmin && (
-            <div className="mx-5 mt-4 flex items-center gap-2 text-amber-400/30">
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/40" />
+            <div className="mx-5 mt-4 flex items-center gap-2 text-red-800/30 dark:text-amber-400/30">
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-red-700/25 dark:to-amber-400/40" />
               <Swords className="size-3.5" strokeWidth={1.5} />
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-400/40" />
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-red-700/25 dark:to-amber-400/40" />
             </div>
           )}
 
           {user && (
-            <div className={`mx-5 mt-5 flex items-center gap-2.5 rounded-xl p-3 ${isAdmin ? 'bg-white/5 ring-1 ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'}`}>
+            <div
+              className={`mx-5 mt-5 flex items-center gap-2.5 rounded-xl p-3 ${
+                isAdmin ? 'bg-red-900/5 ring-1 ring-red-800/10 dark:bg-white/5 dark:ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'
+              }`}
+            >
               <span
-                className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
+                className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                   isAdmin
-                    ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-[#2a0505] ring-2 ring-amber-400/40'
+                    ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-red-950 ring-2 ring-amber-600/30 dark:ring-amber-400/40'
                     : tier === 3
-                      ? 'bg-gradient-to-tl from-brand-500 to-accent-500 ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-800 ring-accent-400/70 shadow-md shadow-accent-500/30'
+                      ? 'bg-gradient-to-tl from-brand-500 to-accent-500 text-white ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-800 ring-accent-400/70 shadow-md shadow-accent-500/30'
                       : tier === 2
-                        ? 'bg-brand-600 ring-2 ring-brand-300/70 dark:ring-brand-500/40'
-                        : 'bg-brand-600'
+                        ? 'bg-brand-600 text-white ring-2 ring-brand-300/70 dark:ring-brand-500/40'
+                        : 'bg-brand-600 text-white'
                 }`}
               >
                 {initials(user.name)}
               </span>
               <div className="min-w-0 text-xs leading-tight">
-                <p className={`truncate font-medium ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>{user.name}</p>
-                <p className={`flex items-center gap-1 ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`}>
+                <p className={`truncate font-medium ${isAdmin ? 'text-red-950 dark:text-amber-50' : 'text-heading'}`}>{user.name}</p>
+                <p className={`flex items-center gap-1 ${isAdmin ? 'text-red-900/60 dark:text-amber-200/50' : 'text-faint'}`}>
                   {roleLabel[user.role]}
                   {user.role === 'ambassador' && (
                     <>
@@ -267,8 +301,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                     isAdmin
                       ? active
-                        ? 'bg-amber-400/10 text-amber-300 ring-1 ring-amber-400/20'
-                        : 'text-rose-200/70 hover:bg-white/5 hover:text-amber-100'
+                        ? 'bg-red-800/10 text-red-900 ring-1 ring-red-800/20 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/20'
+                        : 'text-red-950/60 hover:bg-red-900/5 hover:text-red-950 dark:text-rose-200/70 dark:hover:bg-white/5 dark:hover:text-amber-100'
                       : active
                         ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
                         : 'text-slate-500 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
@@ -288,7 +322,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </nav>
 
           {isAdmin && (
-            <div className="mx-4 h-px bg-gradient-to-l from-transparent via-amber-400/40 to-transparent" />
+            <div className="mx-4 h-px bg-gradient-to-l from-transparent via-red-700/25 to-transparent dark:via-amber-400/40" />
           )}
 
           <div className={`flex items-center justify-between gap-2 border-t px-4 py-4 ${isAdmin ? 'border-transparent' : 'border-slate-200/70 dark:border-slate-800/70'}`}>
@@ -297,7 +331,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 <Link
                   to="/settings"
                   className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
-                    isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+                    isAdmin
+                      ? 'text-red-900/60 hover:bg-red-900/5 hover:text-red-950 dark:text-amber-200/60 dark:hover:bg-white/5 dark:hover:text-amber-100'
+                      : 'text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
                   }`}
                 >
                   <Settings className="size-4" strokeWidth={1.75} />
@@ -308,7 +344,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 <button
                   onClick={() => logout()}
                   className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
-                    isAdmin ? 'text-amber-200/60 hover:bg-red-500/10 hover:text-red-400' : 'text-slate-400 hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400'
+                    isAdmin
+                      ? 'text-red-900/60 hover:bg-red-500/10 hover:text-red-600 dark:text-amber-200/60 dark:hover:bg-red-500/10 dark:hover:text-red-400'
+                      : 'text-slate-400 hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400'
                   }`}
                 >
                   <LogOut className="size-4" strokeWidth={1.75} />
