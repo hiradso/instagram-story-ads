@@ -52,7 +52,10 @@ export function UsersPage() {
     })
   }
 
-  useEffect(load, [role, status, search, page])
+  useEffect(() => {
+    setUsers(null)
+    load()
+  }, [role, status, search, page]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Debounce the search box so we don't fire a request per keystroke.
   useEffect(() => {

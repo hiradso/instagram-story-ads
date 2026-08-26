@@ -3,9 +3,9 @@ import {
   AlertCircle,
   CheckCircle2,
   Eye,
+  Frown,
   ImageOff,
   Mail,
-  ShieldCheck,
   User as UserIcon,
   X,
   XCircle,
@@ -219,7 +219,14 @@ export function SubmissionsPage() {
     })
   }
 
-  useEffect(load, [status, page])
+  // Resetting to null (re-showing the spinner) only belongs here, not
+  // inside load() itself — load() is also called after approving/
+  // rejecting a single row, where the list should refresh in place
+  // instead of flashing back to a full-page spinner.
+  useEffect(() => {
+    setSubmissions(null)
+    load()
+  }, [status, page]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleStatusFilterChange(value: NonNullable<SubmissionFilters['status']>) {
     setStatus(value)
@@ -251,7 +258,7 @@ export function SubmissionsPage() {
 
       {submissions?.length === 0 && (
         <EmptyState
-          icon={ShieldCheck}
+          icon={status === 'pending' ? CheckCircle2 : Frown}
           title={status === 'pending' ? 'چیزی برای بررسی نیست' : 'موردی پیدا نشد'}
           description={status === 'pending' ? 'همه‌ی اسکرین‌شات‌ها بررسی شدن.' : undefined}
         />

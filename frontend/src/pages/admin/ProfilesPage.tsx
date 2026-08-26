@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AlertCircle, BadgeCheck, Clock, Link2, Search, ShieldCheck, Users, Wallet } from 'lucide-react'
+import { AlertCircle, BadgeCheck, Clock, Frown, Link2, Search, Users, Wallet } from 'lucide-react'
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { fetchAdminProfiles, updateUserLevel, verifyProfile, type ProfileFilters } from '../../lib/admin'
 import { extractErrorMessage } from '../../lib/errors'
@@ -47,7 +47,10 @@ export function ProfilesPage() {
     })
   }
 
-  useEffect(load, [verified, search, page])
+  useEffect(() => {
+    setProfiles(null)
+    load()
+  }, [verified, search, page]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Debounce the search box so we don't fire a request per keystroke.
   useEffect(() => {
@@ -128,7 +131,7 @@ export function ProfilesPage() {
 
       {profiles?.length === 0 && (
         <EmptyState
-          icon={ShieldCheck}
+          icon={Frown}
           title={verified !== 'all' || search ? 'سفیری با این فیلتر پیدا نشد' : 'هنوز سفیری ثبت‌نام نکرده'}
         />
       )}

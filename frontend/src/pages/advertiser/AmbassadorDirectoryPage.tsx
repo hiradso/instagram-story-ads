@@ -46,7 +46,10 @@ export function AmbassadorDirectoryPage() {
     })
   }
 
-  useEffect(load, [categoryId, provinceId, search, page]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setProfiles(null)
+    load()
+  }, [categoryId, provinceId, search, page]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const timer = setTimeout(() => {
