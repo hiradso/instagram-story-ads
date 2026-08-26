@@ -108,7 +108,7 @@ export function Install() {
                 className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   platform === p.id
                     ? 'bg-brand-600 text-white'
-                    : 'bg-surface text-slate-500 ring-1 ring-slate-200/70 hover:text-slate-900 dark:text-slate-400 dark:ring-slate-800 dark:hover:text-white'
+                    : 'bg-surface text-slate-500 ring-1 ring-slate-200/70 hover:text-slate-900 dark:!bg-slate-800 dark:text-slate-400 dark:ring-slate-800 dark:hover:!bg-slate-700 dark:hover:text-white'
                 }`}
               >
                 <p.icon className="size-3.5" strokeWidth={1.75} />
