@@ -35,6 +35,10 @@ class AmbassadorDirectoryController extends Controller
             ->paginate(20)
             ->withQueryString();
 
+        // Same privacy rule as show(): contact details stay hidden until a
+        // conversation is agreed on.
+        $profiles->getCollection()->each(fn (AmbassadorProfile $profile) => $profile->user->makeHidden(['email', 'phone']));
+
         return response()->json($profiles);
     }
 

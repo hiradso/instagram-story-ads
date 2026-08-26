@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 // Admin accounts are never created through public registration; only
 // advertiser/ambassador roles are self-service (enforced in RegisterRequest).
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
 Route::post('/login/otp/request', [LoginOtpController::class, 'request'])->middleware('throttle:3,1');
 Route::post('/login/otp/verify', [LoginOtpController::class, 'verify'])->middleware('throttle:10,1');
