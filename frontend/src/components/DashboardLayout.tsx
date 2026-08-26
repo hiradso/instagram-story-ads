@@ -25,37 +25,6 @@ import { formatNumber, roleLabel } from '../lib/labels'
 import { HoverLabel, InfoTooltip } from './ui/Tooltip'
 import { ThemeToggle } from './ui/ThemeToggle'
 
-/**
- * A hand-drawn skull silhouette (not lucide's Skull, whose thin stroke
- * outline turns into a shapeless blob at watermark size) — a filled
- * shape with the eyes/nose/jaw cut out via an SVG mask, so it stays a
- * clean silhouette at any size and against any background behind it.
- */
-function AdminSkull({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
-      <mask id="adyar-admin-skull-mask" maskUnits="userSpaceOnUse">
-        <rect width="100" height="100" fill="black" />
-        {/* Cranium + jaw, built from shapes whose coordinates are
-            mirrored by construction (every x-pair sums to 100) rather
-            than a hand-typed bezier path — easy to get subtly lopsided
-            by arithmetic mistake, hard to notice without eyes on a
-            render. */}
-        <ellipse cx="50" cy="40" rx="36" ry="33" fill="white" />
-        <path d="M25 50 L75 50 66 82 50 96 34 82Z" fill="white" />
-        <ellipse cx="33" cy="38" rx="9" ry="12" fill="black" />
-        <ellipse cx="67" cy="38" rx="9" ry="12" fill="black" />
-        <path d="M50 46 44 60 50 66 56 60Z" fill="black" />
-        <rect x="36" y="84" width="4" height="10" fill="black" />
-        <rect x="44" y="86" width="4" height="10" fill="black" />
-        <rect x="52" y="86" width="4" height="10" fill="black" />
-        <rect x="60" y="84" width="4" height="10" fill="black" />
-      </mask>
-      <rect width="100" height="100" fill="currentColor" mask="url(#adyar-admin-skull-mask)" />
-    </svg>
-  )
-}
-
 interface NavItem {
   to: string
   label: string
@@ -135,11 +104,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         {isAdmin && (
           <>
             <div className="throne-texture pointer-events-none absolute inset-0" />
-            {/* A skull at the foot of the throne — a large, quiet
-                watermark rather than a literal illustration. Ink-dark on
-                the light parchment palette, ghostly pale in the dark
-                torch-lit one. */}
-            <AdminSkull className="pointer-events-none absolute -bottom-6 left-1/2 size-44 -translate-x-1/2 text-red-950/15 dark:text-white/10" />
             {/* A couple of embers drifting up from the hearth — staggered
                 timing/drift so they don't read as a repeating loop. */}
             <span className="ember" style={{ right: '18%', animationDuration: '5.5s', animationDelay: '0.2s', ['--ember-drift' as string]: '6px' }} />
