@@ -4,9 +4,6 @@ import { AlertCircle, Eye, Link2, MapPin, Pencil, Tag, Target, Trash2, Users, Wa
 import { DashboardLayout } from '../../components/DashboardLayout'
 import { deleteCampaign, fetchCampaign } from '../../lib/campaigns'
 import {
-  assignmentStatusIcon,
-  assignmentStatusLabel,
-  assignmentStatusTone,
   campaignStatusIcon,
   campaignStatusLabel,
   campaignStatusTone,
@@ -23,9 +20,9 @@ import { StatTile } from '../../components/ui/StatTile'
 import { Spinner } from '../../components/ui/Spinner'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { UtmLinkBuilder } from '../../components/ui/UtmLinkBuilder'
+import { AssignmentStepper } from '../../components/ui/AssignmentStepper'
 
 function AssignmentRow({ assignment }: { assignment: CampaignAssignmentWithAmbassador }) {
-  const StatusIcon = assignmentStatusIcon[assignment.status]
   const submission = assignment.view_submission
 
   return (
@@ -53,7 +50,7 @@ function AssignmentRow({ assignment }: { assignment: CampaignAssignmentWithAmbas
           </p>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {assignment.ambassador.ambassador_profile?.engagement_rate !== null &&
           assignment.ambassador.ambassador_profile?.engagement_rate !== undefined && (
             <span
@@ -63,9 +60,7 @@ function AssignmentRow({ assignment }: { assignment: CampaignAssignmentWithAmbas
               <Target className="size-3" />٪{formatNumber(assignment.ambassador.ambassador_profile.engagement_rate)}
             </span>
           )}
-        <Badge tone={assignmentStatusTone[assignment.status]} icon={<StatusIcon className="size-3.5" />}>
-          {assignmentStatusLabel[assignment.status]}
-        </Badge>
+        <AssignmentStepper status={assignment.status} />
       </div>
     </div>
   )
