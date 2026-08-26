@@ -63,6 +63,15 @@
   }
 }
 
+html {
+  /* Always reserves the scrollbar's width, whether or not the page
+     currently overflows — without this, anything that toggles
+     `overflow: hidden` on the body (a modal, a mobile drawer, the page
+     preloader) causes a horizontal jitter as the scrollbar appears and
+     disappears and the content width shifts by its width. */
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Vazirmatn', system-ui, sans-serif;
   background: #eef1f6;
