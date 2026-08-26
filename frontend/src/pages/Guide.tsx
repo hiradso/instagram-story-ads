@@ -109,7 +109,7 @@ export function Guide() {
 
   return (
     <PublicLayout>
-      <section className="mx-auto max-w-3xl px-6 py-14 text-center">
+      <section className="mx-auto max-w-3xl px-6 py-20 text-center sm:py-24">
         <h1 className="text-3xl font-extrabold text-heading">راهنمای استفاده از ادیار</h1>
         <p className="mt-3 text-sm text-subtle sm:text-base">
           یه مسیر گام‌به‌گام برای شروع، چه آگهی‌دهنده باشی چه سفیر
@@ -143,7 +143,7 @@ export function Guide() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16">
+      <section className="mx-auto max-w-3xl px-6 pb-20 sm:pb-24">
         <div className="animate-fade-in space-y-4">
           {steps.map((step) => (
             <Card key={step.title} className="flex items-start gap-4">
@@ -159,9 +159,9 @@ export function Guide() {
         </div>
       </section>
 
-      <section className="bg-slate-100/60 py-16 dark:bg-slate-900/40">
+      <section className="bg-slate-100/60 py-20 sm:py-24 dark:bg-slate-900/40">
         <div className="mx-auto max-w-3xl px-6">
-          <div className="mb-8 text-center">
+          <div className="mb-10 text-center">
             <h2 className="text-2xl font-bold text-heading">سوالات پرتکرار</h2>
           </div>
           <div className="space-y-3">

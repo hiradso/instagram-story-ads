@@ -25,7 +25,7 @@ const values = [
 export function About() {
   return (
     <PublicLayout>
-      <section className="mx-auto max-w-3xl px-6 py-16 text-center">
+      <section className="mx-auto max-w-3xl px-6 py-20 text-center sm:py-24">
         <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-700 ring-1 ring-brand-200 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">
           <Heart className="size-3.5" />
           درباره‌ی ادیار
@@ -38,7 +38,7 @@ export function About() {
         </p>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 pb-16">
+      <section className="mx-auto max-w-5xl px-6 pb-20 sm:pb-24">
         <div className="grid gap-6 sm:grid-cols-2">
           <Card className="flex flex-col gap-3">
             <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
@@ -65,9 +65,9 @@ export function About() {
         </div>
       </section>
 
-      <section className="bg-slate-100/60 py-16 dark:bg-slate-900/40">
+      <section className="bg-slate-100/60 py-20 sm:py-24 dark:bg-slate-900/40">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="mb-10 text-center">
+          <div className="mb-12 text-center sm:mb-14">
             <h2 className="text-2xl font-bold text-heading">اصولی که کارمون رو شکل می‌ده</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -84,7 +84,7 @@ export function About() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-16 text-center">
+      <section className="mx-auto max-w-3xl px-6 py-20 text-center sm:py-24">
         <h2 className="text-xl font-bold text-heading">دوست داری همکاری کنیم؟</h2>
         <p className="mt-2 text-sm text-subtle">همین حالا ثبت‌نام کن، چه آگهی‌دهنده‌ای چه سفیر.</p>
         <div className="mt-6 flex justify-center">

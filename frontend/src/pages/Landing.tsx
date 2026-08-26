@@ -141,8 +141,8 @@ export function Landing() {
       )}
 
       {/* How it works */}
-      <section className="mx-auto max-w-6xl px-6 py-16">
-        <div className="mb-10 text-center">
+      <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+        <div className="mb-12 text-center sm:mb-14">
           <h2 className="text-2xl font-bold text-heading">ادیار چطور کار می‌کنه؟</h2>
           <p className="mt-2 text-sm text-faint">هم برای آگهی‌دهنده‌ها، هم برای سفیرها — یه مسیر ساده و شفاف</p>
         </div>
@@ -195,9 +195,9 @@ export function Landing() {
       </section>
 
       {/* Features */}
-      <section className="bg-slate-100/60 py-16 dark:bg-slate-900/40">
+      <section className="bg-slate-100/60 py-20 sm:py-24 dark:bg-slate-900/40">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-10 text-center">
+          <div className="mb-12 text-center sm:mb-14">
             <h2 className="text-2xl font-bold text-heading">همه‌چیز برای یه همکاری مطمئن</h2>
             <p className="mt-2 text-sm text-faint">امکاناتی که به هر دو طرف اطمینان می‌ده</p>
           </div>
@@ -220,8 +220,8 @@ export function Landing() {
           ran (see PricingController); hidden entirely until there's at
           least one to show, rather than displaying a made-up number. */}
       {pricing && pricing.overall.sample_count > 0 && (
-        <section className="mx-auto max-w-4xl px-6 py-16">
-          <div className="mb-10 text-center">
+        <section className="mx-auto max-w-4xl px-6 py-20 sm:py-24">
+          <div className="mb-12 text-center sm:mb-14">
             <h2 className="text-2xl font-bold text-heading">قیمت‌گذاری شفاف</h2>
             <p className="mt-2 text-sm text-faint">
               آگهی‌دهنده خودش قیمت هر ۱۰۰۰ بازدید رو تعیین می‌کنه — این‌جا میانگین واقعی بازار رو می‌بینی
