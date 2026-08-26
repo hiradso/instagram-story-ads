@@ -13,7 +13,10 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          # composer.lock's dev-only deps (laravel/sail -> symfony/yaml)
+          # need PHP >=8.4.1, even though production (which only ever runs
+          # `composer install --no-dev`, excluding those) is on 8.3.
+          php-version: '8.4'
           extensions: mbstring, pdo, pdo_sqlite, sqlite3, redis, bcmath, gd
           coverage: none
 
