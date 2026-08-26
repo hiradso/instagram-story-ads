@@ -20,6 +20,8 @@ import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { AnimatedCounter } from '../components/ui/AnimatedCounter'
 import { fetchPlatformStats, type PlatformStats } from '../lib/platformStats'
+import { fetchPricingStats, type PricingStats } from '../lib/pricing'
+import { formatToman } from '../lib/labels'
 
 const advertiserSteps = [
   { title: 'ثبت‌نام و شارژ کیف‌پول', description: 'حساب آگهی‌دهنده بساز و کیف‌پولت رو از طریق زرین‌پال شارژ کن.' },
@@ -77,9 +79,11 @@ const statItems: { key: keyof PlatformStats; label: string; icon: typeof Megapho
 
 export function Landing() {
   const [stats, setStats] = useState<PlatformStats | null>(null)
+  const [pricing, setPricing] = useState<PricingStats | null>(null)
 
   useEffect(() => {
     fetchPlatformStats().then(setStats)
+    fetchPricingStats().then(setPricing)
   }, [])
 
   return (
@@ -214,6 +218,56 @@ export function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Pricing transparency — real averages from campaigns that actually
+          ran (see PricingController); hidden entirely until there's at
+          least one to show, rather than displaying a made-up number. */}
+      {pricing && pricing.overall.sample_count > 0 && (
+        <section className="mx-auto max-w-4xl px-6 py-16">
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl font-bold text-heading">قیمت‌گذاری شفاف</h2>
+            <p className="mt-2 text-sm text-faint">
+              آگهی‌دهنده خودش قیمت هر ۱۰۰۰ بازدید رو تعیین می‌کنه — این‌جا میانگین واقعی بازار رو می‌بینی
+            </p>
+          </div>
+
+          <Card className="grid grid-cols-3 divide-x divide-x-reverse divide-slate-100 text-center dark:divide-slate-800">
+            <div className="px-2">
+              <p className="text-xs text-faint">کمترین</p>
+              <p className="mt-1 font-bold text-heading">{formatToman(pricing.overall.min!)}</p>
+            </div>
+            <div className="px-2">
+              <p className="text-xs text-faint">میانگین</p>
+              <p className="mt-1 text-lg font-extrabold text-brand-600 dark:text-brand-400">
+                {formatToman(pricing.overall.avg!)}
+              </p>
+            </div>
+            <div className="px-2">
+              <p className="text-xs text-faint">بیشترین</p>
+              <p className="mt-1 font-bold text-heading">{formatToman(pricing.overall.max!)}</p>
+            </div>
+          </Card>
+
+          {pricing.by_category.length > 0 && (
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {pricing.by_category.map((row) => (
+                <div
+                  key={row.category_id}
+                  className="flex items-center justify-between rounded-xl bg-surface px-4 py-2.5 text-sm ring-1 ring-slate-200/70 dark:bg-slate-900 dark:ring-slate-800"
+                >
+                  <span className="text-subtle">{row.category_name}</span>
+                  <span className="font-medium text-heading">{formatToman(row.avg)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <p className="mt-4 text-center text-xs text-faint">
+            بر اساس {pricing.overall.sample_count.toLocaleString('fa-IR')} کمپین واقعی اجراشده روی پلتفرم — قیمت هر
+            ۱۰۰۰ بازدید تاییدشده
+          </p>
+        </section>
+      )}
 
       {/* Final CTA */}
       <section className="mx-auto max-w-4xl px-6 py-20 text-center">
