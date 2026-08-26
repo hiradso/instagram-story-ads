@@ -80,6 +80,15 @@ body {
    raw slate-* + dark:* utilities are only for one-off cases these don't
    cover. */
 @layer components {
+  /* Lets a nav scroll horizontally on narrow viewports without an ugly
+     scrollbar taking up space in a header bar. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
   .text-heading {
     @apply text-slate-900 dark:text-white;
   }

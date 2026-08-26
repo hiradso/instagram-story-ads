@@ -60,13 +60,13 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <header className="sticky top-0 z-10 border-b border-slate-200/70 bg-surface/80 backdrop-blur-md dark:border-slate-800/70 dark:bg-slate-900/80">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
-          <div className="flex items-center gap-1">
-            <Link to="/" className="ml-5 flex items-center gap-2">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3.5">
+          <div className="flex min-w-0 items-center gap-1">
+            <Link to="/" className="ml-5 flex shrink-0 items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 text-white shadow-sm shadow-brand-500/30">
                 <Sparkles className="size-4" strokeWidth={2} />
               </span>
-              <h1 className="flex items-baseline gap-1.5 text-base font-bold text-heading">
+              <h1 className="hidden items-baseline gap-1.5 text-base font-bold text-heading sm:flex">
                 ادیار
                 <span className="text-xs font-medium text-faint" dir="ltr">
                   Adyar
@@ -74,7 +74,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               </h1>
             </Link>
 
-            <nav className="flex items-center gap-1">
+            <nav className="scrollbar-none flex items-center gap-1 overflow-x-auto">
               {items.map((item) => {
                 const active =
                   item.to === '/admin'
@@ -84,13 +84,13 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                    className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                       active
                         ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
                         : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
                     }`}
                   >
-                    <item.icon className="size-4" strokeWidth={active ? 2.25 : 1.75} />
+                    <item.icon className="size-4 shrink-0" strokeWidth={active ? 2.25 : 1.75} />
                     {item.label}
                   </Link>
                 )
@@ -98,7 +98,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             {user && (
               <div className="flex items-center gap-2.5">
                 <span className="flex size-8 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
