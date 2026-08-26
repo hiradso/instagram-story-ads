@@ -210,6 +210,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
               <Link to="/guide" className="hover:text-brand-600 dark:hover:text-brand-400">
                 راهنمای استفاده
               </Link>
+              <Link to="/install" className="hover:text-brand-600 dark:hover:text-brand-400">
+                نصب اپلیکیشن
+              </Link>
               <Link to="/register" className="hover:text-brand-600 dark:hover:text-brand-400">
                 ثبت‌نام
               </Link>

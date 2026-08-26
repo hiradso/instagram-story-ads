@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Landing } from './pages/Landing'
 import { About } from './pages/About'
 import { Guide } from './pages/Guide'
+import { Install } from './pages/Install'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { ForgotPassword } from './pages/ForgotPassword'
@@ -25,13 +26,16 @@ import { UserFormPage } from './pages/admin/UserFormPage'
 import { Settings } from './pages/Settings'
 import { ConversationsPage } from './pages/ConversationsPage'
 import { ConversationChatPage } from './pages/ConversationChatPage'
+import { InstallBanner } from './components/InstallBanner'
 
 function App() {
   return (
-    <Routes>
+    <>
+      <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/about" element={<About />} />
       <Route path="/guide" element={<Guide />} />
+      <Route path="/install" element={<Install />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -70,7 +74,9 @@ function App() {
         <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/admin/users/new" element={<UserFormPage />} />
       </Route>
-    </Routes>
+      </Routes>
+      <InstallBanner />
+    </>
   )
 }
 
