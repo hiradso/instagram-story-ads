@@ -10,6 +10,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Registered manually in main.tsx instead (see registerSW there) so
+      // a new deploy reloads an already-open tab automatically — the
+      // auto-injected register script only activates the new service
+      // worker in the background, silently, but never refreshes assets
+      // already loaded into a tab that was open before the deploy.
+      injectRegister: false,
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'ادیار (Adyar) — مدیریت کمپین تبلیغات استوری',
