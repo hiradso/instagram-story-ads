@@ -4,13 +4,17 @@ import {
   Camera,
   ClipboardCheck,
   Crown,
+  Gem,
   LayoutDashboard,
   LogOut,
   Megaphone,
   Menu,
   MessageCircle,
   Settings,
+  Skull,
   Sparkles,
+  Star,
+  Swords,
   User,
   UserCog,
   Users,
@@ -61,6 +65,10 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
   const items = user ? navByRole[user.role] ?? [] : []
   const isAdmin = user?.role === 'admin'
+  // Purely cosmetic 1-3 tier (see User::panelTier on the backend) — how
+  // ornate the ambassador/advertiser dashboard chrome gets. Admin has its
+  // own fixed throne-room theme instead, independent of this.
+  const tier = Math.min(3, Math.max(1, user?.tier ?? 1))
 
   useEffect(() => {
     setOpen(false)
@@ -88,13 +96,22 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           open ? 'translate-x-0' : 'translate-x-full'
         } ${
           isAdmin
-            ? 'bg-gradient-to-b from-[#170c2e] via-[#120825] to-[#08040f] ring-1 ring-amber-400/10'
-            : 'border-l border-slate-200/70 bg-surface dark:border-slate-800/70 dark:bg-slate-900'
+            ? 'bg-gradient-to-b from-[#4c0a0a] via-[#2b0505] to-[#0a0202] ring-1 ring-amber-400/10'
+            : tier === 3
+              ? 'border-l border-brand-200/60 bg-surface dark:border-brand-900/50 dark:bg-slate-900'
+              : 'border-l border-slate-200/70 bg-surface dark:border-slate-800/70 dark:bg-slate-900'
         }`}
       >
         {isAdmin && (
           <>
             <div className="throne-texture pointer-events-none absolute inset-0" />
+            {/* Skulls at the foot of the throne — a large, near-invisible
+                watermark rather than a literal illustration, so it reads
+                as "throne room" ambience and not a cartoon sticker. */}
+            <Skull
+              className="pointer-events-none absolute -bottom-6 left-1/2 size-44 -translate-x-1/2 text-black/25"
+              strokeWidth={0.6}
+            />
             {/* A couple of embers drifting up from the hearth — staggered
                 timing/drift so they don't read as a repeating loop. */}
             <span className="ember" style={{ right: '18%', animationDuration: '5.5s', animationDelay: '0.2s', ['--ember-drift' as string]: '6px' }} />
@@ -103,21 +120,69 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </>
         )}
 
+        {!isAdmin && tier >= 2 && (
+          <div
+            className={`h-0.5 w-full shrink-0 bg-gradient-to-r ${
+              tier === 3 ? 'from-brand-500 via-accent-400 to-brand-500' : 'from-brand-300 via-brand-400 to-brand-300'
+            }`}
+          />
+        )}
+        {!isAdmin && tier === 3 && (
+          <>
+            {/* A couple of quiet sparks for the top tier — same drifting
+                ember animation as the admin hearth, just recolored to the
+                brand palette so it reads as "special" without borrowing
+                the admin theme's identity. */}
+            <span
+              className="ember"
+              style={{
+                right: '20%',
+                animationDuration: '6s',
+                animationDelay: '0.4s',
+                ['--ember-drift' as string]: '6px',
+                background: 'radial-gradient(circle, #f5d0fe, #c026d3 70%)',
+                boxShadow: '0 0 4px 1px rgba(192, 38, 211, 0.5)',
+              }}
+            />
+            <span
+              className="ember"
+              style={{
+                right: '72%',
+                animationDuration: '7.5s',
+                animationDelay: '2.6s',
+                ['--ember-drift' as string]: '-8px',
+                background: 'radial-gradient(circle, #fed7aa, #f97316 70%)',
+                boxShadow: '0 0 4px 1px rgba(249, 115, 22, 0.5)',
+              }}
+            />
+          </>
+        )}
+
         <div className="relative z-10 flex h-full min-h-0 flex-col">
           <div className="flex items-center justify-between gap-2 px-5 pt-5">
             <Link to="/" className="flex items-center gap-2.5">
               <span className="relative flex items-center justify-center">
-                {isAdmin && (
-                  <span className="torch-glow pointer-events-none absolute inset-0 rounded-xl bg-amber-400 blur-md" />
+                {(isAdmin || tier === 3) && (
+                  <span
+                    className={`torch-glow pointer-events-none absolute inset-0 rounded-xl blur-md ${isAdmin ? 'bg-amber-400' : 'bg-accent-400'}`}
+                  />
                 )}
                 <span
                   className={`relative flex size-9 items-center justify-center rounded-xl text-white shadow-sm ${
                     isAdmin
-                      ? 'bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-[#1a0f36] shadow-amber-500/40 ring-1 ring-amber-200/50'
-                      : 'bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 shadow-brand-500/30'
+                      ? 'bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-[#2a0505] shadow-amber-500/40 ring-1 ring-amber-200/50'
+                      : tier === 3
+                        ? 'bg-gradient-to-tl from-brand-600 via-accent-500 to-accent-400 shadow-accent-500/40 ring-1 ring-accent-200/50'
+                        : 'bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 shadow-brand-500/30'
                   }`}
                 >
-                  {isAdmin ? <Crown className="size-4.5" strokeWidth={2} /> : <Sparkles className="size-4" strokeWidth={2} />}
+                  {isAdmin ? (
+                    <Crown className="size-4.5" strokeWidth={2} />
+                  ) : tier === 3 ? (
+                    <Gem className="size-4" strokeWidth={2} />
+                  ) : (
+                    <Sparkles className="size-4" strokeWidth={2} />
+                  )}
                 </span>
               </span>
               <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>
@@ -141,14 +206,24 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
 
           {isAdmin && (
-            <div className="mx-5 mt-4 h-px bg-gradient-to-l from-transparent via-amber-400/40 to-transparent" />
+            <div className="mx-5 mt-4 flex items-center gap-2 text-amber-400/30">
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/40" />
+              <Swords className="size-3.5" strokeWidth={1.5} />
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-400/40" />
+            </div>
           )}
 
           {user && (
             <div className={`mx-5 mt-5 flex items-center gap-2.5 rounded-xl p-3 ${isAdmin ? 'bg-white/5 ring-1 ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'}`}>
               <span
                 className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
-                  isAdmin ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-[#1a0f36] ring-2 ring-amber-400/40' : 'bg-brand-600'
+                  isAdmin
+                    ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-[#2a0505] ring-2 ring-amber-400/40'
+                    : tier === 3
+                      ? 'bg-gradient-to-tl from-brand-500 to-accent-500 ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-800 ring-accent-400/70 shadow-md shadow-accent-500/30'
+                      : tier === 2
+                        ? 'bg-brand-600 ring-2 ring-brand-300/70 dark:ring-brand-500/40'
+                        : 'bg-brand-600'
                 }`}
               >
                 {initials(user.name)}
@@ -160,9 +235,20 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   {user.role === 'ambassador' && (
                     <>
                       {` · سطح ${formatNumber(user.level)}`}
+                      {tier >= 2 && (tier === 3 ? <Gem className="size-3 text-accent-500" /> : <Star className="size-3 text-brand-500" />)}
                       <InfoTooltip>
                         سطح بالاتر یعنی می‌تونی هم‌زمان کمپین‌های بیشتری بگیری. با تایید شدن بازدیدهات خودکار ارتقا
                         می‌گیری.
+                      </InfoTooltip>
+                    </>
+                  )}
+                  {user.role === 'advertiser' && tier > 1 && (
+                    <>
+                      {` · سطح ${formatNumber(tier)}`}
+                      {tier === 3 ? <Gem className="size-3 text-accent-500" /> : <Star className="size-3 text-brand-500" />}
+                      <InfoTooltip>
+                        سطح حساب بر اساس مجموع بودجه کمپین‌هایی که تا الان اجرا کردی محاسبه می‌شه و ظاهر پنلت رو
+                        ویژه‌تر می‌کنه.
                       </InfoTooltip>
                     </>
                   )}
@@ -182,7 +268,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                     isAdmin
                       ? active
                         ? 'bg-amber-400/10 text-amber-300 ring-1 ring-amber-400/20'
-                        : 'text-indigo-200/70 hover:bg-white/5 hover:text-amber-100'
+                        : 'text-rose-200/70 hover:bg-white/5 hover:text-amber-100'
                       : active
                         ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
                         : 'text-slate-500 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
@@ -190,6 +276,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 >
                   {isAdmin && active && (
                     <span className="absolute inset-y-1.5 right-0 w-0.5 rounded-full bg-gradient-to-b from-amber-300 via-amber-400 to-amber-600" />
+                  )}
+                  {!isAdmin && tier === 3 && active && (
+                    <span className="absolute inset-y-1.5 right-0 w-0.5 rounded-full bg-gradient-to-b from-brand-400 via-accent-400 to-brand-600" />
                   )}
                   <item.icon className="size-4 shrink-0" strokeWidth={active ? 2.25 : 1.75} />
                   {item.label}

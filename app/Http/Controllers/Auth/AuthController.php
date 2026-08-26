@@ -42,7 +42,7 @@ class AuthController extends Controller
         $user->refresh();
 
         return response()->json([
-            'user' => $user,
+            'user' => $this->withTier($user),
             'token' => $user->createToken('api')->plainTextToken,
         ], 201);
     }
@@ -64,7 +64,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'user' => $user,
+            'user' => $this->withTier($user),
             'token' => $user->createToken('api')->plainTextToken,
         ]);
     }
@@ -78,7 +78,16 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        return response()->json($this->withTier($request->user()));
+    }
+
+    /**
+     * Merge the display-only panel tier (see User::panelTier) into the
+     * user payload without mutating the model — 'tier' isn't a column.
+     */
+    private function withTier(User $user): array
+    {
+        return array_merge($user->toArray(), ['tier' => $user->panelTier()]);
     }
 
     public function referrals(Request $request): JsonResponse
@@ -101,7 +110,7 @@ class AuthController extends Controller
 
         $request->user()->update($data);
 
-        return response()->json($request->user());
+        return response()->json($this->withTier($request->user()));
     }
 
     public function updatePassword(UpdatePasswordRequest $request): JsonResponse

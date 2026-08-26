@@ -102,6 +102,35 @@ class User extends Authenticatable
             ->count();
     }
 
+    /**
+     * A 1-3 tier used purely for how fancy the dashboard theme looks —
+     * ambassadors already have a real `level` column (promoted by
+     * UserLevelService on approved view submissions); advertisers have
+     * no such column, so their tier is derived here from lifetime
+     * campaign budget instead. Not an accessor/append on purpose: it
+     * runs a query for advertisers, and this model gets serialized in
+     * places (admin user lists, search results) where that per-row cost
+     * would add up. Call it only where the tier is actually displayed.
+     */
+    public function panelTier(): int
+    {
+        if ($this->role === 'ambassador') {
+            return min(3, max(1, $this->level));
+        }
+
+        if ($this->role === 'advertiser') {
+            $totalBudget = (float) $this->campaigns()->sum('budget_total');
+
+            return match (true) {
+                $totalBudget >= 10_000_000 => 3,
+                $totalBudget >= 3_000_000 => 2,
+                default => 1,
+            };
+        }
+
+        return 1;
+    }
+
     public function routeNotificationForSms(): ?string
     {
         return $this->phone;

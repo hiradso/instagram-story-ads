@@ -7,6 +7,8 @@ export interface User {
   phone: string | null
   role: UserRole
   level: number
+  /** 1-3, purely cosmetic — how ornate the dashboard theme gets. */
+  tier: number
   status: 'active' | 'suspended'
   referral_code: string | null
 }
