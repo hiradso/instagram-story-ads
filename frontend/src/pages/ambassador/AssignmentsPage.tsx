@@ -51,7 +51,7 @@ function AssignmentCard({
     <Card className="animate-fade-in-up">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-accent-400/10 text-brand-500 ring-1 ring-slate-200/70 dark:ring-slate-800">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-slate-200/70 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-slate-800">
             <Camera className="size-5" strokeWidth={1.75} />
           </span>
           <div>

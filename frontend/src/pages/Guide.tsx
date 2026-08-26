@@ -147,7 +147,7 @@ export function Guide() {
         <div className="animate-fade-in space-y-4">
           {steps.map((step) => (
             <Card key={step.title} className="flex items-start gap-4">
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-accent-400/10 text-brand-500 ring-1 ring-slate-200/70 dark:from-brand-500/10 dark:to-accent-500/5 dark:text-brand-400 dark:ring-slate-800">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-slate-200/70 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-slate-800">
                 <step.icon className="size-5" strokeWidth={1.75} />
               </span>
               <div>

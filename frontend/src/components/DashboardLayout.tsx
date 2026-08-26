@@ -101,7 +101,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-3">
             {user && (
               <div className="flex items-center gap-2.5">
-                <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-tl from-brand-500 to-accent-400 text-xs font-bold text-white">
+                <span className="flex size-8 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
                   {initials(user.name)}
                 </span>
                 <div className="hidden text-xs leading-tight sm:block">

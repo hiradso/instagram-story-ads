@@ -72,7 +72,7 @@ export function WalletPage() {
         <Spinner label="در حال بارگذاری..." />
       ) : (
         <div className="animate-fade-in-up space-y-4">
-          <Card className="flex items-center gap-3 bg-gradient-to-l from-brand-50 to-accent-400/10 dark:from-brand-500/10 dark:to-accent-500/5">
+          <Card className="flex items-center gap-3 bg-brand-50 dark:bg-brand-500/10">
             <span className="flex size-10 items-center justify-center rounded-xl bg-surface text-brand-500 ring-1 ring-slate-200/70 dark:bg-slate-900 dark:text-brand-400 dark:ring-slate-700">
               <Wallet className="size-5" strokeWidth={1.75} />
             </span>

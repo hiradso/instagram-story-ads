@@ -89,11 +89,8 @@ export function Landing() {
   return (
     <PublicLayout>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-32 -right-32 size-96 rounded-full bg-gradient-to-br from-brand-400/30 to-accent-400/20 blur-3xl dark:from-brand-500/20 dark:to-accent-500/10" />
-        <div className="pointer-events-none absolute -bottom-32 -left-32 size-96 rounded-full bg-gradient-to-tr from-accent-400/20 to-brand-500/20 blur-3xl dark:from-accent-500/10 dark:to-brand-600/15" />
-
-        <div className="animate-fade-in-up relative mx-auto max-w-4xl px-6 py-20 text-center sm:py-28">
+      <section>
+        <div className="animate-fade-in-up mx-auto max-w-4xl px-6 py-20 text-center sm:py-28">
           <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-700 ring-1 ring-brand-200 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">
             <Sparkles className="size-3.5" />
             تبلیغات استوری اینستاگرام، بدون واسطه
@@ -161,7 +158,7 @@ export function Landing() {
             <div className="space-y-3">
               {advertiserSteps.map((step, i) => (
                 <Card key={step.title} className="flex items-start gap-3">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-tl from-brand-600 to-accent-500 text-xs font-bold text-white">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
                     {(i + 1).toLocaleString('fa-IR')}
                   </span>
                   <div>
@@ -183,7 +180,7 @@ export function Landing() {
             <div className="space-y-3">
               {ambassadorSteps.map((step, i) => (
                 <Card key={step.title} className="flex items-start gap-3">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-tl from-accent-500 to-brand-500 text-xs font-bold text-white">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-500 text-xs font-bold text-white">
                     {(i + 1).toLocaleString('fa-IR')}
                   </span>
                   <div>
@@ -208,7 +205,7 @@ export function Landing() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <Card key={feature.title} hover>
-                <span className="mb-3 flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-accent-400/10 text-brand-500 ring-1 ring-slate-200/70 dark:from-brand-500/10 dark:to-accent-500/5 dark:text-brand-400 dark:ring-slate-800">
+                <span className="mb-3 flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-slate-200/70 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-slate-800">
                   <feature.icon className="size-5" strokeWidth={1.75} />
                 </span>
                 <p className="font-medium text-heading">{feature.title}</p>

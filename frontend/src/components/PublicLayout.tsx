@@ -44,7 +44,7 @@ function UserMenu() {
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2 rounded-xl py-1 pr-1 pl-2.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
       >
-        <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-tl from-brand-500 to-accent-400 text-xs font-bold text-white">
+        <span className="flex size-8 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
           {initials(user.name)}
         </span>
         <span className="hidden text-right text-xs leading-tight sm:block">
@@ -99,7 +99,7 @@ function ScrollToTopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="برو به بالای صفحه"
       tabIndex={visible ? 0 : -1}
-      className={`fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/30 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/40 ${
+      className={`fixed bottom-6 right-6 z-40 flex size-12 items-center justify-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-500/20 transition-all duration-500 ease-out hover:-translate-y-1 hover:bg-brand-700 ${
         visible ? 'translate-y-0 scale-100 opacity-100' : 'pointer-events-none translate-y-4 scale-50 opacity-0'
       }`}
     >

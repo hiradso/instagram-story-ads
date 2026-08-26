@@ -106,7 +106,7 @@ export function AmbassadorProfileDetailPage() {
       <div className="grid gap-5 lg:grid-cols-5">
         <Card className="space-y-4 lg:col-span-3">
           <div className="flex items-center gap-3">
-            <span className="flex size-12 items-center justify-center rounded-full bg-gradient-to-tl from-brand-500 to-accent-400 text-base font-bold text-white">
+            <span className="flex size-12 items-center justify-center rounded-full bg-brand-600 text-base font-bold text-white">
               {profile.instagram_username.slice(0, 1).toUpperCase()}
             </span>
             <div>
@@ -203,7 +203,7 @@ export function AmbassadorProfileDetailPage() {
 
         <Card as="form" onSubmit={handleStartConversation} className="space-y-4 lg:col-span-2">
           <div className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 to-accent-500 text-white">
+            <span className="flex size-8 items-center justify-center rounded-xl bg-brand-600 text-white">
               <MessageCircle className="size-4" />
             </span>
             <h3 className="font-bold text-heading">شروع گفت‌وگو</h3>

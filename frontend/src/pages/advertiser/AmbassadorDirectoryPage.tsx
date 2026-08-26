@@ -116,7 +116,7 @@ export function AmbassadorDirectoryPage() {
         {profiles?.map((profile) => (
           <Card key={profile.id} hover className="animate-fade-in-up flex flex-col gap-3">
             <div className="flex items-center gap-2.5">
-              <span className="flex size-10 items-center justify-center rounded-full bg-gradient-to-tl from-brand-500 to-accent-400 text-sm font-bold text-white">
+              <span className="flex size-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
                 {profile.instagram_username.slice(0, 1).toUpperCase()}
               </span>
               <div className="min-w-0">

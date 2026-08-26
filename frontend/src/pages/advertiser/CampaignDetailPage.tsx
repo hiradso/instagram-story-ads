@@ -199,7 +199,7 @@ export function CampaignDetailPage() {
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
               <div
-                className="h-full rounded-full bg-gradient-to-l from-brand-500 to-accent-400 transition-all duration-700"
+                className="h-full rounded-full bg-brand-500 transition-all duration-700"
                 style={{ width: `${viewsPct}%` }}
               />
             </div>

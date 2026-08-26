@@ -188,7 +188,7 @@ export function ConversationChatPage() {
                 <div
                   className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm ${
                     isMine
-                      ? 'bg-gradient-to-tl from-brand-600 to-accent-500 text-white'
+                      ? 'bg-brand-600 text-white'
                       : 'bg-surface text-body ring-1 ring-slate-200/70 dark:bg-slate-800 dark:ring-slate-700'
                   }`}
                 >

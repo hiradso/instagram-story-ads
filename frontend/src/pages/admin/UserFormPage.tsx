@@ -57,7 +57,7 @@ export function UserFormPage() {
   return (
     <DashboardLayout>
       <div className="mb-6 flex items-center gap-2">
-        <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-tl from-brand-600 to-accent-500 text-white">
+        <span className="flex size-9 items-center justify-center rounded-xl bg-brand-600 text-white">
           <UserPlus className="size-4" />
         </span>
         <h2 className="text-xl font-bold text-heading">افزودن کاربر</h2>

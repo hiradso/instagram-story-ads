@@ -151,7 +151,7 @@ export function JalaliDatePicker({
                     }}
                     className={`flex h-8 items-center justify-center rounded-lg text-sm transition-colors ${
                       isSelected
-                        ? 'bg-gradient-to-tl from-brand-600 to-accent-500 font-bold text-white'
+                        ? 'bg-brand-600 font-bold text-white'
                         : 'text-body hover:bg-slate-100 dark:hover:bg-slate-700'
                     }`}
                   >
