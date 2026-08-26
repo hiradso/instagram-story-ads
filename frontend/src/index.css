@@ -236,3 +236,61 @@ body {
     background-position: -50% 0;
   }
 }
+
+/* Admin sidebar's "throne room" treatment — a fine stone-grain texture
+   (an inline SVG noise filter, no image asset needed) plus a dark vignette
+   for depth. Both sit as a single low-opacity overlay behind the sidebar's
+   real content. */
+.throne-texture {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 140% 60% at 50% -10%, rgba(217, 164, 65, 0.1), transparent 60%),
+    radial-gradient(ellipse 100% 50% at 50% 110%, rgba(0, 0, 0, 0.65), transparent 65%);
+  opacity: 0.9;
+  mix-blend-mode: overlay;
+}
+
+/* Slow torch-like flicker behind the crest badge — subtle, never fast
+   enough to distract from actually using the panel. */
+@keyframes torch-flicker {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.12);
+  }
+}
+.torch-glow {
+  animation: torch-flicker 3.4s ease-in-out infinite;
+}
+
+/* A handful of embers drifting up from the sidebar footer, like a dying
+   hearth — purely decorative, pointer-events-none, low opacity. */
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.75;
+  }
+  85% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-180px) translateX(var(--ember-drift, 8px));
+    opacity: 0;
+  }
+}
+.ember {
+  position: absolute;
+  bottom: 1rem;
+  width: 3px;
+  height: 3px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fde68a, #f59e0b 70%);
+  box-shadow: 0 0 4px 1px rgba(245, 158, 11, 0.6);
+  animation: ember-rise linear infinite;
+}

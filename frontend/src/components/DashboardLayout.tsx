@@ -84,122 +84,151 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       )}
 
       <aside
-        className={`fixed inset-y-0 right-0 z-50 flex w-72 shrink-0 flex-col transition-transform duration-300 ease-out md:sticky md:top-0 md:z-10 md:h-screen md:translate-x-0 ${
+        className={`fixed inset-y-0 right-0 z-50 flex w-72 shrink-0 flex-col overflow-hidden transition-transform duration-300 ease-out md:sticky md:top-0 md:z-10 md:h-screen md:translate-x-0 ${
           open ? 'translate-x-0' : 'translate-x-full'
         } ${
           isAdmin
-            ? 'bg-gradient-to-b from-[#1a0f36] via-[#150a2b] to-[#0c0620] ring-1 ring-amber-400/10'
+            ? 'bg-gradient-to-b from-[#170c2e] via-[#120825] to-[#08040f] ring-1 ring-amber-400/10'
             : 'border-l border-slate-200/70 bg-surface dark:border-slate-800/70 dark:bg-slate-900'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 px-5 pt-5">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span
-              className={`flex size-9 items-center justify-center rounded-xl text-white shadow-sm ${
-                isAdmin
-                  ? 'bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-[#1a0f36] shadow-amber-500/30'
-                  : 'bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 shadow-brand-500/30'
-              }`}
-            >
-              {isAdmin ? <Crown className="size-4.5" strokeWidth={2} /> : <Sparkles className="size-4" strokeWidth={2} />}
-            </span>
-            <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>
-              ادیار
-              <span className={`text-xs font-medium ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`} dir="ltr">
-                Adyar
-              </span>
-            </h1>
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            aria-label="بستن منو"
-            className={`flex size-8 items-center justify-center rounded-lg md:hidden ${
-              isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <X className="size-4.5" strokeWidth={1.75} />
-          </button>
-        </div>
-
-        {user && (
-          <div className={`mx-5 mt-5 flex items-center gap-2.5 rounded-xl p-3 ${isAdmin ? 'bg-white/5 ring-1 ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'}`}>
-            <span
-              className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
-                isAdmin ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-[#1a0f36] ring-2 ring-amber-400/40' : 'bg-brand-600'
-              }`}
-            >
-              {initials(user.name)}
-            </span>
-            <div className="min-w-0 text-xs leading-tight">
-              <p className={`truncate font-medium ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>{user.name}</p>
-              <p className={`flex items-center gap-1 ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`}>
-                {roleLabel[user.role]}
-                {user.role === 'ambassador' && (
-                  <>
-                    {` · سطح ${formatNumber(user.level)}`}
-                    <InfoTooltip>
-                      سطح بالاتر یعنی می‌تونی هم‌زمان کمپین‌های بیشتری بگیری. با تایید شدن بازدیدهات خودکار ارتقا
-                      می‌گیری.
-                    </InfoTooltip>
-                  </>
-                )}
-              </p>
-            </div>
-          </div>
+        {isAdmin && (
+          <>
+            <div className="throne-texture pointer-events-none absolute inset-0" />
+            {/* A couple of embers drifting up from the hearth — staggered
+                timing/drift so they don't read as a repeating loop. */}
+            <span className="ember" style={{ right: '18%', animationDuration: '5.5s', animationDelay: '0.2s', ['--ember-drift' as string]: '6px' }} />
+            <span className="ember" style={{ right: '55%', animationDuration: '7s', animationDelay: '2s', ['--ember-drift' as string]: '-10px' }} />
+            <span className="ember" style={{ right: '80%', animationDuration: '6.2s', animationDelay: '3.4s', ['--ember-drift' as string]: '4px' }} />
+          </>
         )}
 
-        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5">
-          {items.map((item) => {
-            const active = item.to === '/admin' ? location.pathname === '/admin' : location.pathname.startsWith(item.to)
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                  isAdmin
-                    ? active
-                      ? 'bg-amber-400/10 text-amber-300 ring-1 ring-amber-400/20'
-                      : 'text-indigo-200/70 hover:bg-white/5 hover:text-amber-100'
-                    : active
-                      ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
-                      : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
-                }`}
-              >
-                <item.icon className="size-4 shrink-0" strokeWidth={active ? 2.25 : 1.75} />
-                {item.label}
-              </Link>
-            )
-          })}
-        </nav>
+        <div className="relative z-10 flex h-full min-h-0 flex-col">
+          <div className="flex items-center justify-between gap-2 px-5 pt-5">
+            <Link to="/" className="flex items-center gap-2.5">
+              <span className="relative flex items-center justify-center">
+                {isAdmin && (
+                  <span className="torch-glow pointer-events-none absolute inset-0 rounded-xl bg-amber-400 blur-md" />
+                )}
+                <span
+                  className={`relative flex size-9 items-center justify-center rounded-xl text-white shadow-sm ${
+                    isAdmin
+                      ? 'bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-[#1a0f36] shadow-amber-500/40 ring-1 ring-amber-200/50'
+                      : 'bg-gradient-to-tl from-brand-600 via-brand-500 to-accent-500 shadow-brand-500/30'
+                  }`}
+                >
+                  {isAdmin ? <Crown className="size-4.5" strokeWidth={2} /> : <Sparkles className="size-4" strokeWidth={2} />}
+                </span>
+              </span>
+              <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>
+                ادیار
+                <span className={`text-xs font-medium ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`} dir="ltr">
+                  Adyar
+                </span>
+              </h1>
+            </Link>
 
-        <div className={`flex items-center justify-between gap-2 border-t px-4 py-4 ${isAdmin ? 'border-white/10' : 'border-slate-200/70 dark:border-slate-800/70'}`}>
-          <div className="flex items-center gap-1">
-            <HoverLabel label="تنظیمات حساب" position="top" align="end">
-              <Link
-                to="/settings"
-                className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
-                  isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
-                }`}
-              >
-                <Settings className="size-4" strokeWidth={1.75} />
-              </Link>
-            </HoverLabel>
-
-            <HoverLabel label="خروج" position="top">
-              <button
-                onClick={() => logout()}
-                className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
-                  isAdmin ? 'text-amber-200/60 hover:bg-red-500/10 hover:text-red-400' : 'text-slate-400 hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400'
-                }`}
-              >
-                <LogOut className="size-4" strokeWidth={1.75} />
-              </button>
-            </HoverLabel>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="بستن منو"
+              className={`flex size-8 items-center justify-center rounded-lg md:hidden ${
+                isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <X className="size-4.5" strokeWidth={1.75} />
+            </button>
           </div>
 
-          <ThemeToggle position="top" />
+          {isAdmin && (
+            <div className="mx-5 mt-4 h-px bg-gradient-to-l from-transparent via-amber-400/40 to-transparent" />
+          )}
+
+          {user && (
+            <div className={`mx-5 mt-5 flex items-center gap-2.5 rounded-xl p-3 ${isAdmin ? 'bg-white/5 ring-1 ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'}`}>
+              <span
+                className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
+                  isAdmin ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-[#1a0f36] ring-2 ring-amber-400/40' : 'bg-brand-600'
+                }`}
+              >
+                {initials(user.name)}
+              </span>
+              <div className="min-w-0 text-xs leading-tight">
+                <p className={`truncate font-medium ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>{user.name}</p>
+                <p className={`flex items-center gap-1 ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`}>
+                  {roleLabel[user.role]}
+                  {user.role === 'ambassador' && (
+                    <>
+                      {` · سطح ${formatNumber(user.level)}`}
+                      <InfoTooltip>
+                        سطح بالاتر یعنی می‌تونی هم‌زمان کمپین‌های بیشتری بگیری. با تایید شدن بازدیدهات خودکار ارتقا
+                        می‌گیری.
+                      </InfoTooltip>
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5">
+            {items.map((item) => {
+              const active = item.to === '/admin' ? location.pathname === '/admin' : location.pathname.startsWith(item.to)
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                    isAdmin
+                      ? active
+                        ? 'bg-amber-400/10 text-amber-300 ring-1 ring-amber-400/20'
+                        : 'text-indigo-200/70 hover:bg-white/5 hover:text-amber-100'
+                      : active
+                        ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
+                        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
+                  }`}
+                >
+                  {isAdmin && active && (
+                    <span className="absolute inset-y-1.5 right-0 w-0.5 rounded-full bg-gradient-to-b from-amber-300 via-amber-400 to-amber-600" />
+                  )}
+                  <item.icon className="size-4 shrink-0" strokeWidth={active ? 2.25 : 1.75} />
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {isAdmin && (
+            <div className="mx-4 h-px bg-gradient-to-l from-transparent via-amber-400/40 to-transparent" />
+          )}
+
+          <div className={`flex items-center justify-between gap-2 border-t px-4 py-4 ${isAdmin ? 'border-transparent' : 'border-slate-200/70 dark:border-slate-800/70'}`}>
+            <div className="flex items-center gap-1">
+              <HoverLabel label="تنظیمات حساب" position="top" align="end">
+                <Link
+                  to="/settings"
+                  className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
+                    isAdmin ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+                  }`}
+                >
+                  <Settings className="size-4" strokeWidth={1.75} />
+                </Link>
+              </HoverLabel>
+
+              <HoverLabel label="خروج" position="top">
+                <button
+                  onClick={() => logout()}
+                  className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
+                    isAdmin ? 'text-amber-200/60 hover:bg-red-500/10 hover:text-red-400' : 'text-slate-400 hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400'
+                  }`}
+                >
+                  <LogOut className="size-4" strokeWidth={1.75} />
+                </button>
+              </HoverLabel>
+            </div>
+
+            <ThemeToggle position="top" />
+          </div>
         </div>
       </aside>
 
