@@ -199,7 +199,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             </HoverLabel>
           </div>
 
-          <ThemeToggle />
+          <ThemeToggle position="top" />
         </div>
       </aside>
 

@@ -2,12 +2,12 @@ import { Moon, Sun } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { HoverLabel } from './Tooltip'
 
-export function ThemeToggle() {
+export function ThemeToggle({ position = 'bottom' }: { position?: 'top' | 'bottom' }) {
   const { theme, toggle } = useTheme()
   const isDark = theme === 'dark'
 
   return (
-    <HoverLabel label={isDark ? 'حالت روشن' : 'حالت تاریک'} position="bottom">
+    <HoverLabel label={isDark ? 'حالت روشن' : 'حالت تاریک'} position={position}>
       <button
         type="button"
         dir="ltr"
