@@ -1,19 +1,25 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   BadgeCheck,
+  Briefcase,
   Camera,
   CreditCard,
+  Eye,
   MessageCircle,
   Megaphone,
   ShieldCheck,
   Sparkles,
+  Users,
   Wallet,
   Zap,
 } from 'lucide-react'
 import { PublicLayout } from '../components/PublicLayout'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
+import { AnimatedCounter } from '../components/ui/AnimatedCounter'
+import { fetchPlatformStats, type PlatformStats } from '../lib/platformStats'
 
 const advertiserSteps = [
   { title: 'ثبت‌نام و شارژ کیف‌پول', description: 'حساب آگهی‌دهنده بساز و کیف‌پولت رو از طریق زرین‌پال شارژ کن.' },
@@ -62,7 +68,20 @@ const features = [
   },
 ]
 
+const statItems: { key: keyof PlatformStats; label: string; icon: typeof Megaphone }[] = [
+  { key: 'campaigns_run', label: 'کمپین اجراشده', icon: Megaphone },
+  { key: 'views_delivered', label: 'بازدید تحویل‌داده‌شده', icon: Eye },
+  { key: 'verified_ambassadors', label: 'سفیر تاییدشده', icon: Users },
+  { key: 'advertisers', label: 'آگهی‌دهنده', icon: Briefcase },
+]
+
 export function Landing() {
+  const [stats, setStats] = useState<PlatformStats | null>(null)
+
+  useEffect(() => {
+    fetchPlatformStats().then(setStats)
+  }, [])
+
   return (
     <PublicLayout>
       {/* Hero */}
@@ -100,6 +119,25 @@ export function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Platform stats — real, live numbers (see PlatformStatsController) */}
+      {stats && (
+        <section className="border-y border-slate-200/70 bg-surface/60 dark:border-slate-800/70 dark:bg-slate-900/40">
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-6 py-10 sm:grid-cols-4">
+            {statItems.map((item) => (
+              <div key={item.key} className="text-center">
+                <div className="mx-auto mb-2 flex size-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                  <item.icon className="size-4" strokeWidth={1.75} />
+                </div>
+                <p className="text-2xl font-extrabold text-heading sm:text-3xl">
+                  <AnimatedCounter value={stats[item.key]} />
+                </p>
+                <p className="mt-1 text-xs text-faint sm:text-sm">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* How it works */}
       <section className="mx-auto max-w-6xl px-6 py-16">

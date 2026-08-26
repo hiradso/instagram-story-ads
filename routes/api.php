@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CampaignAssignmentController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\PlatformStatsController;
 use App\Http\Controllers\ReferenceDataController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewSubmissionController;
@@ -25,6 +26,8 @@ Route::post('/login/otp/verify', [LoginOtpController::class, 'verify'])->middlew
 
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('throttle:3,1');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:10,1');
+
+Route::get('/platform-stats', [PlatformStatsController::class, 'index']);
 
 Route::get('/categories', [ReferenceDataController::class, 'categories']);
 Route::get('/provinces', [ReferenceDataController::class, 'provinces']);
