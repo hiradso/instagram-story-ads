@@ -154,10 +154,11 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           <div className="flex items-center justify-between gap-2 px-5 pt-5">
             <Link to="/" className="flex items-center gap-2.5">
               <span className="relative flex items-center justify-center">
-                {(isAdmin || tier === 3) && (
-                  <span
-                    className={`torch-glow pointer-events-none absolute inset-0 rounded-xl blur-md ${isAdmin ? 'bg-amber-400' : 'bg-accent-400'}`}
-                  />
+                {isAdmin && (
+                  <span className="torch-glow pointer-events-none absolute -inset-3 rounded-full bg-amber-400/90 blur-xl" />
+                )}
+                {!isAdmin && tier === 3 && (
+                  <span className="torch-glow pointer-events-none absolute inset-0 rounded-xl bg-accent-400 blur-md" />
                 )}
                 <span
                   className={`relative flex size-9 items-center justify-center rounded-xl shadow-sm ${
@@ -265,7 +266,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                     isAdmin
                       ? active
-                        ? 'bg-red-800/10 text-red-900 ring-1 ring-red-800/20 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/20'
+                        ? 'bg-red-800/10 text-red-900 ring-1 ring-red-800/30 shadow-[0_0_14px_-3px_rgba(153,27,27,0.35)] dark:bg-amber-400/10 dark:text-amber-300 dark:ring-2 dark:ring-amber-400/40 dark:shadow-[0_0_18px_-2px_rgba(251,191,36,0.4)]'
                         : 'text-red-950/60 hover:bg-red-900/5 hover:text-red-950 dark:text-rose-200/70 dark:hover:bg-white/5 dark:hover:text-amber-100'
                       : active
                         ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
