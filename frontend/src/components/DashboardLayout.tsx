@@ -97,7 +97,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           open ? 'translate-x-0' : 'translate-x-full'
         } ${
           isAdmin
-            ? 'admin-glass-panel ring-1 ring-amber-400/15'
+            ? 'admin-glass-panel ring-1 ring-red-800/15 dark:ring-amber-400/15'
             : tier === 3
               ? 'border-l border-brand-200/60 bg-surface dark:border-brand-900/50 dark:bg-slate-900'
               : 'border-l border-slate-200/70 bg-surface dark:border-slate-800/70 dark:bg-slate-900'
@@ -179,9 +179,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   )}
                 </span>
               </span>
-              <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>
+              <h1 className={`flex items-baseline gap-1.5 text-base font-bold ${isAdmin ? 'text-red-950 dark:text-amber-50' : 'text-heading'}`}>
                 ادیار
-                <span className={`text-xs font-medium ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`} dir="ltr">
+                <span className={`text-xs font-medium ${isAdmin ? 'text-red-900/50 dark:text-amber-200/50' : 'text-faint'}`} dir="ltr">
                   Adyar
                 </span>
               </h1>
@@ -193,7 +193,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               aria-label="بستن منو"
               className={`flex size-8 items-center justify-center rounded-lg md:hidden ${
                 isAdmin
-                  ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100'
+                  ? 'text-red-900/60 hover:bg-red-900/5 hover:text-red-950 dark:text-amber-200/60 dark:hover:bg-white/5 dark:hover:text-amber-100'
                   : 'text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
               }`}
             >
@@ -202,23 +202,23 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
 
           {isAdmin && (
-            <div className="mx-5 mt-4 flex items-center gap-2 text-amber-400/30">
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/40" />
+            <div className="mx-5 mt-4 flex items-center gap-2 text-red-800/30 dark:text-amber-400/30">
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-red-700/25 dark:to-amber-400/40" />
               <Swords className="size-3.5" strokeWidth={1.5} />
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-400/40" />
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-red-700/25 dark:to-amber-400/40" />
             </div>
           )}
 
           {user && (
             <div
               className={`mx-5 mt-5 flex items-center gap-2.5 rounded-xl p-3 ${
-                isAdmin ? 'bg-white/5 ring-1 ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'
+                isAdmin ? 'bg-red-900/5 ring-1 ring-red-800/10 dark:bg-white/5 dark:ring-amber-400/10' : 'bg-slate-50 dark:bg-slate-800/60'
               }`}
             >
               <span
                 className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                   isAdmin
-                    ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-red-950 ring-2 ring-amber-400/40'
+                    ? 'bg-gradient-to-tl from-amber-500 to-amber-600 text-red-950 ring-2 ring-amber-600/30 dark:ring-amber-400/40'
                     : tier === 3
                       ? 'bg-gradient-to-tl from-brand-500 to-accent-500 text-white ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-800 ring-accent-400/70 shadow-md shadow-accent-500/30'
                       : tier === 2
@@ -229,8 +229,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 {initials(user.name)}
               </span>
               <div className="min-w-0 text-xs leading-tight">
-                <p className={`truncate font-medium ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>{user.name}</p>
-                <p className={`flex items-center gap-1 ${isAdmin ? 'text-amber-200/50' : 'text-faint'}`}>
+                <p className={`truncate font-medium ${isAdmin ? 'text-red-950 dark:text-amber-50' : 'text-heading'}`}>{user.name}</p>
+                <p className={`flex items-center gap-1 ${isAdmin ? 'text-red-900/60 dark:text-amber-200/50' : 'text-faint'}`}>
                   {roleLabel[user.role]}
                   {user.role === 'ambassador' && (
                     <>
@@ -267,8 +267,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                     isAdmin
                       ? active
-                        ? 'bg-amber-400/10 text-amber-300 ring-2 ring-amber-400/40 shadow-[0_0_18px_-2px_rgba(251,191,36,0.4)]'
-                        : 'text-rose-200/70 hover:bg-white/5 hover:text-amber-100'
+                        ? 'bg-red-800/10 text-red-900 ring-1 ring-red-800/30 shadow-[0_0_14px_-3px_rgba(153,27,27,0.35)] dark:bg-amber-400/10 dark:text-amber-300 dark:ring-2 dark:ring-amber-400/40 dark:shadow-[0_0_18px_-2px_rgba(251,191,36,0.4)]'
+                        : 'text-red-950/60 hover:bg-red-900/5 hover:text-red-950 dark:text-rose-200/70 dark:hover:bg-white/5 dark:hover:text-amber-100'
                       : active
                         ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400'
                         : 'text-slate-500 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
@@ -287,7 +287,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             })}
           </nav>
 
-          {isAdmin && <div className="mx-4 h-px bg-gradient-to-l from-transparent via-amber-400/40 to-transparent" />}
+          {isAdmin && (
+            <div className="mx-4 h-px bg-gradient-to-l from-transparent via-red-700/25 to-transparent dark:via-amber-400/40" />
+          )}
 
           <div className={`flex items-center justify-between gap-2 border-t px-4 py-4 ${isAdmin ? 'border-transparent' : 'border-slate-200/70 dark:border-slate-800/70'}`}>
             <div className="flex items-center gap-1">
@@ -296,7 +298,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   to="/settings"
                   className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
                     isAdmin
-                      ? 'text-amber-200/60 hover:bg-white/5 hover:text-amber-100'
+                      ? 'text-red-900/60 hover:bg-red-900/5 hover:text-red-950 dark:text-amber-200/60 dark:hover:bg-white/5 dark:hover:text-amber-100'
                       : 'text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300'
                   }`}
                 >
@@ -309,7 +311,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                   onClick={() => logout()}
                   className={`flex size-8 items-center justify-center rounded-lg transition-colors ${
                     isAdmin
-                      ? 'text-amber-200/60 hover:bg-red-500/10 hover:text-red-400'
+                      ? 'text-red-900/60 hover:bg-red-500/10 hover:text-red-600 dark:text-amber-200/60 dark:hover:bg-red-500/10 dark:hover:text-red-400'
                       : 'text-slate-400 hover:bg-red-50 hover:text-red-600 dark:text-slate-500 dark:hover:bg-red-500/10 dark:hover:text-red-400'
                   }`}
                 >
@@ -327,7 +329,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         <header
           className={`sticky top-0 z-20 flex items-center justify-between gap-3 px-4 py-3 backdrop-blur-md md:hidden ${
             isAdmin
-              ? 'admin-glass-panel border-b border-amber-400/15'
+              ? 'admin-glass-panel border-b border-red-800/15 dark:border-amber-400/15'
               : 'border-b border-slate-200/70 bg-surface/80 dark:border-slate-800/70 dark:bg-slate-900/80'
           }`}
         >
@@ -336,7 +338,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             onClick={() => setOpen(true)}
             aria-label="باز کردن منو"
             className={`flex size-9 items-center justify-center rounded-lg ${
-              isAdmin ? 'text-amber-200/60 hover:bg-white/5' : 'text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800'
+              isAdmin
+                ? 'text-red-900/60 hover:bg-red-900/5 dark:text-amber-200/60 dark:hover:bg-white/5'
+                : 'text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800'
             }`}
           >
             <Menu className="size-5" strokeWidth={1.75} />
@@ -352,7 +356,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             >
               {isAdmin ? <Crown className="size-3.5" strokeWidth={2} /> : <Sparkles className="size-3.5" strokeWidth={2} />}
             </span>
-            <span className={`text-sm font-bold ${isAdmin ? 'text-amber-50' : 'text-heading'}`}>ادیار</span>
+            <span className={`text-sm font-bold ${isAdmin ? 'text-red-950 dark:text-amber-50' : 'text-heading'}`}>ادیار</span>
           </Link>
 
           <span

@@ -90,8 +90,8 @@ export function AdminDashboardPage() {
           <ShieldCheck className="size-4" />
         </span>
         <div>
-          <h2 className="text-xl font-bold text-amber-50">داشبورد ادمین</h2>
-          <p className="text-sm text-amber-200/50">نمای کلی وضعیت پلتفرم</p>
+          <h2 className="text-xl font-bold text-red-950 dark:text-amber-50">داشبورد ادمین</h2>
+          <p className="text-sm text-red-900/60 dark:text-amber-200/50">نمای کلی وضعیت پلتفرم</p>
         </div>
       </div>
 
@@ -108,10 +108,10 @@ export function AdminDashboardPage() {
                 >
                   <card.icon className="size-5" strokeWidth={1.75} />
                 </span>
-                <ArrowLeft className="size-4 text-amber-200/40 transition-transform group-hover:-translate-x-0.5" />
+                <ArrowLeft className="size-4 text-red-900/40 transition-transform group-hover:-translate-x-0.5 dark:text-amber-200/40" />
               </div>
-              <p className="mt-3 text-2xl font-bold text-amber-50">{card.value.toLocaleString('fa-IR')}</p>
-              <p className="text-sm text-amber-200/50">{card.label}</p>
+              <p className="mt-3 text-2xl font-bold text-red-950 dark:text-amber-50">{card.value.toLocaleString('fa-IR')}</p>
+              <p className="text-sm text-red-900/60 dark:text-amber-200/50">{card.label}</p>
             </Card>
           </Link>
         ))}
