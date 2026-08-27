@@ -86,19 +86,19 @@ export function AdminDashboardPage() {
   return (
     <DashboardLayout>
       <div className="mb-6 flex items-center gap-2">
-        <span className="flex size-9 items-center justify-center rounded-xl bg-brand-600 text-white">
+        <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-tl from-amber-500 via-yellow-400 to-amber-600 text-red-950 ring-1 ring-amber-200/50">
           <ShieldCheck className="size-4" />
         </span>
         <div>
-          <h2 className="text-xl font-bold text-heading">داشبورد ادمین</h2>
-          <p className="text-sm text-faint">نمای کلی وضعیت پلتفرم</p>
+          <h2 className="text-xl font-bold text-amber-50">داشبورد ادمین</h2>
+          <p className="text-sm text-amber-200/50">نمای کلی وضعیت پلتفرم</p>
         </div>
       </div>
 
       <div className="grid animate-fade-in-up gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
           <Link key={card.label} to={card.to}>
-            <Card hover className="group relative overflow-hidden">
+            <Card hover className="admin-glass-card group relative overflow-hidden">
               {card.urgent && card.value > 0 && (
                 <span className="absolute top-4 left-4 size-2 animate-pulse rounded-full bg-red-500" />
               )}
@@ -108,10 +108,10 @@ export function AdminDashboardPage() {
                 >
                   <card.icon className="size-5" strokeWidth={1.75} />
                 </span>
-                <ArrowLeft className="size-4 text-slate-300 transition-transform dark:text-slate-600 group-hover:-translate-x-0.5" />
+                <ArrowLeft className="size-4 text-amber-200/40 transition-transform group-hover:-translate-x-0.5" />
               </div>
-              <p className="mt-3 text-2xl font-bold text-heading">{card.value.toLocaleString('fa-IR')}</p>
-              <p className="text-sm text-faint">{card.label}</p>
+              <p className="mt-3 text-2xl font-bold text-amber-50">{card.value.toLocaleString('fa-IR')}</p>
+              <p className="text-sm text-amber-200/50">{card.label}</p>
             </Card>
           </Link>
         ))}

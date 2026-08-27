@@ -249,6 +249,48 @@ body {
   }
 }
 
+/* Admin theme, take three: a real photographed throne room (AI-generated
+   at the user's request, via a free Hugging Face FLUX space — not a
+   tileable texture this time, one continuous wide scene) fixed behind
+   the whole panel, with the sidebar and every card as genuine frosted
+   glass (backdrop-filter: blur) floating on top of it.
+   This is deliberately different from the two earlier, failed attempts:
+   a flat color wash over a tiled photo still let the photo's own
+   contrast fight with text sitting directly on it. Real backdrop-blur
+   is what glassmorphism actually is — it blurs the busy image itself
+   before anything is drawn on top, so text stays readable no matter
+   what part of the scene happens to be behind it. See .admin-glass-panel
+   below, used by both the sidebar and the dashboard's stat cards. */
+.admin-throne-bg {
+  background-image: url('/images/admin-throne-room.webp');
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Frosted glass: semi-transparent + blurred, so whatever part of the
+   throne-room photo sits behind a given panel is smeared into a soft
+   wash of its own colors rather than staying sharp/busy.
+   The photo itself is a night, torch-lit scene — there's no "daylight"
+   version of it to switch to — so the admin theme no longer follows the
+   site's light/dark toggle at all; it's one fixed dark-fantasy palette,
+   same as every reference image this theme is based on. */
+.admin-glass-panel {
+  background-color: rgba(10, 2, 2, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Same glass treatment for individual cards/widgets inside admin pages
+   (stat cards, tables, panels) — use this class directly on them. */
+.admin-glass-card {
+  background-color: rgba(10, 2, 2, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(217, 164, 65, 0.18);
+}
+
 /* Slow torch-like flicker behind the crest badge — subtle, never fast
    enough to distract from actually using the panel. */
 @keyframes torch-flicker {
