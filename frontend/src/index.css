@@ -275,28 +275,35 @@ body {
 
 /* Frosted glass: semi-transparent + blurred, so whatever part of the
    throne-room photo sits behind a given panel is smeared into a soft
-   wash of its own colors rather than staying sharp/busy. A warm, fairly
-   opaque cream frost over the sunlit photo in light mode; a dark,
-   near-opaque frost over the torch-lit photo in dark mode. */
+   wash of its own colors rather than staying sharp/busy. Light mode's
+   frost needed to go up to ~0.85 opacity plus a heavier blur — the
+   daylight photo has much more contrast (direct sunbeams, bright
+   stained glass) than the night one, so the 0.55 that worked fine for
+   the dark photo still let too much of that busy detail and brightness
+   show through the frost, making the dark-red admin text hard to read. */
 .admin-glass-panel {
-  background-color: rgba(253, 246, 227, 0.55);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background-color: rgba(253, 246, 227, 0.85);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
 }
 .dark .admin-glass-panel {
   background-color: rgba(10, 2, 2, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 /* Same glass treatment for individual cards/widgets inside admin pages
    (stat cards, tables, panels) — use this class directly on them. */
 .admin-glass-card {
-  background-color: rgba(253, 246, 227, 0.5);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background-color: rgba(253, 246, 227, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(180, 83, 9, 0.2);
 }
 .dark .admin-glass-card {
   background-color: rgba(10, 2, 2, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-color: rgba(217, 164, 65, 0.18);
 }
 
