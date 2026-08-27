@@ -105,7 +105,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       >
         {isAdmin && (
           <>
-            <div className="throne-texture pointer-events-none absolute inset-0" />
             {/* A couple of embers drifting up from the hearth — staggered
                 timing/drift so they don't read as a repeating loop. */}
             <span className="ember" style={{ right: '18%', animationDuration: '5.5s', animationDelay: '0.2s', ['--ember-drift' as string]: '6px' }} />
